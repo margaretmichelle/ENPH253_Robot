@@ -3,6 +3,7 @@
 #include <Helper.h>
 #include <Motor.h>
 #include <PID.h>
+#include <OLED.h>
 
 //Constructor
 PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) :
@@ -21,9 +22,6 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) :
         summedErrorLimit = TapeFollowerNS::SUMMED_ERROR_LIMIT;
         threshold = TapeFollowerNS::WHITE_THRESHOLD;
         numReadings = TapeFollowerNS::NUM_READINGS;
-        KP = TapeFollowerNS::KP;
-        KI = TapeFollowerNS::KI;
-        KD = TapeFollowerNS::KD;
         break;
       }
       default : {
@@ -36,7 +34,7 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) :
   pinMode(rightSensorPin, INPUT_PULLUP);
 }
 
-void PID:: usePID() {
+void PID:: usePID(OLED oled) {
 
 //get average QRD values
 getLeftSensorVal();
@@ -73,7 +71,7 @@ lastError = error;
 lastTime = micros();
 
 // set new motor speeds
-double adjustment = (KP * error) + (KI * summedError) + (KD * derivativeError);
+double adjustment = (oled.getKD() * error) + (oled.getKI() * summedError) + (oled.getKD() * derivativeError);
 leftMotorSpeed = motorSpeed - adjustment;
 rightMotorSpeed = motorSpeed + adjustment;
 Serial.print("L"); Serial.println(leftMotorSpeed);

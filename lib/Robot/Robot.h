@@ -7,6 +7,7 @@
 #include <Helper.h>
 #include <Motor.h>
 #include <PID.h>
+#include <OLED.h>
 
 namespace Robot {
 
@@ -29,6 +30,7 @@ namespace Robot {
         leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2),
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
         tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 100),
+        display(),
         state(MasterState::Inactive) {
             //Set-up Communication Pins
         }
@@ -70,6 +72,7 @@ namespace Robot {
       Motor leftMotor;
       Motor rightMotor;
       PID tapeFollow;
+      OLED display;
 
       MasterState state;
 

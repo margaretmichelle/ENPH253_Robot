@@ -2,6 +2,7 @@
 #include <Constants.h>
 #include <Motor.h>
 
+
 Motor::Motor(int pin1, int pin2) : pin1(pin1), pin2(pin2) {
   // No need for pinMode since analogWrite() incorporates it
   pinName1 = (PinName) pin1;

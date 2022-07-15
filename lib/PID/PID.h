@@ -4,6 +4,7 @@
 #include <Constants.h>
 #include <Helper.h>
 #include <Motor.h>
+#include <OLED.h>
 
 enum class PIDType {
   TapeFollower,
@@ -22,7 +23,7 @@ public:
   /**
    * Use PID
    **/
-  void usePID();
+  void usePID(OLED oled);
 
   /**
    * Reset PID (remove all stored error values)
@@ -63,13 +64,6 @@ public:
   /**
    * Setter and getter methods
    **/
-  void setKP(int KP) { this -> KP = KP; }
-  void setKI(int KI) { this -> KI = KI; }
-  void setKD(int KD) { this -> KD = KD; }
-
-  int getKP() { return KP; }
-  int getKI() { return KI; }
-  int getKD() { return KD; }
 
   void setMotorSpeed(int motorSpeed) { this -> motorSpeed = motorSpeed; }
   int getRightMotorSpeed() { return rightMotorSpeed; }
@@ -156,11 +150,6 @@ private:
   int rightSensorPin;
 
   PIDType pidType;
-
-  // Gains
-  int KP;
-  int KD;
-  int KI;
 
   // Error
   int lastError;

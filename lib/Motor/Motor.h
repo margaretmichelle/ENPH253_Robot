@@ -25,6 +25,5 @@ class Motor {
     PinName pinName1;
     PinName pinName2;
 };
-#endif
 
 #endif

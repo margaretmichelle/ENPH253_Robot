@@ -1,11 +1,11 @@
 #include <Arduino.h>
 
 #include <Constants.h>
-#include <IR.h>
+// #include <IR.h>
 #include <Motor.h>
 #include <PID.h>
-
 #include <Robot.h>
+#include <OLED.h>
 
 namespace Robot {
   MasterState Master::poll () {
@@ -16,12 +16,10 @@ namespace Robot {
         break;
 
       case MasterState::TapeFollow:
-        //flat ground
-        tapeFollow.setKP(5);
-        tapeFollow.setKD(1);
-        tapeFollow.setKI(0);
 
-        tapeFollow.usePID();
+        tapeFollow.usePID(display);
+
+        display.displayScreen();
         break;
   }
     return state;
