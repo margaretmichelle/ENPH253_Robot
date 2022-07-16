@@ -10,7 +10,10 @@
 #include <Robot.h> 
 
 int counter = 0;
-
+#define LED_BUILTIN PB2
+int ledState = LOW; 
+unsigned long previousMillis = 0;
+const long interval = 4000;
 
 Robot::Master master;
 OLED oledDisplay;
@@ -26,4 +29,18 @@ void loop()
 {
     master.poll(oledDisplay, counter);
     counter++;
+
+      unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+
+    if (ledState == LOW) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    }
+
+    digitalWrite(LED_BUILTIN, ledState);
+  }
 };
