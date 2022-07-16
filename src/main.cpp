@@ -22,6 +22,8 @@ void setup()
 {
     oledDisplay.start();
 
+    pinMode(LED_BUILTIN, OUTPUT);
+
     master.setState(Robot::MasterState::TapeFollow);
 }
 
