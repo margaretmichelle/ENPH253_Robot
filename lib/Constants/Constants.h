@@ -217,9 +217,9 @@ namespace DriveMotorPins {
   const int MOTOR_FREQ = 200;
 }
 
-namespace OLEDDisplayNM {
+namespace OLEDDisplayNS {
   // Pins
-  const int BUTTON_PIN = PA12;
+  const int BUTTON_PIN = PA9;
   const int CLK_PIN = PB14;
   const int DT_PIN = PB15;
 

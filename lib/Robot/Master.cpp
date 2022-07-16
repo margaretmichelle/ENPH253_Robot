@@ -8,21 +8,29 @@
 #include <OLED.h>
 
 namespace Robot {
-  MasterState Master::poll () {
+  MasterState Master::poll(OLED o, int count)
+  {
     // turn off slave signal every loop
 
-    switch(state) {
-      case MasterState::Inactive:
-        break;
+    switch (state)
+    {
+    case MasterState::Inactive:
+      break;
 
-      case MasterState::TapeFollow:
+    case MasterState::TapeFollow:
 
-        tapeFollow.usePID(display);
+      tapeFollow.usePID(o.getKP(), o.getKI(), o.getKD());
 
-        display.displayScreen();
-        break;
-  }
+
+      // o.displayScreen();
+      // o.displayPID();
+      o.displaySpeed(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed());
+      // o.displayCustom("Left reflectance: ", tapeFollow.getLeftSensorVal(), "Right reflectance: ", tapeFollow.getRightSensorVal());
+      // o.displayCustom("Reflectance: ", tapeFollow.getLeftSensorVal(), "Motor speed: ", tapeFollow.getLeftMotorSpeed());
+
+      break;
+    }
     return state;
-}  // namespace Robot
+  } // namespace Robot
 
 }

@@ -23,7 +23,7 @@ public:
   /**
    * Use PID
    **/
-  void usePID(OLED oled);
+  void usePID(int KP, int KI, int KD);
 
   /**
    * Reset PID (remove all stored error values)

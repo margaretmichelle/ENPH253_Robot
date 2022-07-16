@@ -1,8 +1,9 @@
 #ifndef OLED_h
 #define OLED_h
 
-#include <Arduino.h>
 #include <PID.h>
+#include <Arduino.h>
+
 
 class OLED {
 
@@ -11,10 +12,19 @@ class OLED {
     // Constructor
     OLED();
 
+    void start();
+
+
     /**
      * @brief display screen on OLED
      */
     void displayScreen();
+
+    void displayPID();
+
+    void displaySpeed(int leftMotorSpeed, int rightMotorSpeed);
+
+    void displayCustom(String labelA, int valA, String labelB, int valB);
 
     int getKP();
     int getKI();
