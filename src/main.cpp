@@ -24,11 +24,12 @@ void setup()
 
     pinMode(LED_BUILTIN, OUTPUT);
 
-    master.setState(Robot::MasterState::TapeFollow);
+    master.setState(Robot::MasterState::TapeFollow); //Just for Testing Purposes 
 }
 
 void loop()
 {
+    //pwm_start(PA_10, DriveMotorPins::MOTOR_FREQ, 2100, RESOLUTION_12B_COMPARE_FORMAT);
     master.poll(oledDisplay, counter);
     counter++;
 

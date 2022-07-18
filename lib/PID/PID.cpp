@@ -25,10 +25,19 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) : p
     numReadings = TapeFollowerNS::NUM_READINGS;
     break;
   }
+  case PIDType::EdgeFollower: {
+    leftSensorPin = EdgeFollowerNS::LEFT_SENSOR_PIN;
+    rightSensorPin = EdgeFollowerNS::RIGHT_SENSOR_PIN;
+    summedErrorLimit = EdgeFollowerNS::SUMMED_ERROR_LIMIT;
+    threshold = EdgeFollowerNS::EDGE_THRESHOLD;
+    numReadings = EdgeFollowerNS::NUM_READINGS;
+    break;
+  }
   default:
   {
     // Error never should be here should always have PIDType
   }
+
   }
 
   // Setup Pins.  Motor pins are handled by library
@@ -58,6 +67,13 @@ void PID::usePID(int KP, int KI, int KD)
       bool leftOnWhite = sensorOnWhite(leftSensor, threshold);
       bool rightOnWhite = sensorOnWhite(rightSensor, threshold);
       error = getTapeError(leftOnWhite, rightOnWhite, TapeFollowerNS::ONE_OFF_ERROR, TapeFollowerNS::BOTH_OFF_ERROR);
+      break;
+    }
+    case PIDType::EdgeFollower:
+    {
+      bool leftOnPlatform = !sensorOnEdge(leftSensor, threshold);
+      bool rightOffPlatform = sensorOnEdge(rightSensor, threshold);
+      error = getEdgeError(leftOnPlatform, rightOffPlatform, EdgeFollowerNS::ONE_OFF_ERROR);
       break;
     }
   }
@@ -135,6 +151,25 @@ int PID::getTapeError(bool leftOnWhite, bool rightOnWhite, int oneOffError, int 
   }
 
   return error;
+}
+
+int PID::getEdgeError(bool correctLeftPosition, bool correctRightPosition, int oneOffError) {
+  // ensure correct input
+  if (pidType != PIDType::EdgeFollower){}  // THROW EXCEPTION
+
+  int error = 0;
+
+  // set error left or right
+  if (!correctRightPosition) { error = -oneOffError; }
+  else if (!correctLeftPosition) { error = oneOffError; }
+  else { error = 0; }
+
+  return error;
+}
+
+bool PID::sensorOnEdge(int sensorValue, int edgeThreshold) {
+  if (sensorValue > edgeThreshold) { return true; }
+  return false;
 }
 
 int PID::getSummedError(int error, int lastSummedError, int summedErrorLimit)

@@ -8,7 +8,8 @@
 
 enum class PIDType {
   TapeFollower,
-  EdgeFollower
+  EdgeFollower,
+  IRFollower
 };
 
 class PID {

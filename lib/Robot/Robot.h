@@ -15,6 +15,7 @@ namespace Robot {
   enum class MasterState {
     Inactive,
     TapeFollow,
+    IRFollow,
     Done
   };
   enum class SlaveState {
@@ -29,9 +30,14 @@ namespace Robot {
       Master():
         leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2),
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
-        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 100),
+        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 80),
+        irFollow(PIDType::IRFollower,leftMotor,rightMotor,80),
         state(MasterState::Inactive) {
             //Set-up Communication Pins
+          pinMode(MasterNS::ADVANCE_SLAVE_PIN, OUTPUT);
+          pinMode(MasterNS::STOP_SLAVE_PIN, OUTPUT);
+          digitalWrite(MasterNS::ADVANCE_SLAVE_PIN, LOW);
+          digitalWrite(MasterNS::STOP_SLAVE_PIN, LOW);
         }
 
       /*
@@ -46,35 +52,76 @@ namespace Robot {
 
     private:
       /*
-      @brief Advances the master state
+      @brief Increase the master state
 
       @returns true if successful, false if unsuccessful (out of states)
       */
-      bool advanceState();
+      bool incrementState();
 
       /*
       @brief Advances the slave state
 
       */
-      void signalSlaveAdvance();
+      void signalReplicaAdvance();
 
       /*
       @brief Ends Advance signal
 
       */
-      void endSlaveSignal();
+      void endReplicaSignal();
 
-      void stopSlave();
+      void stopReplica();
 
-      void goSlave();
+      void goReplica();
+
+      void stop();
 
       Motor leftMotor;
       Motor rightMotor;
       PID tapeFollow;
+      PID irFollow;
+
+      bool stopped;
 
       MasterState state;
 
   };
+
+  class Slave {
+    public:
+        Slave(): 
+          //Put Constructors for Claw and zipline 
+        state(SlaveState::Inactive) {
+
+        }
+
+
+        /*
+        @brief Returns current state of robot and performs action for one loop.
+        */
+        SlaveState poll();
+        /**
+         * @brief Set the state of master. ONLY FOR DEBUGGING. Do not use on competition day
+         */
+        void setState(SlaveState state) { this->state = state; }
+
+        /**
+         * @brief move slave for given time
+         */
+        void moveForTime(int leftMotorSpeed, int rightMotorSpeed, int moveTime);
+
+    private:
+        SlaveState state;
+        bool stopped;
+        void stop();
+        
+        /*
+        @brief Advances the big bot state
+
+        @returns true if successful, false if unsuccessful (end of list)
+        */
+        bool advanceState();
+    };
 } // namespace Robot
 
 #endif

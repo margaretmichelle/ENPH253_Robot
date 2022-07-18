@@ -136,36 +136,18 @@ namespace SlaveNS {
 
 namespace MasterNS {
   // Temp Value
-  const int START_BUTTON_PIN = PA1;
 
   // Pins
-  const int LEFT_MOTOR_PIN_1 = PA_9;
+  const int LEFT_MOTOR_PIN_1 = PA_11;
   const int LEFT_MOTOR_PIN_2 = PA_10;
   const int RIGHT_MOTOR_PIN_1 = PB_8;
   const int RIGHT_MOTOR_PIN_2 = PB_9;
 
-  //CHANGE
-  const int UP_LIFT_PIN = PB5;
-  const int DOWN_LIFT_PIN = PB4;
-  const int LIMIT_LIFT_PIN = PA12;
-
-  const int ADVANCE_SLAVE_PIN = PA13;
-  const int STOP_SLAVE_PIN = PA14;
+  const int ADVANCE_SLAVE_PIN = PB12;
+  const int STOP_SLAVE_PIN = PB13;
 
   // Speeds
-  const int STANDARD_MOTOR_SPEED = 70;
-  const int DETACHING_SPEED = 60;
-  const int LEFT_TURNING_SPEED = 60;
-  const int RIGHT_TURNING_SPEED = -80;
-  const int ZIPLINE_APPROACH_SPEED = 60;
-
-  //Temp, need to test (ms)
-  const int EDGE_TIME_THRESHOLD = 7000;
-  const int TURNING_TIME_THRESHOLD = 950;
-  const int WAIT_DETACH_TIME_THRESHOLD = 5000;
-  const int STORMTROOPER_TIME_THRESHOLD = 3000;
-  const int DETACHING_TIME = 2000;
-  const int ZIPLINE_APPROACH_TIME = 1000;
+  const int STANDARD_MOTOR_SPEED = 80;
 }
 
 /****** PID ******/
@@ -176,7 +158,7 @@ namespace TapeFollowerNS {
 
   // Error
   const int ONE_OFF_ERROR = 1;
-  const int BOTH_OFF_ERROR = 5;
+  const int BOTH_OFF_ERROR = 3;
 
   // Readings
   const int WHITE_THRESHOLD = 300;
@@ -184,8 +166,8 @@ namespace TapeFollowerNS {
   const int SUMMED_ERROR_LIMIT = 0;
 
   // Gains
-  const int KP = 9;
-  const int KD = 1;
+  const int KP = 15;
+  const int KD = 2;
   const int KI = 0;
 }
 
@@ -213,7 +195,7 @@ namespace EdgeFollowerNS {
 
 namespace DriveMotorPins {
 
-  const int BASE_SPEED = 100; 
+  const int BASE_SPEED = 80; 
   const int MOTOR_FREQ = 200;
 }
 

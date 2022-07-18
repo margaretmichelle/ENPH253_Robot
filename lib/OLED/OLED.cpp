@@ -27,9 +27,9 @@ OLED::OLED() {
   attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::DT_PIN), readEncoder, CHANGE);
 
   screen = 0;
-  KP = 10;
+  KP = 15;
   KI = 0;
-  KD = 0;
+  KD = 2;
 }
 
 void OLED::start() {
