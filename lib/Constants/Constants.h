@@ -211,4 +211,14 @@ namespace OLEDDisplayNS {
   const int OLED_RESET = -1;
 }
 
+namespace ClawConstants{
+  const int CLAW_OPEN = 180;
+  const int CLAW_CLOSED = 0;
+}
+
+namespace ArmConstants{
+  const int ARM_UP = 180;
+  const int ARM_DOWN = 0;
+}
+
 #endif

@@ -1,5 +1,5 @@
-#ifndef Claw_h
-#define Claw_h
+#ifndef claw_h
+#define claw_h
 #include <Arduino.h>
 #include <Servo.h>
 #include <Constants.h>
@@ -21,9 +21,17 @@ class Claw{
          */
         void open();
 
+        /**
+         * @brief Get the position of the claw
+         * 
+         * @return int that represents angle of the claw in degrees
+         */
+        int getPosition();
+
     private:
     int controlPin;
-    Servo ClawServo;
+    int currentPos;
+    Servo clawServo;
 };
 
 #endif
