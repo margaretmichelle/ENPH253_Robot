@@ -23,6 +23,12 @@ class Arm{
         void returnToHome();
 
         /**
+         * @brief Put arm in "down" position to pick up object
+         * 
+         */
+        void goDown();
+
+        /**
          * @brief Get the position of the arm
          * 
          * @return int that represents angle of the arm in degrees
