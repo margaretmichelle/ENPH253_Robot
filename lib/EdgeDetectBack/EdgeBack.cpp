@@ -29,10 +29,17 @@ void EdgeBack::useEdgeBack() {
     bool rightOnPlatform = !sensorOnEdge(bottomRightSensor,threshold);
 
     if(!leftOnPlatform && !rightOnPlatform) {
-        moveForCertainTime()
+        moveForCertainTime(80,80,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //go straight since both off i think moving for 300 milliseconds would be good??
     }
-
-
+    else if(!leftOnPlatform && rightOnPlatform) {
+        moveForCertainTime(80,100,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //turn right if left is not on platform 
+    }
+    else if(leftOnPlatform && !rightOnPlatform) {
+        moveForCertainTime(100,80,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //turn left if right is not on platform
+    }
+    else {
+        //do nothing if both are on platform
+    }
 }    
 
 bool sensorOnEdge(int sensorValue, int edgeThreshold) {
@@ -44,7 +51,9 @@ bool sensorOnEdge(int sensorValue, int edgeThreshold) {
     }
 }
 
-void moveForCertainTime(int leftMotorSpeed, int rightMotorSpeed, int timeToMove) {
-
+void moveForCertainTime(int leftMotorSpeed, int rightMotorSpeed, Motor leftMotor, Motor rightMotor, int timeToMove) {
+    leftMotor.speed(leftMotorSpeed);
+    rightMotor.speed(rightMotorSpeed);
+    delay(timeToMove);
 }
 

@@ -182,6 +182,10 @@ namespace EdgeFollowerNS {
   const int RIGHT_MOTOR_PIN_1 = 3;
   const int RIGHT_MOTOR_PIN_2 = 5;
 
+  //Move For a Certain Amount of Time;
+
+  const int MOVE_FOR_TIME = 300;
+
   // Readings
   const int ONE_OFF_ERROR = 1;
   const int EDGE_THRESHOLD = 400;
