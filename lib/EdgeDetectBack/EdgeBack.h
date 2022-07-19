@@ -43,13 +43,13 @@ class EdgeBack {
         bool sensorOnEdge(int sensorValue, int edgeThreshold);
 
         /**
-         * @brief Move straight for a certain value
+         * @brief Move straight for a certain time
          * 
          * @param leftMotorSpeed 
          * @param rightMotorSpeed 
          * @param moveTime 
          */
-        void moveForCertainTime(int leftMotorSpeed, int rightMotorSpeed, int moveTime);
+        void moveForCertainTime(int leftMotorSpeed, int rightMotorSpeed, Motor leftMotor, Motor rightMotor, int moveTime);
 
 
     private :
