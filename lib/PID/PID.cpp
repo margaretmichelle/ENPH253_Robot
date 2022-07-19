@@ -26,8 +26,8 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) : p
     break;
   }
   case PIDType::EdgeFollower: {
-    leftSensorPin = EdgeFollowerNS::LEFT_SENSOR_PIN;
-    rightSensorPin = EdgeFollowerNS::RIGHT_SENSOR_PIN;
+    topLeftSensorPin = EdgeFollowerNS::TOP_LEFT_SENSOR_PIN;
+    topRightSensorPin = EdgeFollowerNS::TOP_RIGHT_SENSOR_PIN;
     summedErrorLimit = EdgeFollowerNS::SUMMED_ERROR_LIMIT;
     threshold = EdgeFollowerNS::EDGE_THRESHOLD;
     numReadings = EdgeFollowerNS::NUM_READINGS;
@@ -39,19 +39,23 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) : p
   }
 
   }
-
   // Setup Pins.  Motor pins are handled by library
   pinMode(leftSensorPin, INPUT_PULLUP);
   pinMode(rightSensorPin, INPUT_PULLUP);
+  pinMode(topRightSensorPin,INPUT_PULLUP);
+  pinMode(topLeftSensorPin, INPUT_PULLUP);
 }
 
 void PID::usePID(int KP, int KI, int KD)
 {
 
-  // // get average QRD values
+  // average QRD values for Tape
   getLeftSensorVal();
   getRightSensorVal();
 
+  // get average QRD values for the edge 
+  getTopLeftSensorVal();
+  getTopRightSensorVal();
 
   // // print qrd values
   // Serial.print("TL: ");
@@ -59,7 +63,10 @@ void PID::usePID(int KP, int KI, int KD)
   // Serial.print(" TR: ");
   // Serial.println(rightSensor);
 
+  //Reflectance Tape and Edge Top Error 
   int error;
+
+  int errorBottom;
 
   switch (pidType) {
     case PIDType::TapeFollower:
@@ -71,9 +78,9 @@ void PID::usePID(int KP, int KI, int KD)
     }
     case PIDType::EdgeFollower:
     {
-      bool leftOnPlatform = !sensorOnEdge(leftSensor, threshold);
-      bool rightOffPlatform = sensorOnEdge(rightSensor, threshold);
-      error = getEdgeError(leftOnPlatform, rightOffPlatform, EdgeFollowerNS::ONE_OFF_ERROR);
+      bool topLeftOnPlatform = !sensorOnEdge(topLeftSensor, threshold);
+      bool topRightOnPlatform = !sensorOnEdge(topRightSensor, threshold);
+      error = getEdgeError(topLeftOnPlatform, topRightOnPlatform, EdgeFollowerNS::ONE_OFF_ERROR);
       break;
     }
   }

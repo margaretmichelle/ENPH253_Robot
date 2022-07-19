@@ -173,8 +173,10 @@ namespace TapeFollowerNS {
 
 namespace EdgeFollowerNS {
   // Pins
-  const int LEFT_SENSOR_PIN = PA5;
-  const int RIGHT_SENSOR_PIN = PA4;
+  const int TOP_LEFT_SENSOR_PIN = PA5; //not the correct values right now 
+  const int TOP_RIGHT_SENSOR_PIN = PA4;
+  const int BOTTOM_LEFT_SENSOR_PIN = PA6;
+  const int BOTTOM_RIGHT_SENSOR_PIN = PA7;
   const int LEFT_MOTOR_PIN_1 = 2;
   const int LEFT_MOTOR_PIN_2 = 4;
   const int RIGHT_MOTOR_PIN_1 = 3;
