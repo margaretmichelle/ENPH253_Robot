@@ -19,16 +19,14 @@ void IR::followIR() {
     rightIRReading = readIRSensor(rightSensor);
     middleIRReading = readIRSensor(middleSensor);
 
-    if(fabs(leftIRReading - rightIRReading) >= IRFollowerNS::IR_DIFF_THRESHOLD) {
+    if(middleIRReading > leftIRReading && middleIRReading > rightIRReading && fabs(leftIRReading - rightIRReading) <= IRFollowerNS::IR_DIFF_THRESHOLD) {
+        leftMotorSpeed = motorSpeed;
+        rightMotorSpeed = motorSpeed;
+    } else {
         if(leftIRReading > rightIRReading) {
             leftMotorSpeed = motorSpeed + IRFollowerNS::MOTOR_SPEED_INCREMENT;
         } else {
             rightMotorSpeed = motorSpeed + IRFollowerNS::MOTOR_SPEED_INCREMENT;
-        }
-    } else {
-        if(middleIRReading > leftIRReading && middleIRReading > rightIRReading) {
-            leftMotorSpeed = motorSpeed;
-            rightMotorSpeed = motorSpeed;
         }
     }
 
