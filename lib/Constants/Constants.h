@@ -156,6 +156,16 @@ namespace EdgeFollowerNS {
   const int KI = 0;
 }
 
+namespace IRFollowerNS {
+  // Pins
+  const int LEFT_IR_SENSOR = PA5;
+  const int RIGHT_IR_SENSOR = PA3;
+  const int MIDDLE_IR_SENSOR = PA4;
+
+  const double IR_DIFF_THRESHOLD = 0.7;
+  const int MOTOR_SPEED_INCREMENT = 10;
+}
+
 namespace DriveMotorPins {
 
   const int BASE_SPEED = 80; 
