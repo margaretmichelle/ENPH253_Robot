@@ -24,7 +24,7 @@ void setup()
 
     pinMode(LED_BUILTIN, OUTPUT);
 
-    master.setState(Robot::MasterState::TapeFollow); //Just for Testing Purposes 
+    master.setState(Robot::MasterState::ObstacleFollow); //Just for Testing Purposes 
 }
 
 void loop()

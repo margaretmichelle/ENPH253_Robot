@@ -26,6 +26,8 @@ class OLED {
 
     void displayCustom(String labelA, int valA, String labelB, int valB);
 
+    void displayDistance(long distance);
+
     int getKP();
     int getKI();
     int getKD();

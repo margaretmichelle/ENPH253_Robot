@@ -25,11 +25,12 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) : p
     numReadings = TapeFollowerNS::NUM_READINGS;
     break;
   }
-  case PIDType::EdgeFollower: {
+  case PIDType::EdgeFollower: 
+  {
     topLeftSensorPin = EdgeFollowerNS::TOP_LEFT_SENSOR_PIN;
     topRightSensorPin = EdgeFollowerNS::TOP_RIGHT_SENSOR_PIN;
     summedErrorLimit = EdgeFollowerNS::SUMMED_ERROR_LIMIT;
-    threshold = EdgeFollowerNS::EDGE_THRESHOLD;
+    threshold = HighAndLow::HIGH_READING;
     numReadings = EdgeFollowerNS::NUM_READINGS;
     break;
   }
@@ -174,9 +175,13 @@ int PID::getEdgeError(bool correctLeftPosition, bool correctRightPosition, int o
   return error;
 }
 
-bool PID::sensorOnEdge(int sensorValue, int edgeThreshold) {
-  if (sensorValue > edgeThreshold) { return true; }
-  return false;
+bool PID::sensorOnEdge(int sensorValue, int highReading) {
+    if(sensorValue == highReading) { //we get a high reading when on an edge 
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 int PID::getSummedError(int error, int lastSummedError, int summedErrorLimit)

@@ -8,6 +8,7 @@
 #include <Motor.h>
 #include <PID.h>
 #include <OLED.h>
+#include <Obstacle.h>
 
 namespace Robot {
 
@@ -16,6 +17,8 @@ namespace Robot {
     Inactive,
     TapeFollow,
     IRFollow,
+    ObstacleFollow, 
+    EdgeFollow,
     Done
   };
   enum class SlaveState {
@@ -31,14 +34,18 @@ namespace Robot {
         leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2),
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
         tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 80),
-        irFollow(PIDType::IRFollower,leftMotor,rightMotor,80),
-        state(MasterState::Inactive) {
-            //Set-up Communication Pins
+        edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 80),
+        obstacle(),
+        state(MasterState::Inactive)
+        {
+          //Set-up Communication Pins
           pinMode(MasterNS::ADVANCE_SLAVE_PIN, OUTPUT);
           pinMode(MasterNS::STOP_SLAVE_PIN, OUTPUT);
           digitalWrite(MasterNS::ADVANCE_SLAVE_PIN, LOW);
           digitalWrite(MasterNS::STOP_SLAVE_PIN, LOW);
         }
+        
+          
 
       /*
       @brief Returns current state of robot and performs action for one loop.
@@ -79,7 +86,9 @@ namespace Robot {
       Motor leftMotor;
       Motor rightMotor;
       PID tapeFollow;
-      PID irFollow;
+      PID edgeFollow;
+
+      Obstacle obstacle;
 
       bool stopped;
 

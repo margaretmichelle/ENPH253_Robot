@@ -5,49 +5,7 @@
 
 // these Pin numbers are not finalized, please verify before using
 
-const int DEBOUNCE_DELAY = 50;  // ms
 const int MAP_8_BIT_TO_12_BIT = 16;
-
-// setup timers
-const int NUM_TIMERS = 4;
-const int TIMER_PERIOD = 20000;  // 20 ms
-
-const int LOOP_LENGTH = 20; // ms
-const bool TIME_TRIALS = false;
-
-// motor speed changes
-const int MOTOR_SPEED_CHANGE_THRESHOLD = 40;
-const int MOTOR_SPEED_CHANGE_DELAY = 150;  // ms
-
-namespace BridgeLayNS {
-  // off ramp 
-  const int OFF_RAMP_THRESHOLD = 270;
-  const int NUM_TIMES_OFF_RAMP = 2;
-
-  // ramp deploy
-  const int RAMP_DEPLOY_PIN = PB15;
-  const int RAMP_DEPLOY_TIME = 2000; // ms
-
-  // edge
-  const int EDGE_THRESHOLD = 350;
-  const int NUM_READINGS = 5;
-  const int EDGE_ALIGN_SPEED = 110;
-
-  namespace Left {
-    const int SERVO_PIN = PA2;
-    const int HOLD_BRIDGE_ANGLE = 45;
-    const int RELEASE_BRIDGE_ANGLE = 0;
-    const int RETRACT_ANGLE = 67;
-    const int SENSOR_PIN = PA7;
-  }
-  namespace Right {
-    const int SERVO_PIN = PA1;
-    const int HOLD_BRIDGE_ANGLE = 130;
-    const int RELEASE_BRIDGE_ANGLE = 180;
-    const int RETRACT_ANGLE = 105;
-    const int SENSOR_PIN = PA0;
-  }
-}
 
 namespace ClawNS {
   const int UP_ANGLE = 180;
@@ -82,8 +40,7 @@ namespace ClawNS {
 }
 
 namespace GyroNS {
-  const int SPI_ADDRESS = 4;
-  const int GYRO_INTERRUPT_PIN = 0;
+  
 }
 
 namespace IRNS {
@@ -173,10 +130,10 @@ namespace TapeFollowerNS {
 
 namespace EdgeFollowerNS {
   // Pins
-  const int TOP_LEFT_SENSOR_PIN = PA5; //not the correct values right now 
-  const int TOP_RIGHT_SENSOR_PIN = PA4;
-  const int BOTTOM_LEFT_SENSOR_PIN = PA6;
-  const int BOTTOM_RIGHT_SENSOR_PIN = PA7;
+  const int TOP_LEFT_SENSOR_PIN = PA0; //not the correct values right now 
+  const int TOP_RIGHT_SENSOR_PIN = PA1;
+  const int BOTTOM_LEFT_SENSOR_PIN = PA2;
+  const int BOTTOM_RIGHT_SENSOR_PIN = PA3;
   const int LEFT_MOTOR_PIN_1 = 2;
   const int LEFT_MOTOR_PIN_2 = 4;
   const int RIGHT_MOTOR_PIN_1 = 3;
@@ -225,6 +182,19 @@ namespace ClawConstants{
 namespace ArmConstants{
   const int ARM_UP = 180;
   const int ARM_DOWN = 0;
+}
+
+namespace HighAndLow {
+  const int HIGH_READING = 1;
+  const int LOW_READING = 0;
+}
+
+namespace ObstacleNS {; 
+  // not sure what the threshold value is yet we need to test
+  const int ECHO_PIN = PA4;
+  const int TRIGPIN = PA5;
+  const int MAX_DISTANCE = 30;
+  const int MIN_DISTANCE = 50;
 }
 
 #endif

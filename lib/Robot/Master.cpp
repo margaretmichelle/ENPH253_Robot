@@ -36,6 +36,18 @@ namespace Robot {
 
       break;
 
+    case MasterState::ObstacleFollow:
+      obstacle.useObstacle();
+
+      o.displayDistance(obstacle.getDistance());
+      
+      break;
+
+    case MasterState::EdgeFollow:
+    
+      edgeFollow.usePID(o.getKP(), o.getKI(), o.getKD());
+      break;
+
     case MasterState::Done:
       stop();
       break;

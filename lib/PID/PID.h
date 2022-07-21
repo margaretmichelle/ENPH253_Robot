@@ -86,8 +86,8 @@ public:
   int getLeftSensorVal() { leftSensor = Helper:: getAverageAnalogValue(leftSensorPin, TapeFollowerNS::NUM_READINGS); return leftSensor; }
   int getRightSensorVal() { rightSensor = Helper:: getAverageAnalogValue(rightSensorPin, TapeFollowerNS::NUM_READINGS); return rightSensor; }
 
-  int getTopLeftSensorVal() { topLeftSensor = Helper:: getAverageAnalogValue(topLeftSensorPin, EdgeFollowerNS::NUM_READINGS); return topLeftSensor; }
-  int getTopRightSensorVal() { topRightSensor = Helper:: getAverageAnalogValue(topRightSensorPin, EdgeFollowerNS::NUM_READINGS); return topRightSensor; }
+  int getTopLeftSensorVal() { topLeftSensor = digitalRead(topLeftSensorPin); return topLeftSensor; }
+  int getTopRightSensorVal() { topRightSensor = digitalRead(topRightSensorPin); return topRightSensor; }
 
   void setThreshold(int threshold) { this->threshold = threshold; }
   int getThreshold() { return threshold; }
@@ -120,11 +120,11 @@ private:
    * Check if sensor is on edge
    *
    * \param sensorValue QRD sensor value
-   * \param edgeThreshold minimum edge Threshold value
+   * \param highReading high reading when on an edge 
    *
-   * \return bool true if sensor is on edge, else returns false (returns true if sensorValue > edgeThreshold)
+   * \return bool true if sensor is on edge, else returns false (returns true if sensorValue == edgeThreshold)
    **/
-  bool sensorOnEdge(int sensorValue, int edgeThreshold);
+  bool sensorOnEdge(int sensorValue, int highReading);
 
   /**
    * set tape error based on left and right sensor digital data and last error

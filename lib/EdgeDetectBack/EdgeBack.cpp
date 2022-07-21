@@ -1,49 +1,53 @@
 #include <EdgeBack.h>
 #include <Motor.h>
 #include <Constants.h>
-#include <Arduino.h>
+#include <Arduino.h> //To do:  Add interrupts 
 
 EdgeBack :: EdgeBack (Motor leftMotor,Motor rightMotor, int motorSpeed) : 
     leftMotor(leftMotor),
     rightMotor(rightMotor),
     motorSpeed(motorSpeed)
     {
-      bottomLeftSensorPin = EdgeFollowerNS::TOP_LEFT_SENSOR_PIN;
-      bottomRightSensorPin = EdgeFollowerNS::TOP_RIGHT_SENSOR_PIN;
-      threshold = EdgeFollowerNS::EDGE_THRESHOLD;
-      numReadings = EdgeFollowerNS::NUM_READINGS;
+      bottomLeftSensorPin = EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN;
+      bottomRightSensorPin = EdgeFollowerNS::BOTTOM_RIGHT_SENSOR_PIN;
+      //threshold = EdgeFollowerNS::EDGE_THRESHOLD; we are using digital readings 1 and 0
+      //numReadings = EdgeFollowerNS::NUM_READINGS;
 
       //Set-up pins.  Motor pins are handled by library
       pinMode(bottomLeftSensorPin, INPUT_PULLUP);
       pinMode(bottomRightSensorPin, INPUT_PULLUP);
+
+      //attachinterrupts
+      //attachInterrupt(digitalPinToInterrupt(bottomLeftSensorPin), handleInterrupt , RISING);
+      //attachInterrupt(digitalPinToInterrupt(bottomRightSensorPin), handleInterrupt, RISING);
     }
 
 void EdgeBack::useEdgeBack() {
 
-    //Get average QRD Values on back
+    //Get digital QRD Values High and Low 
     getBottomLeftSensorVal();
     getBottomRightSensorVal();
 
     //Get 
-    bool leftOnPlatform = !sensorOnEdge(bottomLeftSensor,threshold);
-    bool rightOnPlatform = !sensorOnEdge(bottomRightSensor,threshold);
+    bool leftOnPlatform = !sensorOnEdge(bottomLeftSensor,HighAndLow::HIGH_READING);
+    bool rightOnPlatform = !sensorOnEdge(bottomRightSensor,HighAndLow::HIGH_READING);
 
     if(!leftOnPlatform && !rightOnPlatform) {
         moveForCertainTime(80,80,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //go straight since both off i think moving for 300 milliseconds would be good??
     }
     else if(!leftOnPlatform && rightOnPlatform) {
-        moveForCertainTime(80,100,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //turn right if left is not on platform 
+        moveForCertainTime(90,80,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //turn right if left is not on platform 
     }
     else if(leftOnPlatform && !rightOnPlatform) {
-        moveForCertainTime(100,80,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //turn left if right is not on platform
+        moveForCertainTime(80,90,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //turn left if right is not on platform
     }
     else {
         //do nothing if both are on platform
     }
 }    
 
-bool sensorOnEdge(int sensorValue, int edgeThreshold) {
-    if(sensorValue > edgeThreshold) {
+bool EdgeBack::sensorOnEdge(int sensorValue, int highReading) {
+    if(sensorValue == highReading) { //we get a high reading when on an edge 
         return true;
     }
     else {
@@ -51,9 +55,13 @@ bool sensorOnEdge(int sensorValue, int edgeThreshold) {
     }
 }
 
-void moveForCertainTime(int leftMotorSpeed, int rightMotorSpeed, Motor leftMotor, Motor rightMotor, int timeToMove) {
+void EdgeBack::moveForCertainTime(int leftMotorSpeed, int rightMotorSpeed, Motor leftMotor, Motor rightMotor, int timeToMove) {
     leftMotor.speed(leftMotorSpeed);
     rightMotor.speed(rightMotorSpeed);
     delay(timeToMove);
+}
+
+void EdgeBack::handleInterrupt() {
+    
 }
 
