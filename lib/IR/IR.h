@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <Constants.h>
 #include <Motor.h>
+#include <Helper.h>
 
 class IR {
 
@@ -26,6 +27,10 @@ private:
    */
   double readIRSensor(int pinNumber);
 
+  int getLeftSensorVal() { leftIRReading = Helper:: getAverageAnalogValue(leftSensor, IRFollowerNS::NUM_READINGS); return leftIRReading; }
+  int getRightSensorVal() { rightIRReading = Helper:: getAverageAnalogValue(rightSensor, IRFollowerNS::NUM_READINGS); return rightIRReading; }
+  int getMiddleSensorVal() { middleIRReading = Helper:: getAverageAnalogValue(middleSensor, IRFollowerNS::NUM_READINGS); return middleIRReading; }
+
   // Motors
   Motor leftMotor;
   Motor rightMotor;
@@ -46,8 +51,8 @@ private:
   double rightIRReading;
   
   // Timing
-  double lastReadTime;
-
+  long lastReadTime;
+  long currentTimeUS;
 };
 
 #endif

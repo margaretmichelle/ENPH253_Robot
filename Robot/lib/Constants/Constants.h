@@ -218,6 +218,8 @@ namespace IRFollowerNS {
 
   const double IR_DIFF_THRESHOLD = 0.7;
   const int MOTOR_SPEED_INCREMENT = 10;
+  const int NUM_READINGS = 4;
+  const long TIME_BETWEEN_UPDATES_US = 3000;
 }
 
 namespace DriveMotorPins {
