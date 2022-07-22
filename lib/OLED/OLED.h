@@ -18,19 +18,29 @@ class OLED {
     /**
      * @brief display screen on OLED
      */
-    void displayScreen();
+    void displayScreen(int leftMotorSpeed, int rightMotorSpeed, int leftReflectance, int rightReflectance, int TL, int TR, int BL, int BR, long distance);
 
-    void displayPID();
+    void displayTFPID();
+
+    void displayEdgePID();
 
     void displaySpeed(int leftMotorSpeed, int rightMotorSpeed);
 
-    void displayCustom(String labelA, int valA, String labelB, int valB);
+    void displayTFReflectance(int leftReflectance, int rightReflectance);
+
+    void displayEdgeReflectance(int TL, int TR, int BL, int BR);
 
     void displayDistance(long distance);
 
-    int getKP();
-    int getKI();
-    int getKD();
+    void displayCustom(String labelA, int valA, String labelB, int valB);
+
+    int getTKP();
+    int getTKI();
+    int getTKD();
+
+    int getEKP();
+    int getEKI();
+    int getEKD();
 };
 
 #endif

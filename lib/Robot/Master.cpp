@@ -21,14 +21,10 @@ namespace Robot {
 
     case MasterState::TapeFollow:
 
-      tapeFollow.usePID(o.getKP(), o.getKI(), o.getKD());
+      tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
 
 
-      // o.displayScreen();
-      // o.displayPID();
-      o.displaySpeed(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed());
-      // o.displayCustom("Left reflectance: ", tapeFollow.getLeftSensorVal(), "Right reflectance: ", tapeFollow.getRightSensorVal());
-      // o.displayCustom("Reflectance: ", tapeFollow.getLeftSensorVal(), "Motor speed: ", tapeFollow.getLeftMotorSpeed());
+      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
 
       break;
 
@@ -45,7 +41,7 @@ namespace Robot {
 
     case MasterState::EdgeFollow:
     
-      edgeFollow.usePID(o.getKP(), o.getKI(), o.getKD());
+      edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
       break;
 
     case MasterState::Done:

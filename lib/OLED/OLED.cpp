@@ -10,9 +10,14 @@ void clicked();
 void readEncoder();
 
 int screen;
-int KP;
-int KI;
-int KD;
+int page;
+int TKP;
+int TKI;
+int TKD;
+
+int EKP;
+int EKI;
+int EKD;
 
 Adafruit_SSD1306 oled(OLEDDisplayNS::SCREEN_WIDTH, OLEDDisplayNS::SCREEN_HEIGHT, &Wire, OLEDDisplayNS::OLED_RESET);
 
@@ -27,9 +32,15 @@ OLED::OLED() {
   // attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::DT_PIN), readEncoder, CHANGE);
 
   screen = 0;
-  KP = 15;
-  KI = 0;
-  KD = 2;
+  page = 0;
+
+  TKP = 15;
+  TKI = 0;
+  TKD = 2;
+
+  EKP = 10;
+  EKI = 0;
+  EKD = 0;
 }
 
 void OLED::start() {
@@ -37,21 +48,33 @@ void OLED::start() {
   oled.display();
 }
 
-int OLED::getKP() {
-  return KP;
+int OLED::getTKP() {
+  return TKP;
 }
 
-int OLED::getKI() {
-  return KI;
+int OLED::getTKI() {
+  return TKI;
 }
 
-int OLED::getKD() {
-  return KD;
+int OLED::getTKD() {
+  return TKD;
+}
+
+int OLED::getEKP() {
+  return EKP;
+}
+
+int OLED::getEKI() {
+  return EKI;
+}
+
+int OLED::getEKD() {
+  return EKD;
 }
 
 void clicked() {
   screen++;
-    if (screen == 4) {
+    if (screen > 7) {
         screen = 0;
     }
 }
@@ -62,26 +85,56 @@ void readEncoder() {
       if (digitalRead(OLEDDisplayNS::DT_PIN)) {
         switch (screen) {
           case 1:
-            KP++;
+            TKP++;
             break;
           case 2:
-            KI++;
+            TKI++;
             break;
           case 3:
-            KD++;
+            TKD++;
+            break;
+          case 4:
+            EKP++;
+            break;
+          case 5:
+            EKI++;
+            break;
+          case 6:
+            EKD++;
+            break;
+          default:
+            page++;
+            if (page > 3) {
+              page = 0;
+            }
             break;
         }
         
       } else {
           switch (screen) {
             case 1:
-              KP--;
+              TKP--;
               break;
             case 2:
-              KI--;
+              TKI--;
               break;
             case 3:
-              KD--;
+              TKD--;
+              break;
+            case 4:
+              EKP--;
+              break;
+            case 5:
+              EKI--;
+              break;
+            case 6:
+              EKD--;
+              break;
+            default:
+              page--;
+              if (page < 0) {
+                page = 3;
+              }
               break;
           }
       }
@@ -89,67 +142,41 @@ void readEncoder() {
   }
 }
 
-void OLED::displayScreen() {
-  oled.clearDisplay();
-  oled.setTextColor(SSD1306_WHITE);
-
-  switch (screen) {
-    case 0:
-      oled.setTextSize(2);
-      oled.setCursor(25,25);
-      oled.print("Robot ");
-      oled.write(3);
-      break;
-    case 1:
-      oled.setCursor(0,5);
-      oled.setTextSize(1);
-      oled.println("Tape Following PID:");
-      oled.setCursor(0,17);
-      oled.setTextSize(2);
-      oled.setTextColor(BLACK, WHITE);
-      oled.print("KP: ");
-      oled.print(KP);
-      oled.setTextColor(WHITE);
-      oled.print("\nKI: ");
-      oled.print(KI);
-      oled.print("\nKD: ");
-      oled.print(KD);
-      break;
-    case 2:
-      oled.setCursor(0,5);
-      oled.setTextSize(1);
-      oled.println("Tape Following PID:");
-      oled.setCursor(0,17);
-      oled.setTextSize(2);
-      oled.print("KP: ");
-      oled.print(KP);
-      oled.setTextColor(BLACK, WHITE);
-      oled.print("\nKI: ");
-      oled.print(KI);
-      oled.setTextColor(WHITE);
-      oled.print("\nKD: ");
-      oled.print(KD);
-      break;
-    case 3:
-      oled.setCursor(0,5);
-      oled.setTextSize(1);
-      oled.println("Tape Following PID:");
-      oled.setCursor(0,17);
-      oled.setTextSize(2);
-      oled.print("KP: ");
-      oled.print(KP);
-      oled.print("\nKI: ");
-      oled.print(KI);
-      oled.setTextColor(BLACK, WHITE);
-      oled.print("\nKD: ");
-      oled.print(KD);
-      break;
+void OLED::displayScreen(int leftMotorSpeed, int rightMotorSpeed, int leftReflectance, int rightReflectance, int TL, int TR, int BL, int BR, long distance) {
+  if (screen == 0) {
+    oled.clearDisplay();
+    oled.setTextColor(SSD1306_WHITE);
+    oled.setTextSize(2);
+    oled.setCursor(25,25);
+    oled.print("Robot ");
+    oled.write(3);
+    
+    oled.display();
+  } else if (screen < 4) {
+    displayTFPID();
+  } else if (screen < 7) {
+    displayEdgePID();
   }
 
-  oled.display();
+  if (screen == 7) {
+    switch (page) {
+      case 0:
+        displaySpeed(leftMotorSpeed, rightMotorSpeed);
+        break;
+      case 1:
+        displayTFReflectance(leftReflectance, rightReflectance);
+        break;
+      case 2:
+        displayEdgeReflectance(TL, TR, BL, BR);
+        break;
+      case 3:
+        displayDistance(distance);
+        break;
+    }
+  }
 }
 
-void OLED::displayPID() {
+void OLED::displayTFPID() {
   oled.clearDisplay();
   oled.setTextColor(SSD1306_WHITE);
   oled.setCursor(0,5);
@@ -157,12 +184,82 @@ void OLED::displayPID() {
   oled.println("Tape Following PID:");
   oled.setCursor(0,17);
   oled.setTextSize(2);
-  oled.print("KP: ");
-  oled.print(KP);
-  oled.print("\nKI: ");
-  oled.print(KI);
-  oled.print("\nKD: ");
-  oled.print(KD);
+
+  switch (screen) {
+    case 1:
+      oled.setTextColor(BLACK, WHITE);
+      oled.print("KP: ");
+      oled.print(TKP);
+      oled.setTextColor(WHITE);
+      oled.print("\nKI: ");
+      oled.print(TKI);
+      oled.print("\nKD: ");
+      oled.print(TKD);
+      break;
+    case 2:
+      oled.print("KP: ");
+      oled.print(TKP);
+      oled.setTextColor(BLACK, WHITE);
+      oled.print("\nKI: ");
+      oled.print(TKI);
+      oled.setTextColor(WHITE);
+      oled.print("\nKD: ");
+      oled.print(TKD);
+      break;
+    case 3:
+      oled.print("KP: ");
+      oled.print(TKP);
+      oled.print("\nKI: ");
+      oled.print(TKI);
+      oled.setTextColor(BLACK, WHITE);
+      oled.print("\nKD: ");
+      oled.print(TKD);
+      break;
+  }
+
+  oled.display();
+}
+
+void OLED::displayEdgePID() {
+  oled.clearDisplay();
+  oled.setTextColor(SSD1306_WHITE);
+  oled.setCursor(0,5);
+  oled.setTextSize(1);
+  oled.println("Edge Following PID:");
+  oled.setCursor(0,17);
+  oled.setTextSize(2);
+
+  switch (screen) {
+    case 4:
+      oled.setTextColor(BLACK, WHITE);
+      oled.print("KP: ");
+      oled.print(EKP);
+      oled.setTextColor(WHITE);
+      oled.print("\nKI: ");
+      oled.print(EKI);
+      oled.print("\nKD: ");
+      oled.print(EKD);
+      break;
+    case 5:
+      oled.print("KP: ");
+      oled.print(EKP);
+      oled.setTextColor(BLACK, WHITE);
+      oled.print("\nKI: ");
+      oled.print(EKI);
+      oled.setTextColor(WHITE);
+      oled.print("\nKD: ");
+      oled.print(EKD);
+      break;
+    case 6:
+      oled.print("KP: ");
+      oled.print(EKP);
+      oled.print("\nKI: ");
+      oled.print(EKI);
+      oled.setTextColor(BLACK, WHITE);
+      oled.print("\nKD: ");
+      oled.print(EKD);
+      break;
+  }
 
   oled.display();
 }
@@ -170,12 +267,59 @@ void OLED::displayPID() {
 void OLED::displaySpeed(int leftMotorSpeed, int rightMotorSpeed) {
   oled.clearDisplay();
   oled.setTextColor(SSD1306_WHITE);
-  oled.setCursor(0,0);
+  oled.setCursor(0,5);
   oled.setTextSize(1);
-  oled.println("Left motor speed: ");
-  oled.println(leftMotorSpeed);
-  oled.println("\nRight motor speed: ");
-  oled.println(rightMotorSpeed);
+  oled.println("Motor Speeds: ");
+  oled.setCursor(0,17);
+  oled.print("Left motor: ");
+  oled.print(leftMotorSpeed);
+  oled.print("\n\nRight motor: ");
+  oled.print(rightMotorSpeed);
+
+  oled.display();
+}
+
+void OLED::displayTFReflectance(int leftReflectance, int rightReflectance) {
+  oled.clearDisplay();
+  oled.setTextColor(SSD1306_WHITE);
+  oled.setCursor(0,5);
+  oled.setTextSize(1);
+  oled.println("Tape Following:");
+  oled.setCursor(0,17);
+  oled.print("Left: ");
+  oled.print(leftReflectance);
+  oled.print("\n\nRight ");
+  oled.print(rightReflectance);
+
+  oled.display();
+}
+
+void OLED::displayEdgeReflectance(int TL, int TR, int BL, int BR) {
+  oled.clearDisplay();
+  oled.setTextColor(SSD1306_WHITE);
+  oled.setCursor(0,5);
+  oled.setTextSize(1);
+  oled.println("Edge Detection:");
+  oled.setCursor(20,17);
+  oled.print(TL);
+  oled.setCursor(90,17);
+  oled.print(TR);
+  oled.setCursor(20,50);
+  oled.print(BL);
+  oled.setCursor(90,50);
+  oled.print(BR);
+
+  oled.display();
+}
+
+void OLED::displayDistance(long distance) {
+  oled.clearDisplay();
+  oled.setTextColor(SSD1306_WHITE);
+  oled.setCursor(0,5);
+  oled.setTextSize(1);
+  oled.println("Sonar Distance (cm): ");
+  oled.setCursor(0,17);
+  oled.println(distance);
 
   oled.display();
 }
@@ -189,17 +333,6 @@ void OLED::displayCustom(String labelA, int valA, String labelB, int valB) {
   oled.println(valA);
   oled.println("\n" + labelB);
   oled.println(valB);
-
-  oled.display();
-}
-
-void OLED::displayDistance(long distance) {
-  oled.clearDisplay();
-  oled.setTextColor(SSD1306_WHITE);
-  oled.setCursor(0,0);
-  oled.setTextSize(1);
-  oled.println("distance (cm): ");
-  oled.println(distance);
 
   oled.display();
 }
