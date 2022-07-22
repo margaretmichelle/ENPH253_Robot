@@ -13,7 +13,7 @@ int counter = 0;
 #define LED_BUILTIN PB2
 int ledState = LOW; 
 unsigned long previousMillis = 0;
-const long interval = 4000;
+const long interval = 2500;
 
 Robot::Master master;
 OLED oledDisplay;

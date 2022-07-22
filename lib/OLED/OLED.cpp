@@ -19,12 +19,12 @@ Adafruit_SSD1306 oled(OLEDDisplayNS::SCREEN_WIDTH, OLEDDisplayNS::SCREEN_HEIGHT,
 OLED::OLED() {
 
   pinMode(OLEDDisplayNS::BUTTON_PIN, INPUT);
-  pinMode(OLEDDisplayNS::CLK_PIN, INPUT_PULLUP);
-  pinMode(OLEDDisplayNS::DT_PIN, INPUT_PULLUP);
+  pinMode(OLEDDisplayNS::CLK_PIN, INPUT);
+  pinMode(OLEDDisplayNS::DT_PIN, INPUT);
 
   attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::BUTTON_PIN), clicked, RISING);
-  attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::CLK_PIN), readEncoder, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::DT_PIN), readEncoder, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::CLK_PIN), readEncoder, RISING);
+  // attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::DT_PIN), readEncoder, CHANGE);
 
   screen = 0;
   KP = 15;
@@ -91,35 +91,58 @@ void readEncoder() {
 
 void OLED::displayScreen() {
   oled.clearDisplay();
-  oled.setTextSize(2);
   oled.setTextColor(SSD1306_WHITE);
-  oled.setCursor(0,0);
 
   switch (screen) {
     case 0:
-      oled.setCursor(30,30);
+      oled.setTextSize(2);
+      oled.setCursor(25,25);
       oled.print("Robot ");
       oled.write(3);
       break;
     case 1:
+      oled.setCursor(0,5);
+      oled.setTextSize(1);
+      oled.println("Tape Following PID:");
+      oled.setCursor(0,17);
+      oled.setTextSize(2);
       oled.setTextColor(BLACK, WHITE);
-      oled.println("KP: " + KP);
+      oled.print("KP: ");
+      oled.print(KP);
       oled.setTextColor(WHITE);
-      oled.println("KI: " + KI);
-      oled.println("KD: " + KD);
+      oled.print("\nKI: ");
+      oled.print(KI);
+      oled.print("\nKD: ");
+      oled.print(KD);
       break;
     case 2:
-      oled.println("KP: " + KP);
+      oled.setCursor(0,5);
+      oled.setTextSize(1);
+      oled.println("Tape Following PID:");
+      oled.setCursor(0,17);
+      oled.setTextSize(2);
+      oled.print("KP: ");
+      oled.print(KP);
       oled.setTextColor(BLACK, WHITE);
-      oled.println("KI: " + KI);
+      oled.print("\nKI: ");
+      oled.print(KI);
       oled.setTextColor(WHITE);
-      oled.println("KD: " + KD);
+      oled.print("\nKD: ");
+      oled.print(KD);
       break;
     case 3:
-      oled.println("KP: " + KP);
-      oled.println("KI: " + KI);
+      oled.setCursor(0,5);
+      oled.setTextSize(1);
+      oled.println("Tape Following PID:");
+      oled.setCursor(0,17);
+      oled.setTextSize(2);
+      oled.print("KP: ");
+      oled.print(KP);
+      oled.print("\nKI: ");
+      oled.print(KI);
       oled.setTextColor(BLACK, WHITE);
-      oled.println("KD: " + KD);
+      oled.print("\nKD: ");
+      oled.print(KD);
       break;
   }
 
