@@ -23,9 +23,44 @@ namespace Robot {
 
       tapeFollow.usePID(o.getKP(), o.getKI(), o.getKD());
 
+      obstacle.useObstacle();
+
       if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 0) {
         moveForCertainTime(0,0,300); //stop for 300 ms 
+
+        //Hardcode the first turn using moveForCertainTime()
+
+        moveForCertainTime(90,80,800);
+        moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
+        moveForCertainTime(0,0,100); //stop to prepare claw 
+
+        //Add claw code 
+
         countIdolPickUp++;
+
+        
+        //Refind Tape and hardcode some good angle to continually move at 
+        while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
+            moveForCertainTime(80,120,100);
+        }
+      }
+      else if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 1) {
+        moveForCertainTime(0,0,300); //stop for 300 ms
+
+        //Hardcode the second turn using moveForCertainTime()
+        moveForCertainTime(90,80,800);
+        moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
+        moveForCertainTime(0,0,100); //stop to prepare claw 
+
+        //Add claw code 
+
+        countIdolPickUp++;
+
+        
+        //Refind Tape and hardcode some good angle to continually move at probably will want to have a sharper turn for this one 
+        while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
+            moveForCertainTime(80,120,100);
+        }
       }
 
 

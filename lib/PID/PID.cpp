@@ -120,6 +120,16 @@ bool PID::sensorOnWhite(int sensorValue, int threshold)
   return false;
 }
 
+bool PID::bothOnBlack(int threshold) {
+    getLeftSensorVal();
+    getRightSensorVal();
+
+    if(leftSensor > threshold && rightSensor > threshold) {
+      return true;
+    }
+    return false;
+}
+
 int PID::getTapeError(bool leftOnWhite, bool rightOnWhite, int oneOffError, int bothOffError)
 {
   // ensure correct input
@@ -206,3 +216,4 @@ int PID::getSummedError(int error, int lastSummedError, int summedErrorLimit)
 
   return summedError;
 }
+
