@@ -10,6 +10,8 @@
 #include <OLED.h>
 #include <Obstacle.h>
 #include <EdgeBack.h>
+#include <Arm.h>
+#include <Claw.h>
 
 namespace Robot {
 
@@ -38,6 +40,10 @@ namespace Robot {
         edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 80),
         obstacle(),
         edgeBack(leftMotor,rightMotor,80),
+        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_HALL_EFFECT_SENSOR_PIN),
+        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
+        leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw),
+        rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw),
         state(MasterState::Inactive)
         {
           //Set-up Communication Pins
@@ -52,7 +58,7 @@ namespace Robot {
       /*
       @brief Returns current state of robot and performs action for one loop.
       */
-      MasterState poll(OLED o, int count);
+      MasterState poll(OLED o);
 
       /**
        * @brief Set the state of the master. ONLY FOR DEBUGGING. Do not use on competition day
@@ -104,7 +110,7 @@ namespace Robot {
       void stop();
 
       /**
-       * @brief move for a certain amount of time 
+       * @brief move for a certain amount of time (in milliseconds)
        * 
        * @param leftMotorSpeed 
        * @param rightMotorSpeed 
@@ -125,6 +131,11 @@ namespace Robot {
       bool stopped;
 
       MasterState state;
+
+      Arm leftArm;
+      Arm rightArm;
+      Claw leftClaw;
+      Claw rightClaw;
 
   };
 

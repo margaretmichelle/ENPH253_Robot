@@ -1,37 +1,32 @@
 #include <Arm.h>
+#include <Claw.h>
 
-using namespace ArmConstants;
+using namespace ArmNS;
 
-Arm::Arm(int clawControlPin, int armControlPin){
+Arm::Arm(int armControlPin, Claw claw) : claw(claw) {
     this -> controlPin = armControlPin;
     ArmServo.attach(armControlPin);
     ArmServo.write(ARM_UP);
     currentPos =  ARM_UP;
-    ArmClaw = Claw(clawControlPin);
 }
 
-void Arm::returnToHome(){
+void Arm::returnToHome() {
     ArmServo.write(ARM_UP);
     currentPos = ARM_UP;
 }
 
-void Arm::goDown(){
-    //Assuming ARM_UP < ARM_DOWN
-    for (int i = ARM_UP; i < ARM_DOWN; i++){
-        ArmServo.write(i);
-        //Add Hall Effect Sensing
-    }
+void Arm::goDown() {
     ArmServo.write(ARM_DOWN);
     currentPos = ARM_DOWN;
 }
 
-int Arm::getPosition(){
+int Arm::getPosition() {
     return currentPos;
 }
 
-void Arm::placeObjectInContainer(){
+void Arm::placeObjectInContainer() {
     goDown();
-    //Add Hall Effect Sensing
-    ArmClaw.close();
+    claw.close();
     returnToHome();
+    claw.open();
 }

@@ -34,13 +34,13 @@ OLED::OLED() {
   screen = 0;
   page = 0;
 
-  TKP = 15;
-  TKI = 0;
-  TKD = 2;
+  TKP = TapeFollowerNS::KP;
+  TKI = TapeFollowerNS::KI;
+  TKD = TapeFollowerNS::KD;
 
-  EKP = 10;
-  EKI = 0;
-  EKD = 0;
+  EKP = EdgeFollowerNS::KP;
+  EKI = EdgeFollowerNS::KI;
+  EKD = EdgeFollowerNS::KD;
 }
 
 void OLED::start() {

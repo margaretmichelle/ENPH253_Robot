@@ -5,10 +5,10 @@
 #include <Constants.h>
 #include <Claw.h>
 
-class Arm{
+class Arm {
     public:
     //Constructor
-        Arm(int clawControlPin, int armControlPin);
+        Arm(int armControlPin, Claw claw);
 
         /**
          * @brief grab totem and place in the basket
@@ -39,7 +39,7 @@ class Arm{
     int controlPin;
     int currentPos;
     Servo ArmServo;
-    Claw ArmClaw;
+    Claw claw;
 };
 
 #endif
