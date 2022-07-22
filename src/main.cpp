@@ -18,11 +18,19 @@ const long interval = 2500;
 Robot::Master master;
 OLED oledDisplay;
 
+void useEdgeDetection();
+
 void setup()
 {
     oledDisplay.start();
 
     pinMode(LED_BUILTIN, OUTPUT);
+    
+    pinMode(EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN, INPUT_PULLUP); //we already do this in the class
+    pinMode(EdgeFollowerNS::BOTTOM_RIGHT_SENSOR_PIN, INPUT_PULLUP);
+    //Attach interrupts to the back edge detection
+    attachInterrupt(EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN, useEdgeDetection, RISING);
+    attachInterrupt(EdgeFollowerNS::BOTTOM_RIGHT_SENSOR_PIN, useEdgeDetection, RISING);
 
     master.setState(Robot::MasterState::TapeFollow); //Just for Testing Purposes 
 }
@@ -47,3 +55,7 @@ void loop()
     digitalWrite(LED_BUILTIN, ledState);
   }
 };
+
+void useEdgeDetection() {
+    master.useEdgeDetection();
+}

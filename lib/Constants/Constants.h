@@ -205,6 +205,7 @@ namespace ObstacleNS {;
   const int TRIGPIN = PA5;
   const int MAX_DISTANCE = 30;
   const int MIN_DISTANCE = 50;
+  const int DISTANCE_TO_IDOL = 40;//cm
 }
 
 #endif

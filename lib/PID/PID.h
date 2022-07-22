@@ -50,6 +50,15 @@ public:
   bool bothOnWhite(int leftSensor, int rightSensor);
 
   /**
+   * @brief Checks if both sensors are on black tape
+   * 
+   * @param threshold 
+   * @return true 
+   * @return false 
+   */
+  bool bothOnBlack(int threshold);
+
+  /**
    * Refind tape
    *
    * @param leftMotorSpeed left speed

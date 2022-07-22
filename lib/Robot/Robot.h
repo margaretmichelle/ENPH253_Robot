@@ -9,6 +9,7 @@
 #include <PID.h>
 #include <OLED.h>
 #include <Obstacle.h>
+#include <EdgeBack.h>
 
 namespace Robot {
 
@@ -36,6 +37,7 @@ namespace Robot {
         tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 80),
         edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 80),
         obstacle(),
+        edgeBack(leftMotor,rightMotor,80),
         state(MasterState::Inactive)
         {
           //Set-up Communication Pins
@@ -53,9 +55,15 @@ namespace Robot {
       MasterState poll(OLED o, int count);
 
       /**
-       * @brief Set the state of slave. ONLY FOR DEBUGGING. Do not use on competition day
+       * @brief Set the state of the master. ONLY FOR DEBUGGING. Do not use on competition day
        */
       void setState(MasterState state) { this->state = state; }
+      
+      /**
+       * @brief Use edge detection
+       * 
+       */
+      void useEdgeDetection();
 
     private:
       /*
@@ -77,11 +85,32 @@ namespace Robot {
       */
       void endReplicaSignal();
 
+      /**
+       * @brief Stop the replica 
+       * 
+       */
       void stopReplica();
 
+      /**
+       * @brief Tell replica to go
+       * 
+       */
       void goReplica();
 
+      /**
+       * @brief stop replica from performing actions 
+       * 
+       */
       void stop();
+
+      /**
+       * @brief move for a certain amount of time 
+       * 
+       * @param leftMotorSpeed 
+       * @param rightMotorSpeed 
+       * @param moveForTime 
+       */
+      void moveForCertainTime(int leftMotorSpeed, int rightMotorSpeed, int moveForTime);
 
       Motor leftMotor;
       Motor rightMotor;
@@ -89,6 +118,9 @@ namespace Robot {
       PID edgeFollow;
 
       Obstacle obstacle;
+      EdgeBack edgeBack;
+
+      int countIdolPickUp = 0;
 
       bool stopped;
 

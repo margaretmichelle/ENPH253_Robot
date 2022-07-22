@@ -54,12 +54,6 @@ class EdgeBack {
          */
         void moveForCertainTime(int leftMotorSpeed, int rightMotorSpeed, Motor leftMotor, Motor rightMotor, int moveTime);
 
-        /**
-         * @brief Perform useBackEdge Function 
-         * 
-         */
-        void handleInterrupt();
-
 
     private :
 

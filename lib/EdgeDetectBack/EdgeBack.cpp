@@ -16,10 +16,6 @@ EdgeBack :: EdgeBack (Motor leftMotor,Motor rightMotor, int motorSpeed) :
       //Set-up pins.  Motor pins are handled by library
       pinMode(bottomLeftSensorPin, INPUT_PULLUP);
       pinMode(bottomRightSensorPin, INPUT_PULLUP);
-
-      //attachinterrupts
-      //attachInterrupt(digitalPinToInterrupt(bottomLeftSensorPin), handleInterrupt , RISING);
-      //attachInterrupt(digitalPinToInterrupt(bottomRightSensorPin), handleInterrupt, RISING);
     }
 
 void EdgeBack::useEdgeBack() {
@@ -59,9 +55,8 @@ void EdgeBack::moveForCertainTime(int leftMotorSpeed, int rightMotorSpeed, Motor
     leftMotor.speed(leftMotorSpeed);
     rightMotor.speed(rightMotorSpeed);
     delay(timeToMove);
-}
 
-void EdgeBack::handleInterrupt() {
-    
+    leftMotor.stop();
+    rightMotor.stop();
 }
 
