@@ -15,13 +15,18 @@ namespace Robot {
     switch (state)
     {
     case MasterState::Inactive:
-      //
+      //We will probably not have an inactive masterState
       incrementState();
       break;
 
     case MasterState::TapeFollow:
 
       tapeFollow.usePID(o.getKP(), o.getKI(), o.getKD());
+
+      if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 0) {
+        moveForCertainTime(0,0,300); //stop for 300 ms 
+        countIdolPickUp++;
+      }
 
 
       // o.displayScreen();
@@ -46,6 +51,8 @@ namespace Robot {
     case MasterState::EdgeFollow:
     
       edgeFollow.usePID(o.getKP(), o.getKI(), o.getKD());
+
+      o.displaySpeed(edgeFollow.getLeftMotorSpeed(), edgeFollow.getRightMotorSpeed());
       break;
 
     case MasterState::Done:
@@ -59,11 +66,26 @@ namespace Robot {
     return state;
   } // namespace Robot
 
+  void Master::useEdgeDetection() {
+    edgeBack.useEdgeBack();
+  }
+
+
+
   void Master::stop() {
-    if(stopped) { return; }
-    stopped = true;
+    // if(stopped) { return; }
+    // stopped = true;
     leftMotor.stop();
     rightMotor.stop();
+  }
+
+  void Master::moveForCertainTime(int leftMotorSpeed,int rightMotorSpeed, int moveForTime) {
+     leftMotor.speed(leftMotorSpeed);
+     rightMotor.speed(rightMotorSpeed);
+     delay(moveForTime);
+
+     leftMotor.stop();
+     rightMotor.stop();
   }
 
   bool Master:: incrementState() {
@@ -89,6 +111,8 @@ namespace Robot {
   void Master::goReplica() {
     digitalWrite(MasterNS::STOP_SLAVE_PIN, LOW);
   }
+
+
 
   
 
