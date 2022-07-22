@@ -7,7 +7,7 @@ Arm::Arm(int clawControlPin, int armControlPin){
     ArmServo.attach(armControlPin);
     ArmServo.write(ARM_UP);
     currentPos =  ARM_UP;
-    ArmClaw(clawControlPin);
+    ArmClaw = Claw(clawControlPin);
 }
 
 void Arm::returnToHome(){

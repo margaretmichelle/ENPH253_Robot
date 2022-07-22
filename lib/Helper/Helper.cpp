@@ -7,4 +7,3 @@ int Helper::getAverageAnalogValue(int analogPin, int numReadings) {
   for (int k = 0; k < numReadings; k++) sensorValue += analogRead(analogPin);
   return sensorValue / numReadings;
 }
-

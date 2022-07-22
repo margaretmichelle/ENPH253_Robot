@@ -3,7 +3,7 @@
 using namespace ClawConstants;
 
 Claw::Claw(int controlPin){
-    this.controlPin = controlPin;
+    this -> controlPin = controlPin;
     clawServo.attach(controlPin);
     currentPos = CLAW_OPEN;
     clawServo.write(CLAW_OPEN);

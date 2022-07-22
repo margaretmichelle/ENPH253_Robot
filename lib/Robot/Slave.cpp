@@ -16,13 +16,13 @@ namespace Robot {
         break;
 
       case SlaveState::Done:
-        // complete, so do nothing
+        // complete, so do nothing and stop the replica/slave 
         stop();
         break;
     }
     return state;
   }
-
+  
   bool Slave::advanceState() {
     if (state == SlaveState::Done) { return false; }
     state = static_cast<SlaveState>(static_cast<int>(state) + 1);

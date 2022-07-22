@@ -32,6 +32,8 @@ void IR::followIR() {
 
     leftMotor.speed(leftMotorSpeed);
     rightMotor.speed(rightMotorSpeed);
+
+    
 };
 
 double IR::readIRSensor(int pinNumber){
