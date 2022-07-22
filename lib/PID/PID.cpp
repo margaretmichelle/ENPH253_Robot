@@ -25,24 +25,38 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) : p
     numReadings = TapeFollowerNS::NUM_READINGS;
     break;
   }
+  case PIDType::EdgeFollower: 
+  {
+    topLeftSensorPin = EdgeFollowerNS::TOP_LEFT_SENSOR_PIN;
+    topRightSensorPin = EdgeFollowerNS::TOP_RIGHT_SENSOR_PIN;
+    summedErrorLimit = EdgeFollowerNS::SUMMED_ERROR_LIMIT;
+    threshold = HighAndLow::HIGH_READING;
+    numReadings = EdgeFollowerNS::NUM_READINGS;
+    break;
+  }
   default:
   {
     // Error never should be here should always have PIDType
   }
-  }
 
+  }
   // Setup Pins.  Motor pins are handled by library
   pinMode(leftSensorPin, INPUT_PULLUP);
   pinMode(rightSensorPin, INPUT_PULLUP);
+  pinMode(topRightSensorPin,INPUT_PULLUP);
+  pinMode(topLeftSensorPin, INPUT_PULLUP);
 }
 
 void PID::usePID(int KP, int KI, int KD)
 {
 
-  // // get average QRD values
+  // average QRD values for Tape
   getLeftSensorVal();
   getRightSensorVal();
 
+  // get average QRD values for the edge 
+  getTopLeftSensorVal();
+  getTopRightSensorVal();
 
   // // print qrd values
   // Serial.print("TL: ");
@@ -50,7 +64,10 @@ void PID::usePID(int KP, int KI, int KD)
   // Serial.print(" TR: ");
   // Serial.println(rightSensor);
 
+  //Reflectance Tape and Edge Top Error 
   int error;
+
+  int errorBottom;
 
   switch (pidType) {
     case PIDType::TapeFollower:
@@ -58,6 +75,13 @@ void PID::usePID(int KP, int KI, int KD)
       bool leftOnWhite = sensorOnWhite(leftSensor, threshold);
       bool rightOnWhite = sensorOnWhite(rightSensor, threshold);
       error = getTapeError(leftOnWhite, rightOnWhite, TapeFollowerNS::ONE_OFF_ERROR, TapeFollowerNS::BOTH_OFF_ERROR);
+      break;
+    }
+    case PIDType::EdgeFollower:
+    {
+      bool topLeftOnPlatform = !sensorOnEdge(topLeftSensor, threshold);
+      bool topRightOnPlatform = !sensorOnEdge(topRightSensor, threshold);
+      error = getEdgeError(topLeftOnPlatform, topRightOnPlatform, EdgeFollowerNS::ONE_OFF_ERROR);
       break;
     }
   }
@@ -135,6 +159,29 @@ int PID::getTapeError(bool leftOnWhite, bool rightOnWhite, int oneOffError, int 
   }
 
   return error;
+}
+
+int PID::getEdgeError(bool correctLeftPosition, bool correctRightPosition, int oneOffError) {
+  // ensure correct input
+  if (pidType != PIDType::EdgeFollower){}  // THROW EXCEPTION
+
+  int error = 0;
+
+  // set error left or right
+  if (!correctRightPosition) { error = -oneOffError; }
+  else if (!correctLeftPosition) { error = oneOffError; }
+  else { error = 0; }
+
+  return error;
+}
+
+bool PID::sensorOnEdge(int sensorValue, int highReading) {
+    if(sensorValue == highReading) { //we get a high reading when on an edge 
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 int PID::getSummedError(int error, int lastSummedError, int summedErrorLimit)

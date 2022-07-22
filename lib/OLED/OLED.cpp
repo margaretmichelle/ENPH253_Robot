@@ -27,9 +27,9 @@ OLED::OLED() {
   // attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::DT_PIN), readEncoder, CHANGE);
 
   screen = 0;
-  KP = 10;
+  KP = 15;
   KI = 0;
-  KD = 0;
+  KD = 2;
 }
 
 void OLED::start() {
@@ -189,6 +189,17 @@ void OLED::displayCustom(String labelA, int valA, String labelB, int valB) {
   oled.println(valA);
   oled.println("\n" + labelB);
   oled.println(valB);
+
+  oled.display();
+}
+
+void OLED::displayDistance(long distance) {
+  oled.clearDisplay();
+  oled.setTextColor(SSD1306_WHITE);
+  oled.setCursor(0,0);
+  oled.setTextSize(1);
+  oled.println("distance (cm): ");
+  oled.println(distance);
 
   oled.display();
 }

@@ -8,7 +8,8 @@
 
 enum class PIDType {
   TapeFollower,
-  EdgeFollower
+  EdgeFollower,
+  IRFollower
 };
 
 class PID {
@@ -60,6 +61,19 @@ public:
    * @return true if on tape, false if hits maxTime
    */
   bool refindTape(int leftMotorSpeed, int rightMotorSpeed, int maxTime);
+
+
+  /**
+   * @brief 
+   * 
+   * @param topLeftSensor top left value
+   * @param topRightSensor  top right value
+   * @param bottomLeftSensor top left value
+   * @param bottomRightSensor top right value 
+   * @return true 
+   * @return false 
+   */
+  bool robotOnTower(int topLeftSensor,int topRightSensor, int bottomLeftSensor, int bottomRightSensor);
   
   /**
    * Setter and getter methods
@@ -71,6 +85,9 @@ public:
 
   int getLeftSensorVal() { leftSensor = Helper:: getAverageAnalogValue(leftSensorPin, TapeFollowerNS::NUM_READINGS); return leftSensor; }
   int getRightSensorVal() { rightSensor = Helper:: getAverageAnalogValue(rightSensorPin, TapeFollowerNS::NUM_READINGS); return rightSensor; }
+
+  int getTopLeftSensorVal() { topLeftSensor = digitalRead(topLeftSensorPin); return topLeftSensor; }
+  int getTopRightSensorVal() { topRightSensor = digitalRead(topRightSensorPin); return topRightSensor; }
 
   void setThreshold(int threshold) { this->threshold = threshold; }
   int getThreshold() { return threshold; }
@@ -103,11 +120,11 @@ private:
    * Check if sensor is on edge
    *
    * \param sensorValue QRD sensor value
-   * \param edgeThreshold minimum edge Threshold value
+   * \param highReading high reading when on an edge 
    *
-   * \return bool true if sensor is on edge, else returns false (returns true if sensorValue > edgeThreshold)
+   * \return bool true if sensor is on edge, else returns false (returns true if sensorValue == edgeThreshold)
    **/
-  bool sensorOnEdge(int sensorValue, int edgeThreshold);
+  bool sensorOnEdge(int sensorValue, int highReading);
 
   /**
    * set tape error based on left and right sensor digital data and last error
@@ -145,9 +162,13 @@ private:
    **/
   int getSummedError(int error, int lastSummedError, int summedErrorLimit);
 
-  // Pins
+  // Pins for TapeFollow
   int leftSensorPin;
   int rightSensorPin;
+
+  // Pins for EdgeFollow
+  int topLeftSensorPin;
+  int topRightSensorPin;
 
   PIDType pidType;
 
@@ -167,8 +188,13 @@ private:
   int leftMotorSpeed;
   int rightMotorSpeed;
 
+  //Tape Reflectance Sensors
   int leftSensor;
   int rightSensor;
+
+  //Edge Reflectance Sensors
+  int topLeftSensor;
+  int topRightSensor;
 
   int threshold;
   int motorSpeed;

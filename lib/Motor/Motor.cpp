@@ -2,7 +2,6 @@
 #include <Constants.h>
 #include <Motor.h>
 
-
 Motor::Motor(int pin1, int pin2) : pin1(pin1), pin2(pin2) {
   // No need for pinMode since analogWrite() incorporates it
   pinName1 = (PinName) pin1;
@@ -22,14 +21,6 @@ void Motor::speed(int speed) {
   // Limits
   if (speed > 255) speed = 255;
   if (speed < -255) speed = -255;
-
-  // // delay if sudden motor speed change
-  // int difference = abs(speed - previousSpeed);
-  // if (difference > MOTOR_SPEED_CHANGE_THRESHOLD) { 
-  //   pwm_start(pinName1, DriveMotorPins::MOTOR_FREQ , 0 , RESOLUTION_12B_COMPARE_FORMAT);
-  //   pwm_start(pinName2, DriveMotorPins::MOTOR_FREQ , 0 , RESOLUTION_12B_COMPARE_FORMAT);
-  //   delay(MOTOR_SPEED_CHANGE_DELAY); 
-  // }
 
   // Write the speeds to the motors
   if (speed > 0) {
