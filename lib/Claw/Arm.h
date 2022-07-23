@@ -1,7 +1,7 @@
 #ifndef arm_h
 #define arm_h
 #include <Arduino.h>
-#include <Servo.h>
+#include <ServoMotor.h>
 #include <Constants.h>
 #include <Claw.h>
 
@@ -36,9 +36,7 @@ class Arm {
         int getPosition();
 
     private:
-    int controlPin;
-    int currentPos;
-    Servo ArmServo;
+    ServoMotor armServo;
     Claw claw;
 };
 

@@ -1,7 +1,7 @@
 #ifndef claw_h
 #define claw_h
 #include <Arduino.h>
-#include <Servo.h>
+#include <ServoMotor.h>
 #include <Constants.h>
 
 class Claw {
@@ -31,10 +31,8 @@ class Claw {
         bool wasMagnetFound();
 
     private:
-    int controlPin;
     int hallEffectPin;
-    int currentPos;
-    Servo clawServo;
+    ServoMotor clawServo;
     bool magnetFound;
 };
 

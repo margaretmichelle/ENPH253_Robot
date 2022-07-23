@@ -1,27 +1,23 @@
 #include <Arm.h>
 #include <Claw.h>
+#include <Servo.h>
 
 using namespace ArmNS;
 
-Arm::Arm(int armControlPin, Claw claw) : claw(claw) {
-    this -> controlPin = armControlPin;
-    ArmServo.attach(armControlPin);
-    ArmServo.write(ARM_UP);
-    currentPos =  ARM_UP;
+Arm::Arm(int armControlPin, Claw claw) : claw(claw), armServo(armControlPin) {
+    armServo.write(ARM_UP);
 }
 
 void Arm::returnToHome() {
-    ArmServo.write(ARM_UP);
-    currentPos = ARM_UP;
+    armServo.write(ARM_UP);
 }
 
 void Arm::goDown() {
-    ArmServo.write(ARM_DOWN);
-    currentPos = ARM_DOWN;
+    armServo.write(ARM_DOWN);
 }
 
 int Arm::getPosition() {
-    return currentPos;
+    return armServo.getPosition();
 }
 
 void Arm::placeObjectInContainer() {

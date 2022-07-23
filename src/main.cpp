@@ -8,6 +8,8 @@
 #include <Adafruit_SSD1306.h>
 #include <Wire.h>
 #include <Robot.h> 
+#include <ServoMotor.h>
+#include <Claw.h>
 
 #define LED_BUILTIN PB2
 int ledState = LOW; 
@@ -19,6 +21,9 @@ OLED oledDisplay;
 
 void useEdgeDetection();
 
+ServoMotor servo(PA_2);
+
+
 void setup()
 {
     oledDisplay.start();
@@ -29,15 +34,14 @@ void setup()
     attachInterrupt(EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN, useEdgeDetection, RISING);
     attachInterrupt(EdgeFollowerNS::BOTTOM_RIGHT_SENSOR_PIN, useEdgeDetection, RISING);
 
-    master.setState(Robot::MasterState::TapeFollow); //Just for Testing Purposes 
+    master.setState(Robot::MasterState::IRFollow); //Just for Testing Purposes 
 }
 
 void loop()
 {
-    //pwm_start(PA_10, DriveMotorPins::MOTOR_FREQ, 2100, RESOLUTION_12B_COMPARE_FORMAT);
-    master.poll(oledDisplay);
+  master.poll(oledDisplay);
 
-      unsigned long currentMillis = millis();
+  unsigned long currentMillis = millis();
 
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;

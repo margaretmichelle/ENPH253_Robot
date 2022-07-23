@@ -132,10 +132,10 @@ namespace Robot {
 
       MasterState state;
 
-      Arm leftArm;
-      Arm rightArm;
       Claw leftClaw;
       Claw rightClaw;
+      Arm leftArm;
+      Arm rightArm;
 
   };
 

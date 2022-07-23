@@ -70,7 +70,10 @@ namespace Robot {
       break;
 
     case MasterState::IRFollow:
-
+      rightArm.goDown();
+      delay(500);
+      rightArm.returnToHome();
+      delay(500);
       break;
 
     case MasterState::ObstacleFollow:

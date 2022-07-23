@@ -9,24 +9,30 @@ const int MAP_8_BIT_TO_12_BIT = 16;
 
 namespace ClawNS {
   // Pins
-  const int LEFT_CLAW_SERVO_PIN = PA1; // will be moved to PA8 and PA9 on other BP
-  const int RIGHT_CLAW_SERVO_PIN = PA0;
+  const int LEFT_CLAW_SERVO_PIN = PA_1; // will be moved to PA8 and PA9 on other BP
+  const int RIGHT_CLAW_SERVO_PIN = PA_0;
   const int LEFT_HALL_EFFECT_SENSOR_PIN = PA5; // overloaded with IR sensor pins
   const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
 
   // Constants
-  const int CLAW_OPEN = 180;
+  const int CLAW_OPEN = 100;
   const int CLAW_CLOSED = 0;
 }
 
 namespace ArmNS {
   // Pins
-  const int LEFT_ARM_SERVO_PIN = PA3; // currently overloaded with IR sensor (servos to be moved to other BP)
-  const int RIGHT_ARM_SERVO_PIN = PA2;
+  const int LEFT_ARM_SERVO_PIN = PA_3; // currently overloaded with IR sensor (servos to be moved to other BP)
+  const int RIGHT_ARM_SERVO_PIN = PA_2;
 
   // Constants
   const int ARM_UP = 180;
   const int ARM_DOWN = 0;
+}
+
+namespace ServoNS {
+  const int SERVO_FREQ = 300;
+  const int MAX_DUTY_CYCLE = 3200;
+  const int MIN_DUTY_CYCLE = 800;
 }
 
 namespace GyroNS {
@@ -148,9 +154,9 @@ namespace EdgeFollowerNS {
 
 namespace IRFollowerNS {
   // Pins
-  const int LEFT_IR_SENSOR = PA5;
-  const int RIGHT_IR_SENSOR = PA3;
-  const int MIDDLE_IR_SENSOR = PA4;
+  // const int LEFT_IR_SENSOR = PA5;
+  // const int RIGHT_IR_SENSOR = PA3;
+  // const int MIDDLE_IR_SENSOR = PA4;
 
   const double IR_DIFF_THRESHOLD = 0.7;
   const int MOTOR_SPEED_INCREMENT = 10;
