@@ -84,22 +84,22 @@ void readEncoder() {
     if (digitalRead(OLEDDisplayNS::CLK_PIN)) {
       if (digitalRead(OLEDDisplayNS::DT_PIN)) {
         switch (screen) {
-          case 1:
+          case 2:
             TKP++;
             break;
-          case 2:
+          case 3:
             TKI++;
             break;
-          case 3:
+          case 4:
             TKD++;
             break;
-          case 4:
+          case 5:
             EKP++;
             break;
-          case 5:
+          case 6:
             EKI++;
             break;
-          case 6:
+          case 7:
             EKD++;
             break;
           default:
@@ -112,22 +112,22 @@ void readEncoder() {
         
       } else {
           switch (screen) {
-            case 1:
+            case 2:
               TKP--;
               break;
-            case 2:
+            case 3:
               TKI--;
               break;
-            case 3:
+            case 4:
               TKD--;
               break;
-            case 4:
+            case 5:
               EKP--;
               break;
-            case 5:
+            case 6:
               EKI--;
               break;
-            case 6:
+            case 7:
               EKD--;
               break;
             default:
