@@ -1,6 +1,7 @@
 #include <Arm.h>
 #include <Claw.h>
 #include <Servo.h>
+#include <OLED.h>
 
 using namespace ArmNS;
 
@@ -25,4 +26,11 @@ void Arm::placeObjectInContainer() {
     claw.close();
     returnToHome();
     claw.open();
+}
+
+void Arm::findHome(int minAngle, int maxAngle, OLED o) {
+    for (int i = minAngle; i <= maxAngle; i++) {
+        armServo.write(i);
+        o.displayCustom("Servo angle: ", i);
+    }
 }

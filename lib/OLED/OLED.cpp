@@ -152,13 +152,7 @@ void OLED::displayScreen(int leftMotorSpeed, int rightMotorSpeed, int leftReflec
     oled.write(3);
     
     oled.display();
-  } else if (screen < 4) {
-    displayTFPID();
-  } else if (screen < 7) {
-    displayEdgePID();
-  }
-
-  if (screen == 7) {
+  } else if (screen == 1) {
     switch (page) {
       case 0:
         displaySpeed(leftMotorSpeed, rightMotorSpeed);
@@ -173,7 +167,12 @@ void OLED::displayScreen(int leftMotorSpeed, int rightMotorSpeed, int leftReflec
         displayDistance(distance);
         break;
     }
+  } else if (screen < 5) {
+    displayTFPID();
+  } else if (screen < 8) {
+    displayEdgePID();
   }
+
 }
 
 void OLED::displayTFPID() {
@@ -186,27 +185,27 @@ void OLED::displayTFPID() {
   oled.setTextSize(2);
 
   switch (screen) {
-    case 1:
-      oled.setTextColor(BLACK, WHITE);
-      oled.print("KP: ");
-      oled.print(TKP);
-      oled.setTextColor(WHITE);
-      oled.print("\nKI: ");
-      oled.print(TKI);
-      oled.print("\nKD: ");
-      oled.print(TKD);
-      break;
     case 2:
+      oled.setTextColor(BLACK, WHITE);
       oled.print("KP: ");
       oled.print(TKP);
-      oled.setTextColor(BLACK, WHITE);
+      oled.setTextColor(WHITE);
       oled.print("\nKI: ");
       oled.print(TKI);
-      oled.setTextColor(WHITE);
       oled.print("\nKD: ");
       oled.print(TKD);
       break;
     case 3:
+      oled.print("KP: ");
+      oled.print(TKP);
+      oled.setTextColor(BLACK, WHITE);
+      oled.print("\nKI: ");
+      oled.print(TKI);
+      oled.setTextColor(WHITE);
+      oled.print("\nKD: ");
+      oled.print(TKD);
+      break;
+    case 4:
       oled.print("KP: ");
       oled.print(TKP);
       oled.print("\nKI: ");
@@ -230,27 +229,27 @@ void OLED::displayEdgePID() {
   oled.setTextSize(2);
 
   switch (screen) {
-    case 4:
-      oled.setTextColor(BLACK, WHITE);
-      oled.print("KP: ");
-      oled.print(EKP);
-      oled.setTextColor(WHITE);
-      oled.print("\nKI: ");
-      oled.print(EKI);
-      oled.print("\nKD: ");
-      oled.print(EKD);
-      break;
     case 5:
+      oled.setTextColor(BLACK, WHITE);
       oled.print("KP: ");
       oled.print(EKP);
-      oled.setTextColor(BLACK, WHITE);
+      oled.setTextColor(WHITE);
       oled.print("\nKI: ");
       oled.print(EKI);
-      oled.setTextColor(WHITE);
       oled.print("\nKD: ");
       oled.print(EKD);
       break;
     case 6:
+      oled.print("KP: ");
+      oled.print(EKP);
+      oled.setTextColor(BLACK, WHITE);
+      oled.print("\nKI: ");
+      oled.print(EKI);
+      oled.setTextColor(WHITE);
+      oled.print("\nKD: ");
+      oled.print(EKD);
+      break;
+    case 7:
       oled.print("KP: ");
       oled.print(EKP);
       oled.print("\nKI: ");
@@ -320,6 +319,17 @@ void OLED::displayDistance(long distance) {
   oled.println("Sonar Distance (cm): ");
   oled.setCursor(0,17);
   oled.println(distance);
+
+  oled.display();
+}
+
+void OLED::displayCustom(String label, int val) {
+  oled.clearDisplay();
+  oled.setTextColor(SSD1306_WHITE);
+  oled.setCursor(0,0);
+  oled.setTextSize(1);
+  oled.println(label);
+  oled.println(val);
 
   oled.display();
 }

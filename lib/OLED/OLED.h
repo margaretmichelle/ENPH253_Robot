@@ -51,6 +51,11 @@ class OLED {
     void displayDistance(long distance);
 
     /**
+     * @brief Display custom screen with one values and its label
+     */
+    void displayCustom(String label, int val);
+
+    /**
      * @brief Display custom screen with two values and their labels
      */
     void displayCustom(String labelA, int valA, String labelB, int valB);
