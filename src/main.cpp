@@ -21,8 +21,6 @@ OLED oledDisplay;
 
 void useEdgeDetection();
 
-ServoMotor servo(PA_2);
-
 
 void setup()
 {

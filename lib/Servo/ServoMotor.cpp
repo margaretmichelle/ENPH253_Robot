@@ -4,7 +4,7 @@
 
 ServoMotor::ServoMotor(int controlPin) {
   pinName = (PinName) controlPin;
-  pinMode(controlPin, OUTPUT);
+  // pinMode(controlPin, OUTPUT);
 }
  
 void ServoMotor::write(int angle) {

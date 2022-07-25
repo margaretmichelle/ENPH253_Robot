@@ -37,7 +37,7 @@ namespace Robot {
         moveForCertainTime(0,0,100); //stop to prepare claw 
 
         //Add claw code 
-        //rightArm.placeObjectInContainer();
+        rightArm.placeObjectInContainer();
 
         countIdolPickUp++;
 
@@ -56,7 +56,7 @@ namespace Robot {
         moveForCertainTime(0,0,100); //stop to prepare claw 
 
         //Add claw code
-        //rightArm.placeObjectInContainer();
+        rightArm.placeObjectInContainer();
 
         countIdolPickUp++;
 
@@ -74,9 +74,11 @@ namespace Robot {
       moveForCertainTime(90,80,800);
       moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
       moveForCertainTime(0,0,100); //stop to prepare claw 
-      //tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+      // tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
 
       o.displayTFReflectance(tapeFollow.getLeftSensorVal(),tapeFollow.getRightSensorVal());
+
+      // rightArm.placeObjectInContainer();
 
 
       break;

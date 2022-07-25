@@ -16,54 +16,41 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) : p
 {
   switch (pidType)
   {
-  case PIDType ::TapeFollower:
-  {
-    leftSensorPin = TapeFollowerNS::LEFT_FRONT_SENSOR_PIN;
-    rightSensorPin = TapeFollowerNS::RIGHT_FRONT_SENSOR_PIN;
-    summedErrorLimit = TapeFollowerNS::SUMMED_ERROR_LIMIT;
-    threshold = TapeFollowerNS::WHITE_THRESHOLD;
-    numReadings = TapeFollowerNS::NUM_READINGS;
-    break;
-  }
-  case PIDType::EdgeFollower: 
-  {
-    topLeftSensorPin = EdgeFollowerNS::TOP_LEFT_SENSOR_PIN;
-    topRightSensorPin = EdgeFollowerNS::TOP_RIGHT_SENSOR_PIN;
-    summedErrorLimit = EdgeFollowerNS::SUMMED_ERROR_LIMIT;
-    threshold = HighAndLow::HIGH_READING;
-    numReadings = EdgeFollowerNS::NUM_READINGS;
-    break;
-  }
-  default:
-  {
-    // Error never should be here should always have PIDType
-  }
+    case PIDType ::TapeFollower:
+    {
+      leftSensorPin = TapeFollowerNS::LEFT_FRONT_SENSOR_PIN;
+      rightSensorPin = TapeFollowerNS::RIGHT_FRONT_SENSOR_PIN;
+      summedErrorLimit = TapeFollowerNS::SUMMED_ERROR_LIMIT;
+      threshold = TapeFollowerNS::WHITE_THRESHOLD;
+      numReadings = TapeFollowerNS::NUM_READINGS;
 
+      pinMode(leftSensorPin, INPUT_PULLUP);
+      pinMode(rightSensorPin, INPUT_PULLUP);
+      break;
+    }
+    case PIDType::EdgeFollower: 
+    {
+      topLeftSensorPin = EdgeFollowerNS::TOP_LEFT_SENSOR_PIN;
+      topRightSensorPin = EdgeFollowerNS::TOP_RIGHT_SENSOR_PIN;
+      summedErrorLimit = EdgeFollowerNS::SUMMED_ERROR_LIMIT;
+      threshold = HighAndLow::HIGH_READING;
+      numReadings = EdgeFollowerNS::NUM_READINGS;
+
+      pinMode(topRightSensorPin,INPUT_PULLUP);
+      pinMode(topLeftSensorPin, INPUT_PULLUP);
+      break;
+    }
+    default:
+    {
+      // Error never should be here should always have PIDType
+      break;
+    }
   }
-  // Setup Pins.  Motor pins are handled by library
-  pinMode(leftSensorPin, INPUT_PULLUP);
-  pinMode(rightSensorPin, INPUT_PULLUP);
-  pinMode(topRightSensorPin,INPUT_PULLUP);
-  pinMode(topLeftSensorPin, INPUT_PULLUP);
+  
 }
 
 void PID::usePID(int KP, int KI, int KD)
 {
-
-  // average QRD values for Tape
-  getLeftSensorVal();
-  getRightSensorVal();
-
-  // get average QRD values for the edge 
-  getTopLeftSensorVal();
-  getTopRightSensorVal();
-
-  // // print qrd values
-  // Serial.print("TL: ");
-  // Serial.print(leftSensor);
-  // Serial.print(" TR: ");
-  // Serial.println(rightSensor);
-
   //Reflectance Tape and Edge Top Error 
   int error;
 
@@ -72,6 +59,10 @@ void PID::usePID(int KP, int KI, int KD)
   switch (pidType) {
     case PIDType::TapeFollower:
     {
+      // average QRD values for Tape
+      getLeftSensorVal();
+      getRightSensorVal();
+
       bool leftOnWhite = sensorOnWhite(leftSensor, threshold);
       bool rightOnWhite = sensorOnWhite(rightSensor, threshold);
       error = getTapeError(leftOnWhite, rightOnWhite, TapeFollowerNS::ONE_OFF_ERROR, TapeFollowerNS::BOTH_OFF_ERROR);
@@ -79,6 +70,10 @@ void PID::usePID(int KP, int KI, int KD)
     }
     case PIDType::EdgeFollower:
     {
+      // get average QRD values for the edge 
+      getTopLeftSensorVal();
+      getTopRightSensorVal();
+
       bool topLeftOnPlatform = !sensorOnEdge(topLeftSensor, threshold);
       bool topRightOnPlatform = !sensorOnEdge(topRightSensor, threshold);
       error = getEdgeError(topLeftOnPlatform, topRightOnPlatform, EdgeFollowerNS::ONE_OFF_ERROR);
@@ -216,4 +211,3 @@ int PID::getSummedError(int error, int lastSummedError, int summedErrorLimit)
 
   return summedError;
 }
-

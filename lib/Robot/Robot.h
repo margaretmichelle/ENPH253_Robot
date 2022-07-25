@@ -40,10 +40,10 @@ namespace Robot {
         edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 80),
         obstacle(),
         edgeBack(leftMotor,rightMotor,80),
-        //leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_HALL_EFFECT_SENSOR_PIN),
-        //rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
-        //leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw),
-        //rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw),
+        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_HALL_EFFECT_SENSOR_PIN),
+        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
+        leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw),
+        rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw),
         state(MasterState::Inactive)
         {
           //Set-up Communication Pins
@@ -132,10 +132,10 @@ namespace Robot {
 
       MasterState state;
 
-      //Claw leftClaw;
-      //Claw rightClaw;
-      //Arm leftArm;
-      //Arm rightArm;
+      Claw leftClaw;
+      Claw rightClaw;
+      Arm leftArm;
+      Arm rightArm;
 
   };
 
