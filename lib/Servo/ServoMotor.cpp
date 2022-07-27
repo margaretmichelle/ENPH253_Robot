@@ -4,17 +4,20 @@
 
 ServoMotor::ServoMotor(int controlPin) {
   pinName = (PinName) controlPin;
-  // pinMode(controlPin, OUTPUT);
 }
- 
+
+void ServoMotor::setupServo(int angle) {
+  pwm_start(pinName, ServoNS::SERVO_FREQ, mapAngleToPulseWidth(angle), MICROSEC_COMPARE_FORMAT);
+  currentPos = angle;
+}
+
 void ServoMotor::write(int angle) {
-  int delayTime = abs(angle - currentPos) * 1000 / 180;
-  pwm_start(pinName, ServoNS::SERVO_FREQ, mapAngleToDutyCycle(angle), RESOLUTION_12B_COMPARE_FORMAT);
+  int delayTime = abs(angle - currentPos) * 900 / 180;
+  pwm_start(pinName, ServoNS::SERVO_FREQ, mapAngleToPulseWidth(angle), MICROSEC_COMPARE_FORMAT);
   currentPos = angle;
   delay(delayTime);
 }
 
-int ServoMotor::mapAngleToDutyCycle(int angle) {
-  return ( angle * (ServoNS::MAX_DUTY_CYCLE - ServoNS::MIN_DUTY_CYCLE) / 180 ) + ServoNS::MIN_DUTY_CYCLE;
+int ServoMotor::mapAngleToPulseWidth(int angle) {
+  return ( angle * (ServoNS::MAX_PULSE_WIDTH - ServoNS::MIN_PULSE_WIDTH) / 180 ) + ServoNS::MIN_PULSE_WIDTH;
 }
-

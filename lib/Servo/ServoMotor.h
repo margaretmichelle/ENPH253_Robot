@@ -7,6 +7,11 @@ class ServoMotor {
     ServoMotor(int controlPin);
 
     /**
+     * @brief setup the servo to its starting position
+     */
+    void setupServo(int angle);
+
+    /**
      * @brief write the servo position
      */
     void write(int angle);
@@ -22,7 +27,7 @@ class ServoMotor {
     int currentPos;
     PinName pinName;
 
-    int mapAngleToDutyCycle(int angle);
+    int mapAngleToPulseWidth(int angle);
 };
 
 #endif

@@ -21,9 +21,7 @@ OLED oledDisplay;
 
 void useEdgeDetection();
 
-
-void setup()
-{
+void setup() {
     oledDisplay.start();
 
     pinMode(LED_BUILTIN, OUTPUT);
@@ -35,8 +33,7 @@ void setup()
     master.setState(Robot::MasterState::IRFollow); //Just for Testing Purposes 
 }
 
-void loop()
-{
+void loop() {
   master.poll(oledDisplay);
 
   unsigned long currentMillis = millis();
@@ -52,7 +49,7 @@ void loop()
 
     digitalWrite(LED_BUILTIN, ledState);
   }
-};
+}
 
 void useEdgeDetection() {
     master.useEdgeDetection();

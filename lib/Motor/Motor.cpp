@@ -28,7 +28,7 @@ void Motor::speed(int speed) {
     pwm_start(pinName2, DriveMotorPins::MOTOR_FREQ , 0 , RESOLUTION_12B_COMPARE_FORMAT);
   } else {
     pwm_start(pinName1, DriveMotorPins::MOTOR_FREQ , 0 , RESOLUTION_12B_COMPARE_FORMAT);
-    pwm_start(pinName2, DriveMotorPins::MOTOR_FREQ , speed * MAP_8_BIT_TO_12_BIT , RESOLUTION_12B_COMPARE_FORMAT);
+    pwm_start(pinName2, DriveMotorPins::MOTOR_FREQ , abs(speed) * MAP_8_BIT_TO_12_BIT, RESOLUTION_12B_COMPARE_FORMAT);
   }
 
   previousSpeed = speed;
