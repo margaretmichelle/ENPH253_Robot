@@ -1,0 +1,73 @@
+#include <Constants.h>
+#include <Helper.h>
+
+#include <Bridge.h>
+#include <ServoMotor.h>
+
+BridgeDeploy::BridgeDeploy(Motor leftMotor, Motor rightMotor) :
+  leftMotor(leftMotor),
+  rightMotor(rightMotor),
+  leftOnEdge(false),
+  rightOnEdge(false),
+  unHookServo(BridgeDeployNS::UnHookBridge::UNHOOK_BRIDGE_SERVO_PIN),
+  pushServo(BridgeDeployNS::PushBridge::PUSH_BRIDGE_SERVO_PIN)
+  {
+    unHookServo.setupServo(BridgeDeployNS::SERVO_REST_ANGLE);
+    pushServo.setupServo(BridgeDeployNS::SERVO_REST_ANGLE);
+
+    //Do i need to set up pinModes??
+  }
+
+bool BridgeDeploy::bothOnEdge() {
+  leftOnEdge = getLeftSensor() > BridgeDeployNS::EDGE_THRESHOLD; //use Top left and right edge sensing pins
+  rightOnEdge = getRightSensor() > BridgeDeployNS::EDGE_THRESHOLD;
+
+  return (leftOnEdge && rightOnEdge);
+}
+
+bool BridgeDeploy::onEdge() {
+  leftOnEdge = getLeftSensor() > BridgeDeployNS::EDGE_THRESHOLD;
+  rightOnEdge = getRightSensor() > BridgeDeployNS::EDGE_THRESHOLD;
+
+  return (leftOnEdge || rightOnEdge);
+}
+
+void BridgeDeploy::deployBridge() {
+    //wait a second for robot to fully stop
+    delay(1000);
+
+    //deploy bridge
+    unHookServo.write(BridgeDeployNS::UNHOOK_SERVO_FINAL_ANGLE);
+    delay(2000); //wait a bit to make sure unhooked 
+
+    pushServo.write(BridgeDeployNS::PUSH_SERVO_FINAL_ANGLE);
+}
+
+void BridgeDeploy::edgeAlign() {
+  while(!bothOnEdge()) {
+    // left on edge => turn right wheel more
+    if (leftOnEdge) {
+      leftMotor.speed(-BridgeDeployNS::EDGE_ALIGN_SPEED); 
+      rightMotor.speed(BridgeDeployNS::EDGE_ALIGN_SPEED);
+    }
+
+    // right on edge => turn left wheel more
+    else if (rightOnEdge) {
+      leftMotor.speed(BridgeDeployNS::EDGE_ALIGN_SPEED); 
+      rightMotor.speed(-BridgeDeployNS::EDGE_ALIGN_SPEED);
+    }
+
+    // if neither on edge, then go straight till it finds edge
+    else { 
+      leftMotor.speed(BridgeDeployNS::EDGE_ALIGN_SPEED); 
+      rightMotor.speed(BridgeDeployNS::EDGE_ALIGN_SPEED);
+    }
+  }
+
+  // when both on edge, stop
+  leftMotor.stop();
+  rightMotor.stop();
+}
+
+
+
