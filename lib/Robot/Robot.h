@@ -25,7 +25,14 @@ namespace Robot {
   };
   enum class SlaveState {
     Inactive,
-    ClawOpen,
+    ClawActivateIdolOne,
+    ClawActivateIdolTwo,
+    ClawActivateIdolThree,
+    ClawActivateIdolFour,
+    BridgeDeploy,
+    ClawActivateIdolFive,
+    ClawActivateIdolSix,
+    ZiplineLift,
     Done
   };
 
@@ -39,10 +46,10 @@ namespace Robot {
         edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 80),
         obstacle(),
         edgeBack(leftMotor,rightMotor,80),
-        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_HALL_EFFECT_SENSOR_PIN),
-        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
-        leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw),
-        rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw),
+        // leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_HALL_EFFECT_SENSOR_PIN),
+        // rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
+        // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw),
+        // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw),
         state(MasterState::Inactive)
         {
           //Set-up Communication Pins
@@ -70,7 +77,12 @@ namespace Robot {
        */
       void useEdgeDetection();
 
+      void changeSlaveState();
+
     private:
+
+      bool slaveBusy = false;
+      
       /*
       @brief Increase the master state
 
@@ -82,25 +94,25 @@ namespace Robot {
       @brief Advances the slave state
 
       */
-      void signalReplicaAdvance();
+      void signalSlaveAdvance();
 
       /*
       @brief Ends Advance signal
 
       */
-      void endReplicaSignal();
+      void endSlaveSignal();
 
       /**
        * @brief Stop the replica 
        * 
        */
-      void stopReplica();
+      void stopSlave();
 
       /**
        * @brief Tell replica to go
        * 
        */
-      void goReplica();
+      void goSlave();
 
       /**
        * @brief stop replica from performing actions 
@@ -131,19 +143,26 @@ namespace Robot {
 
       MasterState state;
 
-      Claw leftClaw;
-      Claw rightClaw;
-      Arm leftArm;
-      Arm rightArm;
+      // Claw leftClaw;
+      // Claw rightClaw;
+      // Arm leftArm;
+      // Arm rightArm;
 
   };
 
   class Slave {
     public:
         Slave(): 
+        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_HALL_EFFECT_SENSOR_PIN),
+        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
+        leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw),
+        rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw),
           //Put Constructors for Claw and zipline 
-        state(SlaveState::Inactive) {
-
+        state(SlaveState::Inactive) { 
+          pinMode(SlaveNS::ADVANCE_MASTER_PIN, OUTPUT);
+          pinMode(SlaveNS::STOP_MASTER_PIN, OUTPUT);
+          digitalWrite(SlaveNS::ADVANCE_MASTER_PIN, LOW);
+          digitalWrite(SlaveNS::STOP_MASTER_PIN,LOW);
         }
 
 
@@ -156,15 +175,16 @@ namespace Robot {
          */
         void setState(SlaveState state) { this->state = state; }
 
-        /**
-         * @brief move slave for given time
-         */
-        void moveForTime(int leftMotorSpeed, int rightMotorSpeed, int moveTime);
-
+        
     private:
         SlaveState state;
         bool stopped;
         void stop();
+
+        Claw leftClaw;
+        Claw rightClaw;
+        Arm leftArm;
+        Arm rightArm;
         
         /*
         @brief Advances the big bot state

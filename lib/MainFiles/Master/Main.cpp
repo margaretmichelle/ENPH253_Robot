@@ -20,7 +20,6 @@ Robot::Master master;
 OLED oledDisplay;
 
 void useEdgeDetection();
-void slaveInterrupt();
 
 void setup() {
     oledDisplay.start();
@@ -28,10 +27,8 @@ void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
 
     //Attach interrupts to the back edge detection
-    attachInterrupt(digitalPinToInterrupt(EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN), useEdgeDetection, RISING);
-    attachInterrupt(digitalPinToInterrupt(EdgeFollowerNS::BOTTOM_RIGHT_SENSOR_PIN), useEdgeDetection, RISING);
-
-    attachInterrupt(digitalPinToInterrupt(PA2), slaveInterrupt, RISING);
+    attachInterrupt(EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN, useEdgeDetection, RISING);
+    attachInterrupt(EdgeFollowerNS::BOTTOM_RIGHT_SENSOR_PIN, useEdgeDetection, RISING);
 
     master.setState(Robot::MasterState::IRFollow); //Just for Testing Purposes 
 }
@@ -56,8 +53,4 @@ void loop() {
 
 void useEdgeDetection() {
     master.useEdgeDetection();
-}
-
-void slaveInterrupt() {
-  master.changeSlaveState();
 }

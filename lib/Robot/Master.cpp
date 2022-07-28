@@ -10,6 +10,7 @@
 namespace Robot {
   MasterState Master::poll(OLED o) {
     // turn off slave signal every loop
+    endSlaveSignal();
 
     switch (state) {
       case MasterState::Inactive:
@@ -36,10 +37,10 @@ namespace Robot {
           moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
           moveForCertainTime(0,0,100); //stop to prepare claw 
 
-          //Add claw code 
-          rightArm.placeObjectInContainer();
-
+          //Add claw Code;
+          signalSlaveAdvance();
           countIdolPickUp++;
+          incrementState();
 
           
           //Refind Tape and hardcode some good angle to continually move at 
@@ -55,10 +56,17 @@ namespace Robot {
           moveForCertainTime(0,0,100); //stop to prepare claw 
 
           //Add claw code
-          rightArm.placeObjectInContainer();
 
+          signalSlaveAdvance(); //signal claw to open
+
+          slaveBusy = true;
+
+          while (slaveBusy) {
+            leftMotor.stop();
+            rightMotor.stop();
+          }
           countIdolPickUp++;
-
+          incrementState();
           
           //Refind Tape and hardcode some good angle to continually move at probably will want to have a sharper turn for this one 
           while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
@@ -100,7 +108,7 @@ namespace Robot {
 
         //   o.displayCustom("Tape following", 0);
         // }
-        rightArm.placeObjectInContainer();
+        //rightArm.placeObjectInContainer();
 
         break;
 
@@ -160,18 +168,22 @@ namespace Robot {
     }
   }
 
-  void Master::endReplicaSignal() {
+  void Master::endSlaveSignal() {
     digitalWrite(MasterNS::ADVANCE_SLAVE_PIN, LOW);
   }
 
-  void Master::stopReplica() {
+  void Master::stopSlave() {
     digitalWrite(MasterNS::STOP_SLAVE_PIN, HIGH);
     //Ensure slave has stopped before doing other things 
     delay(500);
   }
 
-  void Master::goReplica() {
+  void Master::goSlave() {
     digitalWrite(MasterNS::STOP_SLAVE_PIN, LOW);
+  }
+
+  void Master::changeSlaveState() {
+    slaveBusy = false;
   }
 
 }
