@@ -3,8 +3,6 @@
 
 #include <PID.h>
 #include <Arduino.h>
-#include <Robot.h>
-
 
 class OLED {
 
@@ -15,16 +13,11 @@ class OLED {
 
     void start();
 
-<<<<<<< HEAD
     void chooseState();
 
     bool stateChosen();
 
     int getState();
-=======
-    
-    Robot::MasterState chooseState();
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
 
     /**
      * @brief Display screens on OLED to be switched with button and encoder

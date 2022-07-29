@@ -54,17 +54,10 @@ namespace Robot {
         rightForwardUltrasonic(ObstacleNS::FORWARD_TRIG_PIN,ObstacleNS::FORWARD_ECHO_PIN),
         rightMidUltrasonic(ObstacleNS::FORWARD_TRIG_PIN, ObstacleNS::MID_ECHO_PIN),
         edgeBack(leftMotor,rightMotor,80),
-<<<<<<< HEAD
         leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
         rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
         // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN),
         // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
-=======
-        // leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_HALL_EFFECT_SENSOR_PIN),
-        // rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
-        // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw),
-        // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw),
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
         state(MasterState::Inactive)
         {
           //Set-up Communication Pins
@@ -159,13 +152,8 @@ namespace Robot {
 
       MasterState state;
 
-<<<<<<< HEAD
       Claw leftClaw;
       Claw rightClaw;
-=======
-      // Claw leftClaw;
-      // Claw rightClaw;
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
       // Arm leftArm;
       // Arm rightArm;
 
@@ -174,10 +162,10 @@ namespace Robot {
   class Slave {
     public:
         Slave(): 
-        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_HALL_EFFECT_SENSOR_PIN),
-        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
-        leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw),
-        rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw),
+        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
+        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
+        // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN),
+        // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
           //Put Constructors for Claw and zipline 
         state(SlaveState::Inactive) { 
           pinMode(SlaveNS::ADVANCE_MASTER_PIN, OUTPUT);
@@ -204,8 +192,8 @@ namespace Robot {
 
         Claw leftClaw;
         Claw rightClaw;
-        Arm leftArm;
-        Arm rightArm;
+        // Arm leftArm;
+        // Arm rightArm;
         
         /*
         @brief Advances the big bot state

@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #include <Constants.h>
-#include <IR.h>
+// #include <IR.h>
 #include <Motor.h>
 #include <PID.h>
 #include <Robot.h>
@@ -22,7 +22,6 @@ namespace Robot {
 
         tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
 
-<<<<<<< HEAD
       // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
 
       // obstacle.useObstacle();
@@ -68,66 +67,8 @@ namespace Robot {
       // }
       
       break;
-=======
-        o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), 
-                        tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 
-                        0, 0, 0, 0, obstacle.getDistance());
-
-        obstacle.useObstacle();
-
-        if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 0) {
-          moveForCertainTime(0,0,300); //stop for 300 ms 
-
-          //Hardcode the first turn using moveForCertainTime()
-
-          moveForCertainTime(90,80,800);
-          moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
-          moveForCertainTime(0,0,100); //stop to prepare claw 
-
-          //Add claw Code;
-          signalSlaveAdvance();
-          countIdolPickUp++;
-          incrementState();
-
-          
-          //Refind Tape and hardcode some good angle to continually move at 
-          while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-              moveForCertainTime(80,120,100);
-          }
-        } else if (obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 1) {
-          moveForCertainTime(0,0,300); //stop for 300 ms
-
-          //Hardcode the second turn using moveForCertainTime()
-          moveForCertainTime(90,80,800);
-          moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
-          moveForCertainTime(0,0,100); //stop to prepare claw 
-
-          //Add claw code
-
-          signalSlaveAdvance(); //signal claw to open
-
-          slaveBusy = true;
-
-          while (slaveBusy) {
-            leftMotor.stop();
-            rightMotor.stop();
-          }
-          countIdolPickUp++;
-          incrementState();
-          
-          //Refind Tape and hardcode some good angle to continually move at probably will want to have a sharper turn for this one 
-          while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-              moveForCertainTime(80,120,100);
-          }
-        }
-        
-        break;
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
 
       case MasterState::IRFollow:
-        o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), 
-                        tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 
-                        0, 0, 0, 0, obstacle.getDistance());
 
         // obstacle.useObstacle();
 
@@ -154,45 +95,24 @@ namespace Robot {
         //       moveForCertainTime(150,70,100);
         //   }
 
-<<<<<<< HEAD
     case MasterState::ObstacleFollow:
       // obstacle.useObstacle();
 
       // o.displayDistance(obstacle.getDistance());
       
       break;
-=======
-        //   o.displayCustom("Tape following", 0);
-        // }
-        //rightArm.placeObjectInContainer();
-
-        break;
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
-
-      case MasterState::ObstacleFollow:
-        obstacle.useObstacle();
-
-<<<<<<< HEAD
-      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
-      break;
-=======
-        o.displayDistance(obstacle.getDistance());
-        
-        break;
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
 
       case MasterState::EdgeFollow:
       
         edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
 
-        o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+        // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
         break;
 
       case MasterState::Done:
         stop();
         break;
 
-<<<<<<< HEAD
     // Testing and Time Trials States
 
     case MasterState::JustTape:
@@ -284,10 +204,6 @@ namespace Robot {
 
     default:
       break;
-=======
-      default:
-        break;
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
     }
   
     return state;

@@ -14,10 +14,7 @@ namespace ClawNS {
 
   // Constants
   const int CLAW_OPEN = 180;
-<<<<<<< HEAD
   const int CLAW_PARTIAL_CLOSE = 70;
-=======
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
   const int CLAW_CLOSED = 0;
 }
 
@@ -189,17 +186,11 @@ namespace HighAndLow {
 
 namespace ObstacleNS {; 
   // not sure what the threshold value is yet we need to test
-<<<<<<< HEAD
   const int FORWARD_ECHO_PIN = PA7;
   const int MID_ECHO_PIN = PA4;
   const int MID_TRIG_PIN = PA5; // overloaded with IR and hall effect currently
   const int FORWARD_TRIG_PIN = PA6;
   const int DISTANCE_TO_IDOL = 40; //cm
-=======
-  const int ECHO_PIN = PA7;
-  const int TRIGPIN = PA6;
-  const int DISTANCE_TO_IDOL = 35;//cm
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
 }
 
 #endif

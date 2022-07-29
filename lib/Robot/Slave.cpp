@@ -14,27 +14,27 @@ namespace Robot {
         break;
 
       case SlaveState::ClawActivateIdolOne:
-        rightArm.placeObjectInContainer();
+        // rightArm.placeObjectInContainer();
         advanceState();
         //send signal for master to GOOOO
         break;
       
       case SlaveState::ClawActivateIdolTwo:
-        rightArm.placeObjectInContainer();
+        // rightArm.placeObjectInContainer();
         advanceState();
                 //send signal for master to GOOOO
 
         break;
 
       case SlaveState::ClawActivateIdolThree:
-        leftArm.placeObjectInContainer(); //probably left arm 
+        // leftArm.placeObjectInContainer(); //probably left arm 
         advanceState();
                 //send signal for master to GOOOO
 
         break;
 
       case SlaveState::ClawActivateIdolFour:
-        rightArm.placeObjectInContainer();
+        // rightArm.placeObjectInContainer();
         advanceState();
                 //send signal for master to GOOOO
 
@@ -46,13 +46,13 @@ namespace Robot {
         break;
 
       case SlaveState::ClawActivateIdolFive:
-        leftArm.placeObjectInContainer();
+        // leftArm.placeObjectInContainer();
         advanceState();
                 //send signal for master to GOOOO
 
 
       case SlaveState::ClawActivateIdolSix:
-        rightArm.placeObjectInContainer(); //Don;t know which one 
+        // rightArm.placeObjectInContainer(); //Don;t know which one 
         advanceState();
                 //send signal for master to GOOOO
 

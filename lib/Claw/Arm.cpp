@@ -1,20 +1,10 @@
 #include <Arm.h>
 #include <Claw.h>
-<<<<<<< HEAD
 
 Arm::Arm(int armControlPin, Claw claw, int hallEffectPin) : claw(claw), armServo(armControlPin), hallEffectPin(hallEffectPin) {
     armServo.setupServo(ArmNS::ARM_UP);
 
     pinMode(hallEffectPin, INPUT);
-=======
-#include <OLED.h>
-
-using namespace ArmNS;
-void magnetInterrupt();
-
-Arm::Arm(int armControlPin, Claw claw) : claw(claw), armServo(armControlPin) {
-    armServo.setupServo(ARM_UP);
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
 }
 
 void Arm::returnToHome() {
@@ -47,7 +37,6 @@ void Arm::placeObjectInContainer() {
         returnToHome();
         return;
     }
-<<<<<<< HEAD
 
     claw.partialClose();
 
@@ -61,10 +50,4 @@ void Arm::placeObjectInContainer() {
 
     returnToHome();
     claw.open();
-=======
-}
-
-void magnetInterrupt() {
-    
->>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
 }
