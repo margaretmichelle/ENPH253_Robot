@@ -4,10 +4,10 @@
 #include <Wire.h>
 #include <Robot.h> 
 
-#define LED_BUILTIN PC13
+#define LED_BUILTIN PB2
 int ledState = LOW; 
 unsigned long previousMillis = 0;
-const long interval = 2500;
+const long interval = 500;
 
 Robot::Master master;
 OLED oledDisplay;
@@ -26,15 +26,15 @@ void setup() {
 
     attachInterrupt(digitalPinToInterrupt(PA2), slaveInterrupt, RISING);
 
-    master.setState(Robot::MasterState::Random);
+    // master.setState(Robot::MasterState::Random);
 
-    // while (!oledDisplay.stateChosen()) {
-    //   oledDisplay.chooseState();
-    //   if (oledDisplay.stateChosen()) {
-    //     master.setState((Robot::MasterState) oledDisplay.getState()); //Just for Testing Purposes
-    //     delay(1000);
-    //   }
-    // }
+    while (!oledDisplay.stateChosen()) {
+      oledDisplay.chooseState();
+      if (oledDisplay.stateChosen()) {
+        master.setState((Robot::MasterState) oledDisplay.getState()); //Just for Testing Purposes
+        delay(1000);
+      }
+    }
 }
 
 void loop() {

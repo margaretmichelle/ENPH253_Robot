@@ -24,11 +24,11 @@ namespace Robot {
     Done,
     JustTape,
     PickUpObject,
-    Random,
     PositionObject,
     Bridge,
     JustEdge,
-    UpToArch
+    UpToArch,
+    Random
   };
   enum class SlaveState {
     Inactive,
