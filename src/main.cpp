@@ -1,17 +1,10 @@
 #include <Arduino.h>
 #include <Constants.h>
-#include <Motor.h>
-#include <PID.h>
-#include <Helper.h>
-#include <IR.h>
-#include <Wire.h>
-#include <Adafruit_SSD1306.h>
+#include <OLED.h>
 #include <Wire.h>
 #include <Robot.h> 
-#include <ServoMotor.h>
-#include <Claw.h>
 
-#define LED_BUILTIN PB2
+#define LED_BUILTIN PC13
 int ledState = LOW; 
 unsigned long previousMillis = 0;
 const long interval = 2500;
@@ -22,8 +15,7 @@ OLED oledDisplay;
 void useEdgeDetection();
 
 
-void setup()
-{
+void setup() {
     oledDisplay.start();
 
     pinMode(LED_BUILTIN, OUTPUT);
@@ -32,11 +24,18 @@ void setup()
     attachInterrupt(EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN, useEdgeDetection, RISING);
     attachInterrupt(EdgeFollowerNS::BOTTOM_RIGHT_SENSOR_PIN, useEdgeDetection, RISING);
 
-    master.setState(Robot::MasterState::IRFollow); //Just for Testing Purposes 
+    master.setState(Robot::MasterState::Random);
+
+    // while (!oledDisplay.stateChosen()) {
+    //   oledDisplay.chooseState();
+    //   if (oledDisplay.stateChosen()) {
+    //     master.setState((Robot::MasterState) oledDisplay.getState()); //Just for Testing Purposes
+    //     delay(1000);
+    //   }
+    // }
 }
 
-void loop()
-{
+void loop() {
   master.poll(oledDisplay);
 
   unsigned long currentMillis = millis();

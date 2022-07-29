@@ -7,13 +7,18 @@
 class Claw {
     public:
     //Constructor
-        Claw(int controlPin, int hallEffectPin);
+        Claw(int controlPin);
 
         /**
          * @brief Close the claw
          * 
          */
         void close();
+
+        /**
+         * @brief partially close claw to 70 degrees
+         */
+        void partialClose();
 
         /**
          * @brief Open the claw
@@ -28,12 +33,8 @@ class Claw {
          */
         int getPosition();
 
-        bool wasMagnetFound();
-
     private:
-    int hallEffectPin;
     ServoMotor clawServo;
-    bool magnetFound;
 };
 
 #endif

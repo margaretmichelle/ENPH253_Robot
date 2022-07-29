@@ -11,11 +11,10 @@ namespace ClawNS {
   // Pins
   const int LEFT_CLAW_SERVO_PIN = PA_1; // will be moved to PA8 and PA9 on other BP
   const int RIGHT_CLAW_SERVO_PIN = PA_0;
-  const int LEFT_HALL_EFFECT_SENSOR_PIN = PA5; // overloaded with IR sensor pins
-  const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
 
   // Constants
   const int CLAW_OPEN = 180;
+  const int CLAW_PARTIAL_CLOSE = 70;
   const int CLAW_CLOSED = 0;
 }
 
@@ -23,6 +22,8 @@ namespace ArmNS {
   // Pins
   const int LEFT_ARM_SERVO_PIN = PA_3; // currently overloaded with IR sensor (servos to be moved to other BP)
   const int RIGHT_ARM_SERVO_PIN = PA_2;
+  // const int LEFT_HALL_EFFECT_SENSOR_PIN = PA5; // overloaded with IR sensor pins
+  // const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
 
   // Constants
   const int ARM_UP = 180;
@@ -190,9 +191,11 @@ namespace HighAndLow {
 
 namespace ObstacleNS {; 
   // not sure what the threshold value is yet we need to test
-  const int ECHO_PIN = PA7;
-  const int TRIGPIN = PA6;
-  const int DISTANCE_TO_IDOL = 35;//cm
+  const int FORWARD_ECHO_PIN = PA7;
+  const int MID_ECHO_PIN = PA4;
+  const int MID_TRIG_PIN = PA5; // overloaded with IR and hall effect currently
+  const int FORWARD_TRIG_PIN = PA6;
+  const int DISTANCE_TO_IDOL = 40; //cm
 }
 
 #endif

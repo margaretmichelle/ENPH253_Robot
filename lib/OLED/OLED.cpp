@@ -6,8 +6,14 @@
 #include <Helper.h>
 #include <PID.h>
 
+const int numValScreens = 3; // starts at 0
+const int numStartScreens = 5; // starts at 0
+
 void clicked();
 void readEncoder();
+
+int startScreen;
+bool chosen;
 
 int screen;
 int page;
@@ -29,7 +35,9 @@ OLED::OLED() {
 
   attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::BUTTON_PIN), clicked, RISING);
   attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::CLK_PIN), readEncoder, RISING);
-  // attachInterrupt(digitalPinToInterrupt(OLEDDisplayNS::DT_PIN), readEncoder, CHANGE);
+
+  startScreen = 0;
+  chosen = false;
 
   screen = 0;
   page = 0;
@@ -46,33 +54,107 @@ OLED::OLED() {
 void OLED::start() {
   oled.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   oled.display();
+  oled.clearDisplay();
 }
 
-int OLED::getTKP() {
-  return TKP;
+void OLED::chooseState() {
+
+  oled.clearDisplay();
+  oled.setTextSize(1);
+  oled.setCursor(0,0);
+
+  switch (startScreen) {
+    case 0:
+      oled.clearDisplay();
+      oled.setTextColor(BLACK, WHITE);
+      oled.println("Tape follow");
+      oled.setTextColor(WHITE);
+      oled.println("Pick up idol");
+      oled.println("Position object");
+      oled.println("Bridge");
+      oled.println("Edge follow");
+      oled.println("Up to arch");
+      oled.display();
+      break;
+    case 1:
+      oled.clearDisplay();
+      oled.setTextColor(WHITE);
+      oled.println("Tape follow");
+      oled.setTextColor(BLACK, WHITE);
+      oled.println("Pick up idol");
+      oled.setTextColor(WHITE);
+      oled.println("Position object");
+      oled.println("Bridge");
+      oled.println("Edge follow");
+      oled.println("Up to arch");
+      oled.display();
+      break;
+      case 2:
+      oled.clearDisplay();
+      oled.setTextColor(WHITE);
+      oled.println("Tape follow");
+      oled.println("Pick up idol");
+      oled.setTextColor(BLACK, WHITE);
+      oled.println("Position object");
+      oled.setTextColor(WHITE);
+      oled.println("Bridge");
+      oled.println("Edge follow");
+      oled.println("Up to arch");
+      oled.display();
+      break;
+      case 3:
+      oled.clearDisplay();
+      oled.setTextColor(WHITE);
+      oled.println("Tape follow");
+      oled.println("Pick up idol");
+      oled.println("Position object");
+      oled.setTextColor(BLACK, WHITE);
+      oled.println("Bridge");
+      oled.setTextColor(WHITE);
+      oled.println("Edge follow");
+      oled.println("Up to arch");
+      oled.display();
+      break;
+      case 4:
+      oled.clearDisplay();
+      oled.setTextColor(WHITE);
+      oled.println("Tape follow");
+      oled.println("Pick up idol");
+      oled.println("Position object");
+      oled.println("Bridge");
+      oled.setTextColor(BLACK, WHITE);
+      oled.println("Edge follow");
+      oled.setTextColor(WHITE);
+      oled.println("Up to archway");
+      oled.display();
+      break;
+    case 5:
+      oled.clearDisplay();
+      oled.setTextColor(WHITE);
+      oled.println("Tape follow");
+      oled.println("Pick up idol");
+      oled.println("Position object");
+      oled.println("Bridge");
+      oled.println("Edge follow");
+      oled.setTextColor(BLACK, WHITE);
+      oled.println("Up to archway");
+      oled.display();
+      break;
+  }
 }
 
-int OLED::getTKI() {
-  return TKI;
+bool OLED::stateChosen() {
+  return chosen;
 }
 
-int OLED::getTKD() {
-  return TKD;
-}
-
-int OLED::getEKP() {
-  return EKP;
-}
-
-int OLED::getEKI() {
-  return EKI;
-}
-
-int OLED::getEKD() {
-  return EKD;
+int OLED::getState() {
+  return startScreen + 6;
 }
 
 void clicked() {
+  if (!chosen) {
+    chosen = true;
+  }
   screen++;
     if (screen > 7) {
         screen = 0;
@@ -80,97 +162,101 @@ void clicked() {
 }
 
 void readEncoder() {
-  if (screen != 0) {
-    if (digitalRead(OLEDDisplayNS::CLK_PIN)) {
-      if (digitalRead(OLEDDisplayNS::DT_PIN)) {
+  if (digitalRead(OLEDDisplayNS::CLK_PIN)) {
+    if (digitalRead(OLEDDisplayNS::DT_PIN)) {
+      switch (screen) {
+        case 0:
+          startScreen++;
+          if (startScreen > numStartScreens) {
+            startScreen = 0;
+          }
+          break;
+        case 1:
+          page++;
+          if (page > 3) {
+            page = 0;
+          }
+          break;
+        case 2:
+          TKP++;
+          break;
+        case 3:
+          TKI++;
+          break;
+        case 4:
+          TKD++;
+          break;
+        case 5:
+          EKP++;
+          break;
+        case 6:
+          EKI++;
+          break;
+        case 7:
+          EKD++;
+          break;
+      }
+      
+    } else {
         switch (screen) {
-          case 2:
-            TKP++;
-            break;
-          case 3:
-            TKI++;
-            break;
-          case 4:
-            TKD++;
-            break;
-          case 5:
-            EKP++;
-            break;
-          case 6:
-            EKI++;
-            break;
-          case 7:
-            EKD++;
-            break;
-          default:
-            page++;
-            if (page > 3) {
-              page = 0;
+          case 0:
+            startScreen--;
+            if (startScreen == 0) {
+              startScreen = numStartScreens;
             }
             break;
-        }
-        
-      } else {
-          switch (screen) {
-            case 2:
-              TKP--;
-              break;
-            case 3:
-              TKI--;
-              break;
-            case 4:
-              TKD--;
-              break;
-            case 5:
-              EKP--;
-              break;
-            case 6:
-              EKI--;
-              break;
-            case 7:
-              EKD--;
-              break;
-            default:
-              page--;
-              if (page < 0) {
-                page = 3;
-              }
-              break;
-          }
-      }
-    }
-  }
+          case 1:
+            page--;
+            if (page < 0) {
+              page = 3;
+            }
+            break;
+          case 2:
+            TKP--;
+            break;
+          case 3:
+            TKI--;
+            break;
+          case 4:
+            TKD--;
+            break;
+          case 5:
+            EKP--;
+            break;
+          case 6:
+            EKI--;
+            break;
+          case 7:
+            EKD--;
+            break;
+        } // end of switch
+    } // end of of DT if else
+  } // end of CLK if
 }
 
+
 void OLED::displayScreen(int leftMotorSpeed, int rightMotorSpeed, int leftReflectance, int rightReflectance, int TL, int TR, int BL, int BR, long distance) {
-  if (screen == 0) {
-    oled.clearDisplay();
-    oled.setTextColor(SSD1306_WHITE);
-    oled.setTextSize(2);
-    oled.setCursor(25,25);
-    oled.print("Robot ");
-    oled.write(3);
-    
-    oled.display();
-  } else if (screen == 1) {
-    switch (page) {
-      case 0:
-        displaySpeed(leftMotorSpeed, rightMotorSpeed);
-        break;
-      case 1:
-        displayTFReflectance(leftReflectance, rightReflectance);
-        break;
-      case 2:
-        displayEdgeReflectance(TL, TR, BL, BR);
-        break;
-      case 3:
-        displayDistance(distance);
-        break;
+  if (screen != 0) {
+    if (screen == 1) {
+      switch (page) {
+        case 0:
+          displaySpeed(leftMotorSpeed, rightMotorSpeed);
+          break;
+        case 1:
+          displayTFReflectance(leftReflectance, rightReflectance);
+          break;
+        case 2:
+          displayEdgeReflectance(TL, TR, BL, BR);
+          break;
+        case 3:
+          displayDistance(distance);
+          break;
+      }
+    } else if (screen < 5) {
+      displayTFPID();
+    } else if (screen < 8) {
+      displayEdgePID();
     }
-  } else if (screen < 5) {
-    displayTFPID();
-  } else if (screen < 8) {
-    displayEdgePID();
   }
 
 }
@@ -345,4 +431,28 @@ void OLED::displayCustom(String labelA, int valA, String labelB, int valB) {
   oled.println(valB);
 
   oled.display();
+}
+
+int OLED::getTKP() {
+  return TKP;
+}
+
+int OLED::getTKI() {
+  return TKI;
+}
+
+int OLED::getTKD() {
+  return TKD;
+}
+
+int OLED::getEKP() {
+  return EKP;
+}
+
+int OLED::getEKI() {
+  return EKI;
+}
+
+int OLED::getEKD() {
+  return EKD;
 }

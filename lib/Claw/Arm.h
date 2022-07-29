@@ -8,7 +8,7 @@
 class Arm {
     public:
     //Constructor
-        Arm(int armControlPin, Claw claw);
+        Arm(int armControlPin, Claw claw, int hallEffectPin);
 
         /**
          * @brief grab totem and place in the basket
@@ -36,6 +36,7 @@ class Arm {
         int getPosition();
 
     private:
+    int hallEffectPin;
     ServoMotor armServo;
     Claw claw;
 };

@@ -1,23 +1,25 @@
 #include <Obstacle.h>
 #include <Constants.h>
 
-Obstacle::Obstacle() {
+Obstacle::Obstacle(int trigger, int echo) {
 //set-up pinmodes
-    pinMode(ObstacleNS::TRIGPIN, OUTPUT);
-    pinMode(ObstacleNS::ECHO_PIN, INPUT);
+    trigPin = trigger;
+    echoPin = echo;
+    pinMode(trigPin, OUTPUT);
+    pinMode(echoPin, INPUT);
 }
 
 
 void Obstacle::useObstacle() {
 
-    digitalWrite(ObstacleNS::TRIGPIN, LOW); 
+    digitalWrite(trigPin, LOW); 
     delayMicroseconds(2); 
-    digitalWrite(ObstacleNS::TRIGPIN, HIGH); 
+    digitalWrite(trigPin, HIGH); 
     delayMicroseconds(10); 
 
-    digitalWrite(ObstacleNS::TRIGPIN, LOW); 
-    duration = pulseIn(ObstacleNS::ECHO_PIN, HIGH); 
+    digitalWrite(trigPin, LOW); 
+    duration = pulseIn(echoPin, HIGH); 
     distance = duration / 58.2; //distance in cm 
-    delay(50);
+    delay(50); // what is the delay for?
 }
 

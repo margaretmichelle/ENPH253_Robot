@@ -23,49 +23,49 @@ namespace Robot {
 
       tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
 
-      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
 
-      obstacle.useObstacle();
+      // obstacle.useObstacle();
 
-      if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 0) {
-        moveForCertainTime(0,0,300); //stop for 300 ms 
+      // if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 0) {
+      //   moveForCertainTime(0,0,300); //stop for 300 ms 
 
-        //Hardcode the first turn using moveForCertainTime()
+      //   //Hardcode the first turn using moveForCertainTime()
 
-        moveForCertainTime(90,80,800);
-        moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
-        moveForCertainTime(0,0,100); //stop to prepare claw 
+      //   moveForCertainTime(90,80,800);
+      //   moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
+      //   moveForCertainTime(0,0,100); //stop to prepare claw 
 
-        //Add claw code 
-        rightArm.placeObjectInContainer();
+      //   //Add claw code 
+      //   rightArm.placeObjectInContainer();
 
-        countIdolPickUp++;
-
-        
-        //Refind Tape and hardcode some good angle to continually move at 
-        while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-            moveForCertainTime(80,120,100);
-        }
-      }
-      else if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 1) {
-        moveForCertainTime(0,0,300); //stop for 300 ms
-
-        //Hardcode the second turn using moveForCertainTime()
-        moveForCertainTime(90,80,800);
-        moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
-        moveForCertainTime(0,0,100); //stop to prepare claw 
-
-        //Add claw code
-        rightArm.placeObjectInContainer();
-
-        countIdolPickUp++;
+      //   countIdolPickUp++;
 
         
-        //Refind Tape and hardcode some good angle to continually move at probably will want to have a sharper turn for this one 
-        while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-            moveForCertainTime(80,120,100);
-        }
-      }
+      //   //Refind Tape and hardcode some good angle to continually move at 
+      //   while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
+      //       moveForCertainTime(80,120,100);
+      //   }
+      // }
+      // else if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 1) {
+      //   moveForCertainTime(0,0,300); //stop for 300 ms
+
+      //   //Hardcode the second turn using moveForCertainTime()
+      //   moveForCertainTime(90,80,800);
+      //   moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
+      //   moveForCertainTime(0,0,100); //stop to prepare claw 
+
+      //   //Add claw code
+      //   rightArm.placeObjectInContainer();
+
+      //   countIdolPickUp++;
+
+        
+      //   //Refind Tape and hardcode some good angle to continually move at probably will want to have a sharper turn for this one 
+      //   while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
+      //       moveForCertainTime(80,120,100);
+      //   }
+      // }
       
       break;
 
@@ -84,9 +84,9 @@ namespace Robot {
       break;
 
     case MasterState::ObstacleFollow:
-      obstacle.useObstacle();
+      // obstacle.useObstacle();
 
-      o.displayDistance(obstacle.getDistance());
+      // o.displayDistance(obstacle.getDistance());
       
       break;
 
@@ -94,11 +94,100 @@ namespace Robot {
     
       edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
 
-      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
       break;
 
     case MasterState::Done:
       stop();
+      break;
+
+    // Testing and Time Trials States
+
+    case MasterState::JustTape:
+      tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+
+      o.displayCustom("Tape", 1);
+
+      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      break;
+    
+    case MasterState::PickUpObject:
+      // rightArm.placeObjectInContainer();
+
+      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      break;
+
+    case MasterState::Random:
+      rightForwardUltrasonic.useObstacle();
+      rightMidUltrasonic.useObstacle();
+
+      o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance(), "Mid sensor: ", rightMidUltrasonic.getDistance());
+
+      break;
+
+    case MasterState::PositionObject:
+      rightForwardUltrasonic.useObstacle();
+      rightMidUltrasonic.useObstacle();
+
+      o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance(), "Mid sensor: ", rightMidUltrasonic.getDistance());
+
+      if (rightForwardUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL) {
+        moveForCertainTime(0,0,1000);
+
+        rightForwardUltrasonic.useObstacle();
+
+        int timeMoved = 0;
+
+        while (rightForwardUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL) {
+          moveForCertainTime(90,0,200);
+          timeMoved =+ 200;
+          rightForwardUltrasonic.useObstacle();
+        }
+
+        moveForCertainTime(0,90,500);
+
+        rightMidUltrasonic.useObstacle();
+
+        while (rightMidUltrasonic.getDistance() >= ObstacleNS::DISTANCE_TO_IDOL) {
+          moveForCertainTime(-80,-80,100);
+          rightMidUltrasonic.useObstacle();
+        }
+
+        rightMidUltrasonic.useObstacle();
+
+        timeMoved = 0;
+
+        while (rightMidUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL) {
+          moveForCertainTime(-90,0,200);
+          timeMoved =+ 200;
+          rightMidUltrasonic.useObstacle();
+        }
+
+        moveForCertainTime(0,-90,500);
+
+        rightMidUltrasonic.useObstacle();
+
+        while (rightMidUltrasonic.getDistance() >= ObstacleNS::DISTANCE_TO_IDOL) {
+          moveForCertainTime(80,80,100);
+          rightMidUltrasonic.useObstacle();
+        }
+
+    
+        delay(2000);
+      }
+      
+      break;
+
+    case MasterState::Bridge:
+      // need bridge code
+
+      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      break;
+
+    case MasterState::JustEdge:
+      // edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
+
+      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
       break;
 
     default:

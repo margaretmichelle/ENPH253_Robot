@@ -22,7 +22,14 @@ namespace Robot {
     IRFollow,
     ObstacleFollow, 
     EdgeFollow,
-    Done
+    Done,
+    JustTape,
+    PickUpObject,
+    Random,
+    PositionObject,
+    Bridge,
+    JustEdge,
+    UpToArch
   };
   enum class SlaveState {
     Inactive,
@@ -38,12 +45,13 @@ namespace Robot {
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
         tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 80),
         edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 80),
-        obstacle(),
+        rightForwardUltrasonic(ObstacleNS::FORWARD_TRIG_PIN,ObstacleNS::FORWARD_ECHO_PIN),
+        rightMidUltrasonic(ObstacleNS::FORWARD_TRIG_PIN, ObstacleNS::MID_ECHO_PIN),
         edgeBack(leftMotor,rightMotor,80),
-        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_HALL_EFFECT_SENSOR_PIN),
-        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
-        leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw),
-        rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw),
+        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
+        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
+        // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN),
+        // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
         state(MasterState::Inactive)
         {
           //Set-up Communication Pins
@@ -123,7 +131,8 @@ namespace Robot {
       PID tapeFollow;
       PID edgeFollow;
 
-      Obstacle obstacle;
+      Obstacle rightForwardUltrasonic;
+      Obstacle rightMidUltrasonic;
       EdgeBack edgeBack;
 
       int countIdolPickUp = 0;
@@ -134,8 +143,8 @@ namespace Robot {
 
       Claw leftClaw;
       Claw rightClaw;
-      Arm leftArm;
-      Arm rightArm;
+      // Arm leftArm;
+      // Arm rightArm;
 
   };
 

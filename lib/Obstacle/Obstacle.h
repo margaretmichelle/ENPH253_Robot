@@ -13,7 +13,7 @@ class Obstacle {
         * @param rightMotor 
         * @param speed 
         */
-        Obstacle();
+        Obstacle(int trigger, int echo);
 
     
         void useObstacle();
@@ -22,6 +22,8 @@ class Obstacle {
 
 
     private:
+        int trigPin;
+        int echoPin;
         long duration;
         long distance;
 

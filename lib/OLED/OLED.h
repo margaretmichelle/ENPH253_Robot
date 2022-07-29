@@ -14,6 +14,11 @@ class OLED {
 
     void start();
 
+    void chooseState();
+
+    bool stateChosen();
+
+    int getState();
 
     /**
      * @brief Display screens on OLED to be switched with button and encoder
