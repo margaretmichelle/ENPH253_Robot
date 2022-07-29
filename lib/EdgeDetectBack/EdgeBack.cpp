@@ -28,25 +28,21 @@ void EdgeBack::useEdgeBack() {
     bool leftOnPlatform = !sensorOnEdge(bottomLeftSensor,HighAndLow::HIGH_READING);
     bool rightOnPlatform = !sensorOnEdge(bottomRightSensor,HighAndLow::HIGH_READING);
 
-    if(!leftOnPlatform && !rightOnPlatform) {
+    if (!leftOnPlatform && !rightOnPlatform) {
         moveForCertainTime(80,80,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //go straight since both off i think moving for 300 milliseconds would be good??
-    }
-    else if(!leftOnPlatform && rightOnPlatform) {
+    } else if (!leftOnPlatform && rightOnPlatform) {
         moveForCertainTime(90,80,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //turn right if left is not on platform 
-    }
-    else if(leftOnPlatform && !rightOnPlatform) {
+    } else if (leftOnPlatform && !rightOnPlatform) {
         moveForCertainTime(80,90,leftMotor,rightMotor,EdgeFollowerNS::MOVE_FOR_TIME); //turn left if right is not on platform
-    }
-    else {
+    } else {
         //do nothing if both are on platform
     }
 }    
 
 bool EdgeBack::sensorOnEdge(int sensorValue, int highReading) {
-    if(sensorValue == highReading) { //we get a high reading when on an edge 
+    if (sensorValue == highReading) { //we get a high reading when on an edge 
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }

@@ -14,8 +14,30 @@ namespace ClawNS {
 
   // Constants
   const int CLAW_OPEN = 180;
+<<<<<<< HEAD
   const int CLAW_PARTIAL_CLOSE = 70;
+=======
+>>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
   const int CLAW_CLOSED = 0;
+}
+
+namespace BridgeDeployNS {
+  // edge
+  const int EDGE_THRESHOLD = 350;
+  const int NUM_READINGS = 2;
+  const int EDGE_ALIGN_SPEED = 110;
+
+  const int SERVO_REST_ANGLE = 0;
+  const int UNHOOK_SERVO_FINAL_ANGLE = 45;
+  const int PUSH_SERVO_FINAL_ANGLE = 180;
+
+  namespace UnHookBridge {
+    const int UNHOOK_BRIDGE_SERVO_PIN = PA3;
+  }
+
+  namespace PushBridge {
+    const int PUSH_BRIDGE_SERVO_PIN = PA2;
+  }
 }
 
 namespace ArmNS {
@@ -60,32 +82,8 @@ namespace IRNS {
 /****** Bots ******/
 namespace SlaveNS {
   const int MIN_ADVANCE_TIME = 500;
-  // Pins
-  // const int LEFT_MOTOR_PIN_1 = PA9;
-  // const int LEFT_MOTOR_PIN_2 = PA10;
-  // const int RIGHT_MOTOR_PIN_1 = PB8;
-  // const int RIGHT_MOTOR_PIN_2 = PB9;
-
-  // const int ADVANCE_PIN = PB3;
-  // const int STOP_PIN = PB5;
-
-  /* while tuning, use specified numbers
-  // Speeds + Kps
-  const int RAMP_CLIMBING_SPEED = 140;
-  const int RAMP_CLIMBING_KP = 12;
-
-  const int PRE_BRIDGE_SPEED = 60;
-  const int PRE_BRIDGE_KP = 13;
-
-  const int BRIDGE_CROSSING_SPEED = 85;
-  const int BRIDGE_CROSSING_KP= 10;
-
-  const int PRE_IR_SPEED = 80;
-  const int PRE_IR_KP = 9;
-
-  const int POST_IR_SPEED = 90;
-  const int POST_IR_KP = 9;
-  */
+  const int ADVANCE_MASTER_PIN = PB12;
+  const int STOP_MASTER_PIN = PB13;
 }
 
 namespace MasterNS {
@@ -191,11 +189,17 @@ namespace HighAndLow {
 
 namespace ObstacleNS {; 
   // not sure what the threshold value is yet we need to test
+<<<<<<< HEAD
   const int FORWARD_ECHO_PIN = PA7;
   const int MID_ECHO_PIN = PA4;
   const int MID_TRIG_PIN = PA5; // overloaded with IR and hall effect currently
   const int FORWARD_TRIG_PIN = PA6;
   const int DISTANCE_TO_IDOL = 40; //cm
+=======
+  const int ECHO_PIN = PA7;
+  const int TRIGPIN = PA6;
+  const int DISTANCE_TO_IDOL = 35;//cm
+>>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
 }
 
 #endif

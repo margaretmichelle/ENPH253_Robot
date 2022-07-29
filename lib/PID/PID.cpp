@@ -14,10 +14,8 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) : p
                                                                                rightMotor(rightMotor),
                                                                                motorSpeed(motorSpeed)
 {
-  switch (pidType)
-  {
+  switch (pidType) {
     case PIDType ::TapeFollower:
-    {
       leftSensorPin = TapeFollowerNS::LEFT_FRONT_SENSOR_PIN;
       rightSensorPin = TapeFollowerNS::RIGHT_FRONT_SENSOR_PIN;
       summedErrorLimit = TapeFollowerNS::SUMMED_ERROR_LIMIT;
@@ -27,9 +25,8 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) : p
       pinMode(leftSensorPin, INPUT_PULLUP);
       pinMode(rightSensorPin, INPUT_PULLUP);
       break;
-    }
+
     case PIDType::EdgeFollower: 
-    {
       topLeftSensorPin = EdgeFollowerNS::TOP_LEFT_SENSOR_PIN;
       topRightSensorPin = EdgeFollowerNS::TOP_RIGHT_SENSOR_PIN;
       summedErrorLimit = EdgeFollowerNS::SUMMED_ERROR_LIMIT;
@@ -39,18 +36,14 @@ PID::PID(PIDType pidType, Motor leftMotor, Motor rightMotor, int motorSpeed) : p
       pinMode(topRightSensorPin,INPUT_PULLUP);
       pinMode(topLeftSensorPin, INPUT_PULLUP);
       break;
-    }
+
     default:
-    {
       // Error never should be here should always have PIDType
       break;
-    }
   }
-  
 }
 
-void PID::usePID(int KP, int KI, int KD)
-{
+void PID::usePID(int KP, int KI, int KD) {
   //Reflectance Tape and Edge Top Error 
   int error;
 
@@ -58,7 +51,7 @@ void PID::usePID(int KP, int KI, int KD)
 
   switch (pidType) {
     case PIDType::TapeFollower:
-    {
+      {
       // average QRD values for Tape
       getLeftSensorVal();
       getRightSensorVal();
@@ -66,10 +59,11 @@ void PID::usePID(int KP, int KI, int KD)
       bool leftOnWhite = sensorOnWhite(leftSensor, threshold);
       bool rightOnWhite = sensorOnWhite(rightSensor, threshold);
       error = getTapeError(leftOnWhite, rightOnWhite, TapeFollowerNS::ONE_OFF_ERROR, TapeFollowerNS::BOTH_OFF_ERROR);
+      }
       break;
-    }
+
     case PIDType::EdgeFollower:
-    {
+      {
       // get average QRD values for the edge 
       getTopLeftSensorVal();
       getTopRightSensorVal();
@@ -77,8 +71,8 @@ void PID::usePID(int KP, int KI, int KD)
       bool topLeftOnPlatform = !sensorOnEdge(topLeftSensor, threshold);
       bool topRightOnPlatform = !sensorOnEdge(topRightSensor, threshold);
       error = getEdgeError(topLeftOnPlatform, topRightOnPlatform, EdgeFollowerNS::ONE_OFF_ERROR);
+      }
       break;
-    }
   }
 
   summedError = getSummedError(error, summedError, summedErrorLimit);
@@ -89,10 +83,9 @@ void PID::usePID(int KP, int KI, int KD)
     derivativeError = (error - lastError) / (micros() - lastTime);
     lastDifferentError = error;
     timeOfLastChange = lastTime;
-  }
-
-  else
+  } else {
     derivativeError = (error - lastError) / (micros() - timeOfLastChange); // will be 0 anyways
+  }
 
   // reset last values
   lastError = error;
@@ -106,10 +99,8 @@ void PID::usePID(int KP, int KI, int KD)
   rightMotor.speed(rightMotorSpeed);
 }
 
-bool PID::sensorOnWhite(int sensorValue, int threshold)
-{
-  if (sensorValue < threshold)
-  {
+bool PID::sensorOnWhite(int sensorValue, int threshold) {
+  if (sensorValue < threshold) {
     return true;
   }
   return false;
@@ -119,47 +110,33 @@ bool PID::bothOnBlack(int threshold) {
     getLeftSensorVal();
     getRightSensorVal();
 
-    if(leftSensor > threshold && rightSensor > threshold) {
+    if (leftSensor > threshold && rightSensor > threshold) {
       return true;
     }
     return false;
 }
 
-int PID::getTapeError(bool leftOnWhite, bool rightOnWhite, int oneOffError, int bothOffError)
-{
+int PID::getTapeError(bool leftOnWhite, bool rightOnWhite, int oneOffError, int bothOffError) {
   // ensure correct input
-  if (pidType != PIDType::TapeFollower)
-  {
-  } // THROW EXCEPTION
+  if (pidType != PIDType::TapeFollower) {} // THROW EXCEPTION
 
   int error = lastError;
 
   // if both sensors are on white, set error based on lastError
-  if (leftOnWhite && rightOnWhite)
-  {
-    if (lastError > 0)
-    {
+  if (leftOnWhite && rightOnWhite) {
+    if (lastError > 0) {
       error = bothOffError;
-    }
-    else if (lastError < 0)
-    {
+    } else if (lastError < 0) {
       error = -bothOffError;
     }
     // if suddenly went off tape) dont need
   }
-
   // set error left or right
-  else if (rightOnWhite)
-  {
+  else if (rightOnWhite) {
     error = oneOffError;
-  }
-  else if (leftOnWhite)
-  {
+  } else if (leftOnWhite) {
     error = -oneOffError;
-  }
-
-  else
-  {
+  } else {
     error = 0;
   }
 
@@ -181,31 +158,25 @@ int PID::getEdgeError(bool correctLeftPosition, bool correctRightPosition, int o
 }
 
 bool PID::sensorOnEdge(int sensorValue, int highReading) {
-    if(sensorValue == highReading) { //we get a high reading when on an edge 
-        return true;
-    }
-    else {
-        return false;
-    }
+  if (sensorValue == highReading) { //we get a high reading when on an edge 
+      return true;
+  } else {
+      return false;
+  }
 }
 
-int PID::getSummedError(int error, int lastSummedError, int summedErrorLimit)
-{ // there integral term KI = 0 so we will need to change summedErrorLimit and KI to stabilize robot
+int PID::getSummedError(int error, int lastSummedError, int summedErrorLimit) { // there integral term KI = 0 so we will need to change summedErrorLimit and KI to stabilize robot
   // get absolute value of summedErrorLimit
-  if (summedErrorLimit < 0)
-  {
+  if (summedErrorLimit < 0) {
     summedErrorLimit = -summedErrorLimit;
   }
 
   int summedError = lastSummedError + error;
 
   // anti-windup
-  if (summedError > summedErrorLimit)
-  {
+  if (summedError > summedErrorLimit) {
     summedError = summedErrorLimit;
-  }
-  else if (summedError < -summedErrorLimit)
-  {
+  } else if (summedError < -summedErrorLimit) {
     summedError = -summedErrorLimit;
   }
 

@@ -1,10 +1,17 @@
 #include <Arduino.h>
 #include <Constants.h>
-#include <OLED.h>
+#include <Motor.h>
+#include <PID.h>
+#include <Helper.h>
+#include <IR.h>
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
 #include <Wire.h>
 #include <Robot.h> 
+#include <ServoMotor.h>
+#include <Claw.h>
 
-#define LED_BUILTIN PC13
+#define LED_BUILTIN PB2
 int ledState = LOW; 
 unsigned long previousMillis = 0;
 const long interval = 2500;
@@ -13,7 +20,6 @@ Robot::Master master;
 OLED oledDisplay;
 
 void useEdgeDetection();
-void slaveInterrupt();
 
 void setup() {
     oledDisplay.start();
@@ -21,20 +27,10 @@ void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
 
     //Attach interrupts to the back edge detection
-    attachInterrupt(digitalPinToInterrupt(EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN), useEdgeDetection, RISING);
-    attachInterrupt(digitalPinToInterrupt(EdgeFollowerNS::BOTTOM_RIGHT_SENSOR_PIN), useEdgeDetection, RISING);
+    attachInterrupt(EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN, useEdgeDetection, RISING);
+    attachInterrupt(EdgeFollowerNS::BOTTOM_RIGHT_SENSOR_PIN, useEdgeDetection, RISING);
 
-    attachInterrupt(digitalPinToInterrupt(PA2), slaveInterrupt, RISING);
-
-    master.setState(Robot::MasterState::Random);
-
-    // while (!oledDisplay.stateChosen()) {
-    //   oledDisplay.chooseState();
-    //   if (oledDisplay.stateChosen()) {
-    //     master.setState((Robot::MasterState) oledDisplay.getState()); //Just for Testing Purposes
-    //     delay(1000);
-    //   }
-    // }
+    master.setState(Robot::MasterState::IRFollow); //Just for Testing Purposes 
 }
 
 void loop() {
@@ -57,8 +53,4 @@ void loop() {
 
 void useEdgeDetection() {
     master.useEdgeDetection();
-}
-
-void slaveInterrupt() {
-  master.changeSlaveState();
 }

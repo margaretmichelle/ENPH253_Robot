@@ -3,8 +3,18 @@
 
 
 
+<<<<<<< HEAD
 Claw::Claw(int controlPin) : clawServo(controlPin) {
     clawServo.setupServo(ClawNS::CLAW_OPEN);
+=======
+Claw::Claw(int controlPin, int hallEffectPin) : clawServo(controlPin) {
+    hallEffectPin = hallEffectPin;
+    clawServo.setupServo(ClawNS::CLAW_OPEN);
+    
+    pinMode(hallEffectPin, INPUT_ANALOG); // might change to internal pullup resistor (need to test)
+
+    magnetFound = false;
+>>>>>>> a90412d316a8ac95e85e3f6303a477f8f2efa7af
 }
 
 void Claw::close() {
