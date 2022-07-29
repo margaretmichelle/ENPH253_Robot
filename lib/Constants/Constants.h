@@ -15,7 +15,7 @@ namespace ClawNS {
   const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
 
   // Constants
-  const int CLAW_OPEN = 100;
+  const int CLAW_OPEN = 180;
   const int CLAW_CLOSED = 0;
 }
 
@@ -26,13 +26,13 @@ namespace ArmNS {
 
   // Constants
   const int ARM_UP = 180;
-  const int ARM_DOWN = 0;
+  const int ARM_DOWN = 20;
 }
 
 namespace ServoNS {
-  const int SERVO_FREQ = 300;
-  const int MAX_DUTY_CYCLE = 3200;
-  const int MIN_DUTY_CYCLE = 800;
+  const int SERVO_FREQ = 50;
+  const int MAX_PULSE_WIDTH = 2500;
+  const int MIN_PULSE_WIDTH = 500;
 }
 
 namespace GyroNS {
@@ -115,6 +115,7 @@ namespace TapeFollowerNS {
 
   // Readings
   const int WHITE_THRESHOLD = 300;
+  const int BLACK_THRESHOLD = 600;
   const int NUM_READINGS = 1;
   const int SUMMED_ERROR_LIMIT = 0;
 
@@ -191,9 +192,7 @@ namespace ObstacleNS {;
   // not sure what the threshold value is yet we need to test
   const int ECHO_PIN = PA7;
   const int TRIGPIN = PA6;
-  const int MAX_DISTANCE = 30;
-  const int MIN_DISTANCE = 50;
-  const int DISTANCE_TO_IDOL = 40;//cm
+  const int DISTANCE_TO_IDOL = 35;//cm
 }
 
 #endif

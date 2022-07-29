@@ -1,12 +1,11 @@
 #include <Arm.h>
 #include <Claw.h>
-#include <Servo.h>
-#include <OLED.h>
 
 using namespace ArmNS;
+void magnetInterrupt();
 
 Arm::Arm(int armControlPin, Claw claw) : claw(claw), armServo(armControlPin) {
-    armServo.write(ARM_UP);
+    armServo.setupServo(ARM_UP);
 }
 
 void Arm::returnToHome() {
@@ -28,9 +27,6 @@ void Arm::placeObjectInContainer() {
     claw.open();
 }
 
-void Arm::findHome(int minAngle, int maxAngle, OLED o) {
-    for (int i = minAngle; i <= maxAngle; i++) {
-        armServo.write(i);
-        o.displayCustom("Servo angle: ", i);
-    }
+void magnetInterrupt() {
+    
 }

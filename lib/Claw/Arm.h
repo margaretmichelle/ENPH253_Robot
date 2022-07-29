@@ -4,7 +4,6 @@
 #include <ServoMotor.h>
 #include <Constants.h>
 #include <Claw.h>
-#include <OLED.h>
 
 class Arm {
     public:
@@ -35,8 +34,6 @@ class Arm {
          * @return int that represents angle of the arm in degrees
          */
         int getPosition();
-
-        void findHome(int minAngle, int maxAngle, OLED o);
 
     private:
     ServoMotor armServo;
