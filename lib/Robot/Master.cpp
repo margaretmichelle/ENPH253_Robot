@@ -130,8 +130,7 @@ namespace Robot {
       break;
 
     case MasterState::Random:
-      rightForwardUltrasonic.useObstacle();
-      rightMidUltrasonic.useObstacle();
+      bridge.deployBridge();
 
       o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance(), "Mid sensor: ", rightMidUltrasonic.getDistance());
 
@@ -210,7 +209,7 @@ namespace Robot {
   } // namespace Robot
 
   void Master::useEdgeDetection() {
-    edgeBack.useEdgeBack();
+    edgeBack.useEdge();
   }
 
 

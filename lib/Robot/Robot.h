@@ -11,6 +11,7 @@
 #include <EdgeBack.h>
 #include <Arm.h>
 #include <Claw.h>
+#include <Bridge.h>
 
 namespace Robot {
 
@@ -54,8 +55,9 @@ namespace Robot {
         rightForwardUltrasonic(ObstacleNS::FORWARD_TRIG_PIN,ObstacleNS::FORWARD_ECHO_PIN),
         rightMidUltrasonic(ObstacleNS::FORWARD_TRIG_PIN, ObstacleNS::MID_ECHO_PIN),
         edgeBack(leftMotor,rightMotor,80),
-        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
-        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
+        bridge(leftMotor,rightMotor),
+        //leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
+        //rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
         // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN),
         // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
         state(MasterState::Inactive)
@@ -142,6 +144,8 @@ namespace Robot {
       PID tapeFollow;
       PID edgeFollow;
 
+      BridgeDeploy bridge;
+
       Obstacle rightForwardUltrasonic;
       Obstacle rightMidUltrasonic;
       EdgeBack edgeBack;
@@ -152,8 +156,8 @@ namespace Robot {
 
       MasterState state;
 
-      Claw leftClaw;
-      Claw rightClaw;
+      // Claw leftClaw;
+      // Claw rightClaw;
       // Arm leftArm;
       // Arm rightArm;
 
