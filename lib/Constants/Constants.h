@@ -29,11 +29,11 @@ namespace BridgeDeployNS {
   const int PUSH_SERVO_FINAL_ANGLE = 180;
 
   namespace UnHookBridge {
-    const int UNHOOK_BRIDGE_SERVO_PIN = PA1;
+    const int UNHOOK_BRIDGE_SERVO_PIN = PA_7;
   }
 
   namespace PushBridge {
-    const int PUSH_BRIDGE_SERVO_PIN = PA0;
+    const int PUSH_BRIDGE_SERVO_PIN = PA_6;
   }
 }
 
@@ -41,8 +41,8 @@ namespace ArmNS {
   // Pins
   const int LEFT_ARM_SERVO_PIN = PA_3; // currently overloaded with IR sensor (servos to be moved to other BP)
   const int RIGHT_ARM_SERVO_PIN = PA_2;
-  // const int LEFT_HALL_EFFECT_SENSOR_PIN = PA5; // overloaded with IR sensor pins
-  // const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
+  const int LEFT_HALL_EFFECT_SENSOR_PIN = PA5; // overloaded with IR sensor pins
+  const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
 
   // Constants
   const int ARM_UP = 180;
@@ -87,8 +87,8 @@ namespace MasterNS {
   // Temp Value
 
   // Pins
-  const int LEFT_MOTOR_PIN_1 = PA_9;
-  const int LEFT_MOTOR_PIN_2 = PA_10;
+  const int LEFT_MOTOR_PIN_1 = PA_8;
+  const int LEFT_MOTOR_PIN_2 = PA_9;
   const int RIGHT_MOTOR_PIN_1 = PB_8;
   const int RIGHT_MOTOR_PIN_2 = PB_9;
 
@@ -186,10 +186,10 @@ namespace HighAndLow {
 
 namespace ObstacleNS {; 
   // not sure what the threshold value is yet we need to test
-  const int FORWARD_ECHO_PIN = PA7;
-  const int MID_ECHO_PIN = PA4;
-  const int MID_TRIG_PIN = PA5; // overloaded with IR and hall effect currently
-  const int FORWARD_TRIG_PIN = PA6;
+  const int FORWARD_ECHO_PIN = PB11;
+  const int MID_ECHO_PIN = PB10;
+  const int FORWARD_TRIG_PIN = PA10;
+  const int MID_TRIG_PIN = PA11;
   const int DISTANCE_TO_IDOL = 40; //cm
 }
 

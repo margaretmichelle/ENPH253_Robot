@@ -118,9 +118,7 @@ namespace Robot {
     case MasterState::JustTape:
       tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
 
-      o.displayCustom("Tape", 1);
-
-      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, rightMidUltrasonic.getDistance());
       break;
     
     case MasterState::PickUpObject:
@@ -140,51 +138,24 @@ namespace Robot {
       rightForwardUltrasonic.useObstacle();
       rightMidUltrasonic.useObstacle();
 
-      o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance(), "Mid sensor: ", rightMidUltrasonic.getDistance());
+      o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance(), "Mid sonar: ", rightMidUltrasonic.getDistance());
+      
+      while (rightForwardUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL && rightForwardUltrasonic.getDistance() > 15) {
 
-      if (rightForwardUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL) {
-        moveForCertainTime(0,0,1000);
+        moveForCertainTime(90,0,400);
+        moveForCertainTime(0,0,50);
+        moveForCertainTime(0,90,400);
 
         rightForwardUltrasonic.useObstacle();
 
-        int timeMoved = 0;
+        moveForCertainTime(0,0,300);
 
-        while (rightForwardUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL) {
-          moveForCertainTime(90,0,200);
-          timeMoved =+ 200;
+        while (rightForwardUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+          moveForCertainTime(-80,-80,100);
           rightForwardUltrasonic.useObstacle();
         }
-
-        moveForCertainTime(0,90,500);
-
-        rightMidUltrasonic.useObstacle();
-
-        while (rightMidUltrasonic.getDistance() >= ObstacleNS::DISTANCE_TO_IDOL) {
-          moveForCertainTime(-80,-80,100);
-          rightMidUltrasonic.useObstacle();
-        }
-
-        rightMidUltrasonic.useObstacle();
-
-        timeMoved = 0;
-
-        while (rightMidUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL) {
-          moveForCertainTime(-90,0,200);
-          timeMoved =+ 200;
-          rightMidUltrasonic.useObstacle();
-        }
-
-        moveForCertainTime(0,-90,500);
-
-        rightMidUltrasonic.useObstacle();
-
-        while (rightMidUltrasonic.getDistance() >= ObstacleNS::DISTANCE_TO_IDOL) {
-          moveForCertainTime(80,80,100);
-          rightMidUltrasonic.useObstacle();
-        }
-
     
-        delay(2000);
+        moveForCertainTime(0,0,1000);
       }
       
       break;
