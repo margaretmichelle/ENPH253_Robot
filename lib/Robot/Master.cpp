@@ -128,9 +128,16 @@ namespace Robot {
       break;
 
     case MasterState::Random:
-      bridge.deployBridge();
 
-      o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance(), "Mid sensor: ", rightMidUltrasonic.getDistance());
+      moveForCertainTime(255,255,800);
+      moveForCertainTime(-255,-255,800);
+      moveForCertainTime(255,200,800); //turn right
+      moveForCertainTime(255,200,800); //turn left
+
+      //Test Bridge Reploy 
+      // bridge.deployBridge();
+
+      // o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance(), "Mid sensor: ", rightMidUltrasonic.getDistance());
 
       break;
 

@@ -50,8 +50,8 @@ namespace Robot {
       Master():
         leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2),
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
-        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 80),
-        edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 80),
+        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 125),
+        edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 125),
         rightForwardUltrasonic(ObstacleNS::FORWARD_TRIG_PIN,ObstacleNS::FORWARD_ECHO_PIN),
         rightMidUltrasonic(ObstacleNS::FORWARD_TRIG_PIN, ObstacleNS::MID_ECHO_PIN),
         edgeBack(leftMotor,rightMotor,80),
