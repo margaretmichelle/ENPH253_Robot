@@ -194,7 +194,7 @@ namespace EncoderNS{
   const float WHEEL_DIA_MM = 88.9;
   const float ROTATION_DISTANCE_MM = WHEEL_DIA_MM * PI;
   const int PULSES_PER_ROTATION = 131*11*7/5;
-  const int STRAIGHT_POWER = 255;
+  const int POWER_OFFSET = 5;
 }
 
 #endif
