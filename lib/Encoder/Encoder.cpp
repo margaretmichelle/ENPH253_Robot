@@ -9,8 +9,8 @@ void rightEncoderPulse();
 long int leftEncoderPulses;
 long int rightEncoderPulses;
 
-Motor LeftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2);
-Motor RightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2);
+Motor leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2);
+Motor rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2);
 
 Encoder::Encoder(){
     pinMode(EncoderNS::LEFT_MOTOR_ENCODER_PIN, INPUT);
@@ -66,6 +66,9 @@ void Encoder::driveStraight(int distance, int motorPower){
             rightPower += EncoderNS::POWER_OFFSET;
             leftPower -= EncoderNS::POWER_OFFSET;
         }
+
+        leftMotor.speed(leftPower);
+        rightMotor.speed(rightPower);
 
         //delay to give motors time to change speeds
         delay(20);
