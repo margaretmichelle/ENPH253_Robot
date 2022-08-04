@@ -193,4 +193,13 @@ namespace ObstacleNS {;
   const int DISTANCE_TO_IDOL = 40; //cm
 }
 
+namespace EncoderNS{
+  const int LEFT_MOTOR_ENCODER_PIN = PA12;
+  const int RIGHT_MOTOR_ENCODER_PIN = PA15;
+  const float WHEEL_DIA_MM = 88.9;
+  const float ROTATION_DISTANCE_MM = WHEEL_DIA_MM * PI;
+  const int PULSES_PER_ROTATION = 131*11*7/5;
+  const int STRAIGHT_POWER = 255;
+}
+
 #endif
