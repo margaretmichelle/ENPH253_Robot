@@ -26,14 +26,9 @@ namespace BridgeDeployNS {
 
   const int SERVO_REST_ANGLE = 0;
   const int UNHOOK_SERVO_FINAL_ANGLE = 45;
-  const int PUSH_SERVO_FINAL_ANGLE = 180;
 
   namespace UnHookBridge {
     const int UNHOOK_BRIDGE_SERVO_PIN = PA_7;
-  }
-
-  namespace PushBridge {
-    const int PUSH_BRIDGE_SERVO_PIN = PA_6;
   }
 }
 
