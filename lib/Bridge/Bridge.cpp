@@ -9,13 +9,9 @@ BridgeDeploy::BridgeDeploy(Motor leftMotor, Motor rightMotor) :
   rightMotor(rightMotor),
   leftOnEdge(false),
   rightOnEdge(false),
-  unHookServo(BridgeDeployNS::UnHookBridge::UNHOOK_BRIDGE_SERVO_PIN),
-  pushServo(BridgeDeployNS::PushBridge::PUSH_BRIDGE_SERVO_PIN)
+  unHookServo(BridgeDeployNS::UnHookBridge::UNHOOK_BRIDGE_SERVO_PIN)
   {
     unHookServo.setupServo(BridgeDeployNS::SERVO_REST_ANGLE);
-    pushServo.setupServo(BridgeDeployNS::SERVO_REST_ANGLE);
-
-    //Do i need to set up pinModes??
   }
 
 bool BridgeDeploy::bothOnEdge() {
@@ -39,8 +35,6 @@ void BridgeDeploy::deployBridge() {
     //deploy bridge
     unHookServo.write(BridgeDeployNS::UNHOOK_SERVO_FINAL_ANGLE);
     delay(2000); //wait a bit to make sure unhooked 
-
-    pushServo.write(BridgeDeployNS::PUSH_SERVO_FINAL_ANGLE);
 }
 
 void BridgeDeploy::edgeAlign() {

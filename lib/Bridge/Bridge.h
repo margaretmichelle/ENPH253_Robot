@@ -54,8 +54,6 @@ private:
   Motor leftMotor;
   Motor rightMotor;
   ServoMotor unHookServo;
-  ServoMotor pushServo;
-
   // Sensors
   int leftSensor;
   int rightSensor;
