@@ -10,7 +10,7 @@ class Encoder{
 
     int * changeInPosition();
 
-    void driveStraight(int distance);
+    void driveStraight(int distance, int motorPower);
 };
 
 #endif
