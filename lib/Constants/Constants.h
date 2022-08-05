@@ -9,8 +9,8 @@ const int MAP_8_BIT_TO_12_BIT = 16;
 
 namespace ClawNS {
   // Pins
-  const int LEFT_CLAW_SERVO_PIN = PA_1; // will be moved to PA8 and PA9 on other BP
-  const int RIGHT_CLAW_SERVO_PIN = PA_0;
+  const int LEFT_CLAW_SERVO_PIN = PA_8; // will be moved to PA8 and PA9 on other BP
+  const int RIGHT_CLAW_SERVO_PIN = PA_9;
 
   // Constants
   const int CLAW_OPEN = 180;
@@ -28,14 +28,14 @@ namespace BridgeDeployNS {
   const int UNHOOK_SERVO_FINAL_ANGLE = 45;
 
   namespace UnHookBridge {
-    const int UNHOOK_BRIDGE_SERVO_PIN = PA_7;
+    const int UNHOOK_BRIDGE_SERVO_PIN = PA_0;
   }
 }
 
 namespace ArmNS {
   // Pins
-  const int LEFT_ARM_SERVO_PIN = PA_3; // currently overloaded with IR sensor (servos to be moved to other BP)
-  const int RIGHT_ARM_SERVO_PIN = PA_2;
+  const int LEFT_ARM_SERVO_PIN = PB_6; // currently overloaded with IR sensor (servos to be moved to other BP)
+  const int RIGHT_ARM_SERVO_PIN = PB_7;
   const int LEFT_HALL_EFFECT_SENSOR_PIN = PA5; // overloaded with IR sensor pins
   const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
 
@@ -118,16 +118,14 @@ namespace TapeFollowerNS {
 
 namespace EdgeFollowerNS {
   // Pins
-  const int TOP_LEFT_SENSOR_PIN = PA15;
-  const int TOP_RIGHT_SENSOR_PIN = PB3;
-  const int BOTTOM_LEFT_SENSOR_PIN = PB4;
-  const int BOTTOM_RIGHT_SENSOR_PIN = PB5;
-  const int LEFT_MOTOR_PIN_1 = 2;
-  const int LEFT_MOTOR_PIN_2 = 4;
-  const int RIGHT_MOTOR_PIN_1 = 3;
-  const int RIGHT_MOTOR_PIN_2 = 5;
-
-  //Move For a Certain Amount of Time;
+  const int TOP_LEFT_SENSOR_PIN = PA7;
+  const int TOP_RIGHT_SENSOR_PIN = PA6;
+  const int BOTTOM_LEFT_SENSOR_PIN = PA5;
+  const int BOTTOM_RIGHT_SENSOR_PIN = PA4;
+  const int LEFT_MOTOR_PIN_1 = PA_8;
+  const int LEFT_MOTOR_PIN_2 = PA_9;
+  const int RIGHT_MOTOR_PIN_1 = PB_8;
+  const int RIGHT_MOTOR_PIN_2 = PB_9;
 
   const int MOVE_FOR_TIME = 300;
 
@@ -164,7 +162,7 @@ namespace DriveMotorPins {
 
 namespace OLEDDisplayNS {
   // Pins
-  const int BUTTON_PIN = PA12;
+  const int BUTTON_PIN = PB5;
   const int CLK_PIN = PB14;
   const int DT_PIN = PB15;
 
@@ -180,11 +178,10 @@ namespace HighAndLow {
 }
 
 namespace ObstacleNS {; 
-  // not sure what the threshold value is yet we need to test
-  const int FORWARD_ECHO_PIN = PB11;
-  const int MID_ECHO_PIN = PB10;
-  const int FORWARD_TRIG_PIN = PA10;
-  const int MID_TRIG_PIN = PA11;
+  const int FORWARD_ECHO_PIN = PB2; //left
+  const int FORWARD_TRIG_PIN = PA3;
+  const int MID_ECHO_PIN = PA1; //right 
+  const int MID_TRIG_PIN = PA0;
   const int DISTANCE_TO_IDOL = 40; //cm
 }
 
