@@ -8,9 +8,9 @@ class Encoder{
 
     Encoder();
 
-    int * changeInPosition();
+    void pivotAngle(float angleDegrees);
 
-    void driveStraight(int distance, int motorPower);
+    void driveStraight(float distanceMm, int motorPower);
 };
 
 #endif

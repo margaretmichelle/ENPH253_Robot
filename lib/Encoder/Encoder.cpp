@@ -23,7 +23,7 @@ Encoder::Encoder(){
     rightEncoderPulses = 0;
 }
 
-void Encoder::driveStraight(int distance, int motorPower){
+void Encoder::driveStraight(float distance, int motorPower){
     // Set inital motor powers
     int leftPower = motorPower;
     int rightPower = motorPower;
@@ -75,10 +75,62 @@ void Encoder::driveStraight(int distance, int motorPower){
     }
 
     //stop moving motors
-    LeftMotor.stop();
-    RightMotor.stop();
+    leftMotor.stop();
+    rightMotor.stop();
 }
 
+void pivotAngle(float angleDegrees) {
+// use wheel encoders to pivot (turn) by specified angle
+
+    // set motor speed for pivoting
+    int speed = EncoderNS::PIVOT_WHEEL_SPEED; // clockwise
+    int angle = angleDegrees;
+
+    if (angleDegrees < 0) {
+        speed *= -1; // negative power for counter-clockwise
+    }
+
+    // use correction to improve angle accuracy
+    // adjust correction value based on test results
+    float correction = -5.0; // need decimal point for float value
+    if (angle > 0) {
+        angle += correction;
+    }
+    else if (angle < 0) {
+        angle -= correction;
+    }
+
+    // variable for tracking wheel encoder counts
+    long rightCount = 0;
+
+    // based on angle, calculate distance (arc length) for pivot
+    float distance = abs(angle) / 360.0 * EncoderNS::PIVOT_CIRCUMFERENCE;
+
+    // based on distance, calculate number of wheel revolutions
+    float numRev = distance / EncoderNS::ROTATION_DISTANCE_MM;
+
+    // based on number of revolutions, calculate target encoder count
+    float targetCount = numRev * EncoderNS::PULSES_PER_ROTATION;
+
+    // reset encoder counters and start pivoting
+    leftEncoderPulses = 0;
+    rightEncoderPulses = 0;
+    delay(100);
+    leftMotor.speed(speed);
+    rightMotor.speed(-speed); //will go counterclockwise if angle is - therefore speeds will be negative 
+
+    // keeps looping while right encoder count less than target count
+    while (abs(rightCount) < abs(targetCount)) {
+        // get current wheel encoder count
+        rightCount = rightEncoderPulses;
+        delay(10);  // short delay before next reading
+    }
+
+    // target count reached
+    leftMotor.stop();
+    rightMotor.stop();
+    delay(250);
+}
 void leftEncoderPulse(){
     leftEncoderPulses++;
 }

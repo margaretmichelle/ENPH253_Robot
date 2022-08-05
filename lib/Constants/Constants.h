@@ -195,6 +195,11 @@ namespace EncoderNS{
   const float ROTATION_DISTANCE_MM = WHEEL_DIA_MM * PI;
   const int PULSES_PER_ROTATION = 131*11*7/5;
   const int POWER_OFFSET = 5;
+  const float CENTRE_TO_RIGHT_WHEEL_MM = 99.5;
+  const float CENTRE_TO_LEFT_WHEEL_MM = 99.5;
+  const int PIVOT_WHEEL_SPEED = 200;
+  const float PIVOT_DIAMETER = 199;
+  const float PIVOT_CIRCUMFERENCE = PIVOT_DIAMETER * PI;
 }
 
 #endif
