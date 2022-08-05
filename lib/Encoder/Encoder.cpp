@@ -2,6 +2,7 @@
 #include <Constants.h>
 #include <Encoder.h>
 #include <Motor.h>
+#include <PID.h>
 
 void leftEncoderPulse();
 void rightEncoderPulse();
@@ -23,18 +24,18 @@ Encoder::Encoder(){
     rightEncoderPulses = 0;
 }
 
-void Encoder::driveStraight(float distance, int motorPower){
-    // Set inital motor powers
-    int leftPower = motorPower;
-    int rightPower = motorPower;
+void Encoder::driveStraight(float distance, int motorSpeed){
 
     // Sets target number of counts for the encoder
-    float numOfRevs = distance / EncoderNS::ROTATION_DISTANCE_MM;
+    float numOfRevs = abs(distance) / EncoderNS::ROTATION_DISTANCE_MM;
     unsigned long targetCount = numOfRevs * EncoderNS::PULSES_PER_ROTATION;
 
     // Sets inital encoder counts to keep track of new changes to encoder counts
     unsigned long initalLeftCount = leftEncoderPulses;
     unsigned long initalRightCount = rightEncoderPulses;
+
+    unsigned long lastError = 0;
+    unsigned long lastTime = 0;
 
     //travels until one wheel reaches the end
     while ( (leftEncoderPulses - initalLeftCount) < targetCount && rightEncoderPulses - initalRightCount < targetCount ){
@@ -46,32 +47,28 @@ void Encoder::driveStraight(float distance, int motorPower){
         unsigned long diffLeft = currentLeftCount - initalLeftCount;
         unsigned long diffRight = currentRightCount - initalRightCount;
 
-        //Some code I found online uses this I wanted to test out mine first, IDK why they do it this way
-        /*
-        unsigned long diffLeft = currentLeftCount - prevLeftCount;
-        unsigned long diffRight = currentRightCount - prevRightCount;
+        unsigned long error = diffLeft - diffRight
+        double derivativeError;
 
-        unsigned long prevLeftCount = currentLeftCount;
-        unsigned long prevRightCount = currentRightCount;
-        */
-
-        //Increase left's speed if right has travelled more
-        if (diffLeft < diffRight){
-            rightPower -= EncoderNS::POWER_OFFSET;
-            leftPower += EncoderNS::POWER_OFFSET;
+        if (lastError != error) {
+            derivativeError = (error - lastError) / (micros() - lastTime);
+        } else {
+            derivativeError = 0;
         }
 
-        //Increase right's speed if left has travelled more
-        else if(diffLeft > diffRight){
-            rightPower += EncoderNS::POWER_OFFSET;
-            leftPower -= EncoderNS::POWER_OFFSET;
-        }
+        // reset last values
+        lastError = error;
+        lastTime = micros();
 
-        leftMotor.speed(leftPower);
-        rightMotor.speed(rightPower);
+        // set new motor speeds
+        double adjustment = (EncoderNS::STRAIGHT_KP * error) + (EncoderNS::STRAIGHT_KD * derivativeError);
+        leftMotorSpeed = motorSpeed - adjustment;
+        rightMotorSpeed = motorSpeed + adjustment;
+        leftMotor.speed(leftMotorSpeed);
+        rightMotor.speed(rightMotorSpeed);
 
         //delay to give motors time to change speeds
-        delay(20);
+        delay(10);
     }
 
     //stop moving motors
@@ -137,4 +134,12 @@ void leftEncoderPulse(){
 
 void rightEncoderPulse(){
     rightEncoderPulses++;
+}
+
+int getLeftPulses(){
+    return leftEncoderPulses;
+}
+
+int get rightPulses(){
+    return rightEncoderPulses;
 }
