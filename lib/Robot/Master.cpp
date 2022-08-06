@@ -128,7 +128,7 @@ namespace Robot {
 
       delay (1000);
 
-      rightArm.placeObjectInContainer();
+      // rightArm.placeObjectInContainer();
 
       break;
 
@@ -162,7 +162,7 @@ namespace Robot {
         shuffleRight();
       }
 
-      rightArm.placeObjectInContainer();
+      // rightArm.placeObjectInContainer();
 
       break;
 
@@ -205,17 +205,17 @@ namespace Robot {
   }
 
   void Master::endSlaveSignal() {
-    digitalWrite(MasterNS::ADVANCE_SLAVE_PIN, LOW);
+    digitalWrite(MasterNS::BP_COMM_OUT, LOW);
   }
 
   void Master::stopSlave() {
-    digitalWrite(MasterNS::STOP_SLAVE_PIN, HIGH);
+    digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
     //Ensure slave has stopped before doing other things 
     delay(500);
   }
 
   void Master::goSlave() {
-    digitalWrite(MasterNS::STOP_SLAVE_PIN, LOW);
+    digitalWrite(MasterNS::BP_COMM_OUT, LOW);
   }
 
   void Master::changeSlaveState() {

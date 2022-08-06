@@ -134,7 +134,7 @@ void OLED::chooseState() {
       oled.setTextColor(BLACK, WHITE);
       oled.println("Edge follow");
       oled.setTextColor(WHITE);
-      oled.println("Up to archway");
+      oled.println("Up to arch");
       oled.display();
       break;
     case 5:
@@ -146,7 +146,7 @@ void OLED::chooseState() {
       oled.println("Bridge");
       oled.println("Edge follow");
       oled.setTextColor(BLACK, WHITE);
-      oled.println("Up to archway");
+      oled.println("Up to arch");
       oled.display();
       break;
   }

@@ -66,10 +66,8 @@ namespace Robot {
         state(MasterState::Inactive)
         {
           //Set-up Communication Pins
-          pinMode(MasterNS::ADVANCE_SLAVE_PIN, OUTPUT);
-          pinMode(MasterNS::STOP_SLAVE_PIN, OUTPUT);
-          digitalWrite(MasterNS::ADVANCE_SLAVE_PIN, LOW);
-          digitalWrite(MasterNS::STOP_SLAVE_PIN, LOW);
+          pinMode(MasterNS::BP_COMM_OUT, OUTPUT);
+          digitalWrite(MasterNS::BP_COMM_OUT, LOW);
         }
         
 
@@ -156,8 +154,6 @@ namespace Robot {
       Obstacle rightForwardUltrasonic;
       Obstacle rightMidUltrasonic;
       EdgeBack edgeBack;
-      
-      BridgeDeploy bridge;
 
       Encoder encoder;
 
@@ -183,10 +179,8 @@ namespace Robot {
         // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
           //Put Constructors for Claw and zipline 
         state(SlaveState::Inactive) { 
-          pinMode(SlaveNS::ADVANCE_MASTER_PIN, OUTPUT);
-          pinMode(SlaveNS::STOP_MASTER_PIN, OUTPUT);
-          digitalWrite(SlaveNS::ADVANCE_MASTER_PIN, LOW);
-          digitalWrite(SlaveNS::STOP_MASTER_PIN,LOW);
+          pinMode(SlaveNS::BP_COMM_OUT, OUTPUT);
+          digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
         }
 
 

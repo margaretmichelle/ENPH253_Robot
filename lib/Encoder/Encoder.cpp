@@ -47,7 +47,7 @@ void Encoder::driveStraight(float distance, int motorSpeed){
         unsigned long diffLeft = currentLeftCount - initalLeftCount;
         unsigned long diffRight = currentRightCount - initalRightCount;
 
-        unsigned long error = diffLeft - diffRight
+        unsigned long error = diffLeft - diffRight;
         double derivativeError;
 
         if (lastError != error) {
@@ -62,8 +62,8 @@ void Encoder::driveStraight(float distance, int motorSpeed){
 
         // set new motor speeds
         double adjustment = (EncoderNS::STRAIGHT_KP * error) + (EncoderNS::STRAIGHT_KD * derivativeError);
-        leftMotorSpeed = motorSpeed - adjustment;
-        rightMotorSpeed = motorSpeed + adjustment;
+        int leftMotorSpeed = motorSpeed - adjustment;
+        int rightMotorSpeed = motorSpeed + adjustment;
         leftMotor.speed(leftMotorSpeed);
         rightMotor.speed(rightMotorSpeed);
 
@@ -140,6 +140,6 @@ int getLeftPulses(){
     return leftEncoderPulses;
 }
 
-int get rightPulses(){
+int getrightPulses(){
     return rightEncoderPulses;
 }

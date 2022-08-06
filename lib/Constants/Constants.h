@@ -78,8 +78,8 @@ namespace IRNS {
 /****** Bots ******/
 namespace SlaveNS {
   const int MIN_ADVANCE_TIME = 500;
-  const int ADVANCE_MASTER_PIN = PB12;
-  const int STOP_MASTER_PIN = PB13;
+  const int BP_COMM_OUT = PB12;
+  const int BP_COMM_IN = PB13;
 }
 
 namespace MasterNS {
@@ -91,8 +91,8 @@ namespace MasterNS {
   const int RIGHT_MOTOR_PIN_1 = PB_8;
   const int RIGHT_MOTOR_PIN_2 = PB_9;
 
-  const int ADVANCE_SLAVE_PIN = PB12; // maybe change this to BP_COMM_IN and the other to BP_COMM_OUT
-  const int STOP_SLAVE_PIN = PB13;
+  const int BP_COMM_IN = PB12;
+  const int BP_COMM_OUT = PB13;
 
   // Speeds
   const int STANDARD_MOTOR_SPEED = 80;
@@ -166,7 +166,7 @@ namespace DriveMotorPins {
 
 namespace OLEDDisplayNS {
   // Pins
-  const int BUTTON_PIN = PB5;
+  const int BUTTON_PIN = PB3;
   const int CLK_PIN = PB15;
   const int DT_PIN = PB14;
 
@@ -190,8 +190,8 @@ namespace ObstacleNS {;
 }
 
 namespace EncoderNS{
-  const int LEFT_MOTOR_ENCODER_PIN = PA12;
-  const int RIGHT_MOTOR_ENCODER_PIN = PA15;
+  const int LEFT_MOTOR_ENCODER_PIN = PA11;
+  const int RIGHT_MOTOR_ENCODER_PIN = PA12;
   const float WHEEL_DIA_MM = 88.9;
   const float ROTATION_DISTANCE_MM = WHEEL_DIA_MM * PI;
   const int PULSES_PER_ROTATION = 131*11*7/5;
