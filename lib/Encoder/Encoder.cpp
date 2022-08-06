@@ -140,6 +140,6 @@ int getLeftPulses(){
     return leftEncoderPulses;
 }
 
-int getRightPulses(){
+int get rightPulses(){
     return rightEncoderPulses;
 }
