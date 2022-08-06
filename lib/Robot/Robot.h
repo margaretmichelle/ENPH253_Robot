@@ -12,6 +12,8 @@
 #include <Arm.h>
 #include <Claw.h>
 #include <Bridge.h>
+#include <Encoder.h>
+
 
 namespace Robot {
 
@@ -50,16 +52,17 @@ namespace Robot {
       Master():
         leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2),
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
-        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 110),
-        edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 80),
+        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 200),
+        edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 200),
         rightForwardUltrasonic(ObstacleNS::FORWARD_TRIG_PIN,ObstacleNS::FORWARD_ECHO_PIN),
         rightMidUltrasonic(ObstacleNS::FORWARD_TRIG_PIN, ObstacleNS::MID_ECHO_PIN),
-        edgeBack(leftMotor,rightMotor,80),
-        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_CLAW_OPEN, ClawNS::RIGHT_CLAW_CLOSED),
-        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_CLAW_OPEN, ClawNS::RIGHT_CLAW_CLOSED),
-        leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN, ArmNS::LEFT_ARM_UP, ArmNS::LEFT_ARM_DOWN),
-        rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN, ArmNS::RIGHT_ARM_UP, ArmNS::RIGHT_ARM_DOWN),
+        edgeBack(leftMotor,rightMotor,200),
         bridge(leftMotor,rightMotor),
+        encoder(),
+        // leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
+        // rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
+        // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN),
+        // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
         state(MasterState::Inactive)
         {
           //Set-up Communication Pins
@@ -148,11 +151,15 @@ namespace Robot {
       PID tapeFollow;
       PID edgeFollow;
 
+      BridgeDeploy bridge;
+
       Obstacle rightForwardUltrasonic;
       Obstacle rightMidUltrasonic;
       EdgeBack edgeBack;
       
       BridgeDeploy bridge;
+
+      Encoder encoder;
 
       int countIdolPickUp = 0;
 
@@ -160,10 +167,10 @@ namespace Robot {
 
       MasterState state;
 
-      Claw leftClaw;
-      Claw rightClaw;
-      Arm leftArm;
-      Arm rightArm;
+      // Claw leftClaw;
+      // Claw rightClaw;
+      // Arm leftArm;
+      // Arm rightArm;
 
   };
 

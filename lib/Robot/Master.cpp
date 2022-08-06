@@ -70,6 +70,8 @@ namespace Robot {
 
       case MasterState::IRFollow:
 
+        //encoder.pivotAngle(45);
+        encoder.driveStraight(3000,200);
         // obstacle.useObstacle();
 
         // tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
@@ -172,7 +174,7 @@ namespace Robot {
   } // namespace Robot
 
   void Master::useEdgeDetection() {
-    edgeBack.useEdgeBack();
+    edgeBack.useEdge();
   }
 
 

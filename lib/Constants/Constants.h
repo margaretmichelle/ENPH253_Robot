@@ -9,8 +9,8 @@ const int MAP_8_BIT_TO_12_BIT = 16;
 
 namespace ClawNS {
   // Pins
-  const int LEFT_CLAW_SERVO_PIN = PA_1; // will be moved to PA8 and PA9 on other BP
-  const int RIGHT_CLAW_SERVO_PIN = PA_0;
+  const int LEFT_CLAW_SERVO_PIN = PA_8; // will be moved to PA8 and PA9 on other BP
+  const int RIGHT_CLAW_SERVO_PIN = PA_9;
 
   // Constants
   const int LEFT_CLAW_OPEN = 180;
@@ -28,21 +28,16 @@ namespace BridgeDeployNS {
 
   const int SERVO_REST_ANGLE = 0;
   const int UNHOOK_SERVO_FINAL_ANGLE = 45;
-  const int PUSH_SERVO_FINAL_ANGLE = 180;
 
   namespace UnHookBridge {
-    const int UNHOOK_BRIDGE_SERVO_PIN = PA_7;
-  }
-
-  namespace PushBridge {
-    const int PUSH_BRIDGE_SERVO_PIN = PA_6;
+    const int UNHOOK_BRIDGE_SERVO_PIN = PA_0;
   }
 }
 
 namespace ArmNS {
   // Pins
-  const int LEFT_ARM_SERVO_PIN = PA_2; // this pin does not seem to work :((( currently overloaded with IR sensor (servos to be moved to other BP)
-  const int RIGHT_ARM_SERVO_PIN = PA_3;
+  const int LEFT_ARM_SERVO_PIN = PB_6; // currently overloaded with IR sensor (servos to be moved to other BP)
+  const int RIGHT_ARM_SERVO_PIN = PB_7;
   const int LEFT_HALL_EFFECT_SENSOR_PIN = PA5; // overloaded with IR sensor pins
   const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
 
@@ -127,16 +122,14 @@ namespace TapeFollowerNS {
 
 namespace EdgeFollowerNS {
   // Pins
-  const int TOP_LEFT_SENSOR_PIN = PA15;
-  const int TOP_RIGHT_SENSOR_PIN = PB3;
-  const int BOTTOM_LEFT_SENSOR_PIN = PB4;
-  const int BOTTOM_RIGHT_SENSOR_PIN = PB5;
-  const int LEFT_MOTOR_PIN_1 = 2;
-  const int LEFT_MOTOR_PIN_2 = 4;
-  const int RIGHT_MOTOR_PIN_1 = 3;
-  const int RIGHT_MOTOR_PIN_2 = 5;
-
-  //Move For a Certain Amount of Time;
+  const int TOP_LEFT_SENSOR_PIN = PA7;
+  const int TOP_RIGHT_SENSOR_PIN = PA6;
+  const int BOTTOM_LEFT_SENSOR_PIN = PA5;
+  const int BOTTOM_RIGHT_SENSOR_PIN = PA4;
+  const int LEFT_MOTOR_PIN_1 = PA_8;
+  const int LEFT_MOTOR_PIN_2 = PA_9;
+  const int RIGHT_MOTOR_PIN_1 = PB_8;
+  const int RIGHT_MOTOR_PIN_2 = PB_9;
 
   const int MOVE_FOR_TIME = 300;
 
@@ -173,9 +166,9 @@ namespace DriveMotorPins {
 
 namespace OLEDDisplayNS {
   // Pins
-  const int BUTTON_PIN = PA12;
-  const int CLK_PIN = PB14;
-  const int DT_PIN = PB15;
+  const int BUTTON_PIN = PB5;
+  const int CLK_PIN = PB15;
+  const int DT_PIN = PB14;
 
   // OLED constants
   const int SCREEN_WIDTH = 128;
@@ -189,12 +182,27 @@ namespace HighAndLow {
 }
 
 namespace ObstacleNS {; 
-  // not sure what the threshold value is yet we need to test
-  const int FORWARD_ECHO_PIN = PB11;
-  const int MID_ECHO_PIN = PB10;
-  const int FORWARD_TRIG_PIN = PA10;
-  const int MID_TRIG_PIN = PA11;
+  const int FORWARD_ECHO_PIN = PB2; //left
+  const int FORWARD_TRIG_PIN = PA3;
+  const int MID_ECHO_PIN = PA1; //right 
+  const int MID_TRIG_PIN = PA0;
   const int DISTANCE_TO_IDOL = 40; //cm
+}
+
+namespace EncoderNS{
+  const int LEFT_MOTOR_ENCODER_PIN = PA12;
+  const int RIGHT_MOTOR_ENCODER_PIN = PA15;
+  const float WHEEL_DIA_MM = 88.9;
+  const float ROTATION_DISTANCE_MM = WHEEL_DIA_MM * PI;
+  const int PULSES_PER_ROTATION = 131*11*7/5;
+  const int STRAIGHT_KP = 10;
+  const int STRAIGHT_KD = 1;
+  const int POWER_OFFSET = 5;
+  const float CENTRE_TO_RIGHT_WHEEL_MM = 99.5;
+  const float CENTRE_TO_LEFT_WHEEL_MM = 99.5;
+  const int PIVOT_WHEEL_SPEED = 200;
+  const float PIVOT_DIAMETER = 199;
+  const float PIVOT_CIRCUMFERENCE = PIVOT_DIAMETER * PI;
 }
 
 #endif

@@ -23,8 +23,8 @@ class EdgeBack {
          * @brief Use BackEdge Detection
          * 
          */
-        void useEdgeBack();
-
+        void useEdge();
+        
         /**
         * Setter and Getter Methods 
         * 
@@ -34,6 +34,8 @@ class EdgeBack {
 
         int getBottomLeftSensorVal() { bottomLeftSensor = digitalRead(bottomLeftSensorPin); return bottomLeftSensor; }
         int getBottomRightSensorVal() { bottomRightSensor = digitalRead(bottomRightSensorPin); return bottomRightSensor; }
+        int getTopLeftSensorVal() { topLeftSensor = digitalRead(topLeftSensorPin); return topLeftSensor;}
+        int getTopRightSensorVal() { topRightSensor = digitalRead(topRightSensorPin); return topRightSensor;}
 
         /**
          * @brief Detect if sensor is on edge 
@@ -66,10 +68,14 @@ class EdgeBack {
         //Sensors
         int bottomLeftSensor;
         int bottomRightSensor;
+        int topLeftSensor;
+        int topRightSensor;
 
         //Sensor Pins
         int bottomLeftSensorPin;
         int bottomRightSensorPin;
+        int topRightSensorPin;
+        int topLeftSensorPin;
 
         //Edge Threshold
         int threshold;

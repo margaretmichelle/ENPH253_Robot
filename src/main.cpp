@@ -3,6 +3,7 @@
 #include <OLED.h>
 #include <Wire.h>
 #include <Robot.h> 
+#include <Encoder.h>
 
 #define LED_BUILTIN PB2
 int ledState = LOW; 
@@ -28,17 +29,18 @@ void setup() {
 
     // master.setState(Robot::MasterState::PickUpObject);
 
-    while (!oledDisplay.stateChosen()) {
-      oledDisplay.chooseState();
-      if (oledDisplay.stateChosen()) {
-        master.setState((Robot::MasterState) oledDisplay.getState()); //Just for Testing Purposes
-        delay(1000);
-      }
-    }
+    // while (!oledDisplay.stateChosen()) {
+    //   oledDisplay.chooseState();
+    //   if (oledDisplay.stateChosen()) {
+    //     master.setState((Robot::MasterState) oledDisplay.getState()); //Just for Testing Purposes
+    //     delay(1000);
+    //   }
+    // }
 }
 
 void loop() {
-  master.poll(oledDisplay);
+  // master.poll(oledDisplay);
+  oledDisplay.displayScreen(1,2,3,4,5,6,7,8,9);
 
   unsigned long currentMillis = millis();
 

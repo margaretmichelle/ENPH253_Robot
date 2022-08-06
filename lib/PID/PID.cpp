@@ -47,8 +47,6 @@ void PID::usePID(int KP, int KI, int KD) {
   //Reflectance Tape and Edge Top Error 
   int error;
 
-  int errorBottom;
-
   switch (pidType) {
     case PIDType::TapeFollower:
       {
