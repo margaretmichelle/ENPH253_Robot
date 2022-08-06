@@ -69,10 +69,10 @@ namespace MasterNS {
   // Temp Value
 
   // Pins
-  const int LEFT_MOTOR_PIN_1 = PA_8;
-  const int LEFT_MOTOR_PIN_2 = PA_9;
-  const int RIGHT_MOTOR_PIN_1 = PB_8;
-  const int RIGHT_MOTOR_PIN_2 = PB_9;
+  const int LEFT_MOTOR_PIN_1 = PA_9;
+  const int LEFT_MOTOR_PIN_2 = PA_8;
+  const int RIGHT_MOTOR_PIN_1 = PB_9;
+  const int RIGHT_MOTOR_PIN_2 = PB_8;
 
   const int BP_COMM_IN = PB12;
   const int BP_COMM_OUT = PB13;

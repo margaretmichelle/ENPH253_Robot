@@ -154,7 +154,7 @@ namespace Robot {
       Obstacle rightForwardUltrasonic;
       Obstacle rightMidUltrasonic;
       EdgeBack edgeBack;
-
+      
       Encoder encoder;
 
       int countIdolPickUp = 0;
