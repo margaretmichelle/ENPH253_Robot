@@ -136,7 +136,7 @@ namespace Robot {
 
       delay (1000);
 
-      rightArm.placeObjectInContainer();
+      //rightArm.placeObjectInContainer();
 
       break;
 
@@ -170,7 +170,7 @@ namespace Robot {
         shuffleRight();
       }
 
-      rightArm.placeObjectInContainer();
+      //rightArm.placeObjectInContainer();
 
       break;
 
