@@ -120,7 +120,7 @@ namespace Robot {
     case MasterState::JustTape:
       tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
 
-      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0);
+      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0,0,0,0);
       break;
     
     case MasterState::PickUpObject:
@@ -145,12 +145,13 @@ namespace Robot {
 
     case MasterState::Bridge:
       bridge.deployBridge();
+      tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
       break;
 
     case MasterState::JustEdge:
       edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
 
-      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0);
+      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), edgeBack.getTopLeftSensorVal(), edgeBack.getTopRightSensorVal(), edgeBack.getBottomLeftSensorVal(), edgeBack.getBottomRightSensorVal());
       break;
 
     case MasterState::UpToArch:

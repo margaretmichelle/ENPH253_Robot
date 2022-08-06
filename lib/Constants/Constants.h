@@ -58,23 +58,6 @@ namespace GyroNS {
   
 }
 
-namespace IRNS {
-  // pins
-  // const int CONTROL_PIN_1 = PA1;
-  // const int CONTROL_PIN_2 = PA0;
-  // const int ONE_KHZ_PIN = PB1;
-  // const int TEN_KHZ_PIN = PB0;
-
-  // averaging
-  const int NUM_READINGS = 1;
-  const int NUM_QSD_AVERAGE = 5;
-
-  // thresholds
-  const int TEN_KHZ_THRESHOLD = 350;
-  const int TEN_DIFF_THRESHOLD = 300;
-  const int ONE_KHZ_THRESHOLD = 150;
-}
-
 /****** Bots ******/
 namespace SlaveNS {
   const int MIN_ADVANCE_TIME = 500;
@@ -115,15 +98,15 @@ namespace TapeFollowerNS {
   const int SUMMED_ERROR_LIMIT = 0;
 
   // Gains
-  const int KP = 35;
+  const int KP = 60;
   const int KI = 0;
   const int KD = 2;
 }
 
 namespace EdgeFollowerNS {
   // Pins
-  const int TOP_LEFT_SENSOR_PIN = PA7;
-  const int TOP_RIGHT_SENSOR_PIN = PA6;
+  const int TOP_LEFT_SENSOR_PIN = PA6;
+  const int TOP_RIGHT_SENSOR_PIN = PA7;
   const int BOTTOM_LEFT_SENSOR_PIN = PA5;
   const int BOTTOM_RIGHT_SENSOR_PIN = PA4;
   const int LEFT_MOTOR_PIN_1 = PA_8;
@@ -141,7 +124,7 @@ namespace EdgeFollowerNS {
   const int STANDARD_MOTOR_SPEED = 40;
 
   // Gains
-  const int KP = 9;
+  const int KP = 100;
   const int KI = 0;
   const int KD = 1;
 }
