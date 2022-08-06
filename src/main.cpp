@@ -64,3 +64,4 @@ void useEdgeDetection() {
 void slaveInterrupt() {
   master.changeSlaveState();
 }
+
