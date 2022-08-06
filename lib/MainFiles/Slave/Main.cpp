@@ -21,6 +21,8 @@ Robot::Slave slave;
 
 
 void setup() {
+    pinMode(LED_BUILTIN, OUTPUT);
+
     attachInterrupt(digitalPinToInterrupt(PA3), slavePoll, RISING); //random pin 
     slave.setState(Robot::SlaveState::ClawActivateIdolOne); //Just for Testing Purposes 
 }
