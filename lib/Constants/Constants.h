@@ -58,23 +58,6 @@ namespace GyroNS {
   
 }
 
-namespace IRNS {
-  // pins
-  // const int CONTROL_PIN_1 = PA1;
-  // const int CONTROL_PIN_2 = PA0;
-  // const int ONE_KHZ_PIN = PB1;
-  // const int TEN_KHZ_PIN = PB0;
-
-  // averaging
-  const int NUM_READINGS = 1;
-  const int NUM_QSD_AVERAGE = 5;
-
-  // thresholds
-  const int TEN_KHZ_THRESHOLD = 350;
-  const int TEN_DIFF_THRESHOLD = 300;
-  const int ONE_KHZ_THRESHOLD = 150;
-}
-
 /****** Bots ******/
 namespace SlaveNS {
   const int MIN_ADVANCE_TIME = 500;
