@@ -8,6 +8,7 @@
 
 const int numValScreens = 3; // starts at 0
 const int numStartScreens = 5; // starts at 0
+const int numPages = 2;
 
 void clicked();
 void readEncoder();
@@ -181,7 +182,7 @@ void readEncoder() {
           break;
         case 1:
           page++;
-          if (page > 3) {
+          if (page > numPages) {
             page = 0;
           }
           break;
@@ -216,7 +217,7 @@ void readEncoder() {
           case 1:
             page--;
             if (page < 0) {
-              page = 3;
+              page = numPages;
             }
             break;
           case 2:
@@ -243,7 +244,7 @@ void readEncoder() {
 }
 
 
-void OLED::displayScreen(int leftMotorSpeed, int rightMotorSpeed, int leftReflectance, int rightReflectance, int TL, int TR, int BL, int BR, long distance) {
+void OLED::displayScreen(int leftMotorSpeed, int rightMotorSpeed, int leftReflectance, int rightReflectance, int TL, int TR, int BL, int BR) {
   if (screen != 0) {
     if (screen == 1) {
       switch (page) {
@@ -255,9 +256,6 @@ void OLED::displayScreen(int leftMotorSpeed, int rightMotorSpeed, int leftReflec
           break;
         case 2:
           displayEdgeReflectance(TL, TR, BL, BR);
-          break;
-        case 3:
-          displayDistance(distance);
           break;
       }
     } else if (screen < 5) {

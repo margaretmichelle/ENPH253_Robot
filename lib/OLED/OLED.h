@@ -22,7 +22,7 @@ class OLED {
     /**
      * @brief Display screens on OLED to be switched with button and encoder
      */
-    void displayScreen(int leftMotorSpeed, int rightMotorSpeed, int leftReflectance, int rightReflectance, int TL, int TR, int BL, int BR, long distance);
+    void displayScreen(int leftMotorSpeed, int rightMotorSpeed, int leftReflectance, int rightReflectance, int TL, int TR, int BL, int BR);
 
     /**
      * @brief Display tape following PID values with the ablility to change them

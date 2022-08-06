@@ -26,7 +26,7 @@ void setup() {
 
     attachInterrupt(digitalPinToInterrupt(PA2), slaveInterrupt, RISING);
 
-    // master.setState(Robot::MasterState::Random);
+    // master.setState(Robot::MasterState::PickUpObject);
 
     while (!oledDisplay.stateChosen()) {
       oledDisplay.chooseState();

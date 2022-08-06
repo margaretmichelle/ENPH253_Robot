@@ -22,6 +22,8 @@ class ServoMotor {
     int getPosition() {
         return currentPos;
     }
+
+    void stop();
     
   private:
     int currentPos;

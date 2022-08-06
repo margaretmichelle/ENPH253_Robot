@@ -11,6 +11,7 @@
 #include <EdgeBack.h>
 #include <Arm.h>
 #include <Claw.h>
+#include <Bridge.h>
 
 namespace Robot {
 
@@ -49,15 +50,16 @@ namespace Robot {
       Master():
         leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2),
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
-        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 80),
+        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 110),
         edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 80),
         rightForwardUltrasonic(ObstacleNS::FORWARD_TRIG_PIN,ObstacleNS::FORWARD_ECHO_PIN),
         rightMidUltrasonic(ObstacleNS::FORWARD_TRIG_PIN, ObstacleNS::MID_ECHO_PIN),
         edgeBack(leftMotor,rightMotor,80),
-        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
-        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
-        // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN),
-        // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
+        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_CLAW_OPEN, ClawNS::RIGHT_CLAW_CLOSED),
+        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_CLAW_OPEN, ClawNS::RIGHT_CLAW_CLOSED),
+        leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN, ArmNS::LEFT_ARM_UP, ArmNS::LEFT_ARM_DOWN),
+        rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN, ArmNS::RIGHT_ARM_UP, ArmNS::RIGHT_ARM_DOWN),
+        bridge(leftMotor,rightMotor),
         state(MasterState::Inactive)
         {
           //Set-up Communication Pins
@@ -67,7 +69,6 @@ namespace Robot {
           digitalWrite(MasterNS::STOP_SLAVE_PIN, LOW);
         }
         
-          
 
       /*
       @brief Returns current state of robot and performs action for one loop.
@@ -137,6 +138,11 @@ namespace Robot {
        */
       void moveForCertainTime(int leftMotorSpeed, int rightMotorSpeed, int moveForTime);
 
+      /**
+       * @brief "shuffles" robot over towards detected object on the right side
+       */
+      void shuffleRight();
+
       Motor leftMotor;
       Motor rightMotor;
       PID tapeFollow;
@@ -145,6 +151,8 @@ namespace Robot {
       Obstacle rightForwardUltrasonic;
       Obstacle rightMidUltrasonic;
       EdgeBack edgeBack;
+      
+      BridgeDeploy bridge;
 
       int countIdolPickUp = 0;
 
@@ -154,16 +162,16 @@ namespace Robot {
 
       Claw leftClaw;
       Claw rightClaw;
-      // Arm leftArm;
-      // Arm rightArm;
+      Arm leftArm;
+      Arm rightArm;
 
   };
 
   class Slave {
     public:
         Slave(): 
-        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
-        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
+        // leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
+        // rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
         // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN),
         // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
           //Put Constructors for Claw and zipline 
@@ -190,8 +198,8 @@ namespace Robot {
         bool stopped;
         void stop();
 
-        Claw leftClaw;
-        Claw rightClaw;
+        // Claw leftClaw;
+        // Claw rightClaw;
         // Arm leftArm;
         // Arm rightArm;
         

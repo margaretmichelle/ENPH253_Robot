@@ -7,7 +7,7 @@
 class Claw {
     public:
     //Constructor
-        Claw(int controlPin);
+        Claw(int controlPin, int openAngle, int closedAngle);
 
         /**
          * @brief Close the claw
@@ -35,6 +35,8 @@ class Claw {
 
     private:
     ServoMotor clawServo;
+    int opened;
+    int closed;
 };
 
 #endif

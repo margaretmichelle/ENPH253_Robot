@@ -1,18 +1,20 @@
 #include <Arm.h>
 #include <Claw.h>
 
-Arm::Arm(int armControlPin, Claw claw, int hallEffectPin) : claw(claw), armServo(armControlPin), hallEffectPin(hallEffectPin) {
-    armServo.setupServo(ArmNS::ARM_UP);
+Arm::Arm(int armControlPin, Claw claw, int hallEffectPin, int upAngle, int downAngle) : 
+                        claw(claw), armServo(armControlPin), 
+                        hallEffectPin(hallEffectPin), up(upAngle), down(downAngle) {
+    armServo.setupServo(up);
 
     pinMode(hallEffectPin, INPUT);
 }
 
 void Arm::returnToHome() {
-    armServo.write(ArmNS::ARM_UP);
+    armServo.write(up);
 }
 
 void Arm::goDown() {
-    armServo.write(ArmNS::ARM_DOWN);
+    armServo.write(down);
 }
 
 int Arm::getPosition() {
@@ -30,15 +32,7 @@ void Arm::placeObjectInContainer() {
         return;
     }
 
-    delay(500);
-
-    if (analogRead(hallEffectPin) < 300) {
-        claw.open();
-        returnToHome();
-        return;
-    }
-
-    claw.partialClose();
+    claw.close();
 
     delay(500);
 

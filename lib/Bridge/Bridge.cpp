@@ -15,6 +15,9 @@ BridgeDeploy::BridgeDeploy(Motor leftMotor, Motor rightMotor) :
     unHookServo.setupServo(BridgeDeployNS::SERVO_REST_ANGLE);
     pushServo.setupServo(BridgeDeployNS::SERVO_REST_ANGLE);
 
+    unHookServo.stop();
+    pushServo.stop();
+
     //Do i need to set up pinModes??
   }
 

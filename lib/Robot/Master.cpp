@@ -118,59 +118,50 @@ namespace Robot {
     case MasterState::JustTape:
       tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
 
-      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, rightMidUltrasonic.getDistance());
+      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0);
       break;
     
     case MasterState::PickUpObject:
-      // rightArm.placeObjectInContainer();
+    // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0);
 
-      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
-      break;
+      delay (1000);
 
-    case MasterState::Random:
-      rightForwardUltrasonic.useObstacle();
-      rightMidUltrasonic.useObstacle();
-
-      o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance(), "Mid sensor: ", rightMidUltrasonic.getDistance());
+      rightArm.placeObjectInContainer();
 
       break;
 
     case MasterState::PositionObject:
       rightForwardUltrasonic.useObstacle();
-      rightMidUltrasonic.useObstacle();
 
-      o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance(), "Mid sonar: ", rightMidUltrasonic.getDistance());
+      o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance());
       
       while (rightForwardUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL && rightForwardUltrasonic.getDistance() > 15) {
-
-        moveForCertainTime(90,0,400);
-        moveForCertainTime(0,0,50);
-        moveForCertainTime(0,90,400);
-
-        rightForwardUltrasonic.useObstacle();
-
-        moveForCertainTime(0,0,300);
-
-        while (rightForwardUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
-          moveForCertainTime(-80,-80,100);
-          rightForwardUltrasonic.useObstacle();
-        }
-    
-        moveForCertainTime(0,0,1000);
+        shuffleRight();
       }
       
       break;
 
     case MasterState::Bridge:
-      // need bridge code
-
-      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      bridge.deployBridge();
       break;
 
     case MasterState::JustEdge:
-      // edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
+      edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
 
-      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0);
+      break;
+
+    case MasterState::UpToArch:
+      tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+
+      rightForwardUltrasonic.useObstacle();
+
+      while (rightForwardUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL && rightForwardUltrasonic.getDistance() > 15) {
+        shuffleRight();
+      }
+
+      rightArm.placeObjectInContainer();
+
       break;
 
     default:
@@ -227,6 +218,24 @@ namespace Robot {
 
   void Master::changeSlaveState() {
     slaveBusy = false;
+  }
+
+  void Master::shuffleRight() {
+    moveForCertainTime(100,0,600);
+    moveForCertainTime(0,0,100);
+    moveForCertainTime(0,100,600);
+
+    rightForwardUltrasonic.useObstacle();
+
+    moveForCertainTime(0,0,100);
+
+    while (rightForwardUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+      moveForCertainTime(-80,-80,100);
+      rightForwardUltrasonic.useObstacle();
+      moveForCertainTime(0,0,100);
+    }
+
+    moveForCertainTime(0,0,100);
   }
 
 }

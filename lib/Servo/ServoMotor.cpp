@@ -21,3 +21,8 @@ void ServoMotor::write(int angle) {
 int ServoMotor::mapAngleToPulseWidth(int angle) {
   return ( angle * (ServoNS::MAX_PULSE_WIDTH - ServoNS::MIN_PULSE_WIDTH) / 180 ) + ServoNS::MIN_PULSE_WIDTH;
 }
+
+void ServoMotor::stop() {
+  delay(200);
+  pwm_start(pinName,ServoNS::SERVO_FREQ, 0, MICROSEC_COMPARE_FORMAT);
+}

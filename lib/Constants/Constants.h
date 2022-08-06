@@ -13,9 +13,11 @@ namespace ClawNS {
   const int RIGHT_CLAW_SERVO_PIN = PA_0;
 
   // Constants
-  const int CLAW_OPEN = 180;
+  const int LEFT_CLAW_OPEN = 180;
+  const int LEFT_CLAW_CLOSED = 0;
+  const int RIGHT_CLAW_OPEN = 0;
+  const int RIGHT_CLAW_CLOSED = 180;
   const int CLAW_PARTIAL_CLOSE = 70;
-  const int CLAW_CLOSED = 0;
 }
 
 namespace BridgeDeployNS {
@@ -39,14 +41,16 @@ namespace BridgeDeployNS {
 
 namespace ArmNS {
   // Pins
-  const int LEFT_ARM_SERVO_PIN = PA_3; // currently overloaded with IR sensor (servos to be moved to other BP)
-  const int RIGHT_ARM_SERVO_PIN = PA_2;
+  const int LEFT_ARM_SERVO_PIN = PA_2; // this pin does not seem to work :((( currently overloaded with IR sensor (servos to be moved to other BP)
+  const int RIGHT_ARM_SERVO_PIN = PA_3;
   const int LEFT_HALL_EFFECT_SENSOR_PIN = PA5; // overloaded with IR sensor pins
   const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
 
   // Constants
-  const int ARM_UP = 180;
-  const int ARM_DOWN = 20;
+  const int LEFT_ARM_UP = 160;
+  const int LEFT_ARM_DOWN = 0;
+  const int RIGHT_ARM_UP = 0;
+  const int RIGHT_ARM_DOWN = 160;
 }
 
 namespace ServoNS {
@@ -116,7 +120,7 @@ namespace TapeFollowerNS {
   const int SUMMED_ERROR_LIMIT = 0;
 
   // Gains
-  const int KP = 15;
+  const int KP = 35;
   const int KI = 0;
   const int KD = 2;
 }

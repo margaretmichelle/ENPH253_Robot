@@ -3,12 +3,13 @@
 
 
 
-Claw::Claw(int controlPin) : clawServo(controlPin) {
-    clawServo.setupServo(ClawNS::CLAW_OPEN);
+Claw::Claw(int controlPin, int openAngle, int closedAngle) : clawServo(controlPin), opened(openAngle), closed(closedAngle) {
+    clawServo.setupServo(opened);
+    clawServo.stop();
 }
 
 void Claw::close() {
-    clawServo.write(ClawNS::CLAW_CLOSED);
+    clawServo.write(closed);
 }
 
 void Claw::partialClose() {
@@ -16,7 +17,7 @@ void Claw::partialClose() {
 }
 
 void Claw::open() {
-    clawServo.write(ClawNS::CLAW_OPEN);
+    clawServo.write(opened);
 }
 
 int Claw::getPosition() {
