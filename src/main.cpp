@@ -3,6 +3,7 @@
 #include <OLED.h>
 #include <Wire.h>
 #include <Robot.h> 
+#include <Encoder.h>
 
 #define LED_BUILTIN PB2
 int ledState = LOW; 
@@ -26,7 +27,7 @@ void setup() {
 
     attachInterrupt(digitalPinToInterrupt(PA2), slaveInterrupt, RISING);
 
-    master.setState(Robot::MasterState::Random);
+    master.setState(Robot::MasterState::JustTape);
 
     // while (!oledDisplay.stateChosen()) {
     //   oledDisplay.chooseState();
@@ -38,7 +39,8 @@ void setup() {
 }
 
 void loop() {
-  master.poll(oledDisplay);
+  // master.poll(oledDisplay);
+  oledDisplay.displayScreen(1,2,3,4,5,6,7,8,9);
 
   unsigned long currentMillis = millis();
 

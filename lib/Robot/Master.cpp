@@ -70,6 +70,8 @@ namespace Robot {
 
       case MasterState::IRFollow:
 
+        //encoder.pivotAngle(45);
+        encoder.driveStraight(3000,200);
         // obstacle.useObstacle();
 
         // tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
@@ -124,7 +126,7 @@ namespace Robot {
     case MasterState::PickUpObject:
       // rightArm.placeObjectInContainer();
 
-      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, 0);
       break;
 
     case MasterState::Random:
@@ -174,9 +176,9 @@ namespace Robot {
       break;
 
     case MasterState::JustEdge:
-      // edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
+      edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
 
-      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      //o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
       break;
 
     default:

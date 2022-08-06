@@ -12,6 +12,8 @@
 #include <Arm.h>
 #include <Claw.h>
 #include <Bridge.h>
+#include <Encoder.h>
+
 
 namespace Robot {
 
@@ -50,12 +52,13 @@ namespace Robot {
       Master():
         leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2),
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
-        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 125),
-        edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 125),
+        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 200),
+        edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 200),
         rightForwardUltrasonic(ObstacleNS::FORWARD_TRIG_PIN,ObstacleNS::FORWARD_ECHO_PIN),
         rightMidUltrasonic(ObstacleNS::FORWARD_TRIG_PIN, ObstacleNS::MID_ECHO_PIN),
-        edgeBack(leftMotor,rightMotor,80),
+        edgeBack(leftMotor,rightMotor,200),
         bridge(leftMotor,rightMotor),
+        encoder(),
         //leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
         //rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
         // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN),
@@ -149,6 +152,8 @@ namespace Robot {
       Obstacle rightForwardUltrasonic;
       Obstacle rightMidUltrasonic;
       EdgeBack edgeBack;
+
+      Encoder encoder;
 
       int countIdolPickUp = 0;
 

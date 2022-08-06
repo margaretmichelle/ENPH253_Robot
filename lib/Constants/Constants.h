@@ -163,8 +163,8 @@ namespace DriveMotorPins {
 namespace OLEDDisplayNS {
   // Pins
   const int BUTTON_PIN = PB5;
-  const int CLK_PIN = PB14;
-  const int DT_PIN = PB15;
+  const int CLK_PIN = PB15;
+  const int DT_PIN = PB14;
 
   // OLED constants
   const int SCREEN_WIDTH = 128;

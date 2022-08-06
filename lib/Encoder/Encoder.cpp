@@ -87,14 +87,14 @@ void pivotAngle(float angleDegrees) {
     int angle = angleDegrees;
 
     if (angleDegrees < 0) {
-        speed *= -1; // negative power for counter-clockwise
+        speed *= -1; 
     }
 
     // use correction to improve angle accuracy
     // adjust correction value based on test results
-    float correction = -5.0; // need decimal point for float value
+    float correction = -2.0; // need decimal point for float value
     if (angle > 0) {
-        angle += correction;
+        angle += correction; 
     }
     else if (angle < 0) {
         angle -= correction;

@@ -28,6 +28,7 @@ bool BridgeDeploy::onEdge() {
   return (leftOnEdge || rightOnEdge);
 }
 
+
 void BridgeDeploy::deployBridge() {
     //wait a second for robot to fully stop
     delay(1000);
