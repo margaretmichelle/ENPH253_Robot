@@ -157,8 +157,6 @@ namespace Robot {
       Obstacle rightMidUltrasonic;
       EdgeBack edgeBack;
       
-      BridgeDeploy bridge;
-
       Encoder encoder;
 
       int countIdolPickUp = 0;

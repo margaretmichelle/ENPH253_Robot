@@ -86,10 +86,10 @@ namespace MasterNS {
   // Temp Value
 
   // Pins
-  const int LEFT_MOTOR_PIN_1 = PA_8;
-  const int LEFT_MOTOR_PIN_2 = PA_9;
-  const int RIGHT_MOTOR_PIN_1 = PB_8;
-  const int RIGHT_MOTOR_PIN_2 = PB_9;
+  const int LEFT_MOTOR_PIN_1 = PA_9;
+  const int LEFT_MOTOR_PIN_2 = PA_8;
+  const int RIGHT_MOTOR_PIN_1 = PB_9;
+  const int RIGHT_MOTOR_PIN_2 = PB_8;
 
   const int ADVANCE_SLAVE_PIN = PB12; // maybe change this to BP_COMM_IN and the other to BP_COMM_OUT
   const int STOP_SLAVE_PIN = PB13;
@@ -115,15 +115,15 @@ namespace TapeFollowerNS {
   const int SUMMED_ERROR_LIMIT = 0;
 
   // Gains
-  const int KP = 35;
+  const int KP = 60;
   const int KI = 0;
   const int KD = 2;
 }
 
 namespace EdgeFollowerNS {
   // Pins
-  const int TOP_LEFT_SENSOR_PIN = PA7;
-  const int TOP_RIGHT_SENSOR_PIN = PA6;
+  const int TOP_LEFT_SENSOR_PIN = PA6;
+  const int TOP_RIGHT_SENSOR_PIN = PA7;
   const int BOTTOM_LEFT_SENSOR_PIN = PA5;
   const int BOTTOM_RIGHT_SENSOR_PIN = PA4;
   const int LEFT_MOTOR_PIN_1 = PA_8;
@@ -141,7 +141,7 @@ namespace EdgeFollowerNS {
   const int STANDARD_MOTOR_SPEED = 40;
 
   // Gains
-  const int KP = 9;
+  const int KP = 100;
   const int KI = 0;
   const int KD = 1;
 }

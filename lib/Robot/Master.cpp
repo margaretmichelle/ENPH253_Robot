@@ -20,7 +20,15 @@ namespace Robot {
 
       case MasterState::TapeFollow:
 
-        tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+        // tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+        
+        moveForCertainTime(200,200,500);
+        delay(1000);
+        moveForCertainTime(-200,-200,500);
+        delay(500);
+        moveForCertainTime(150,100,500);
+        delay(500);
+        moveForCertainTime(100,150,500);
 
       // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
 
@@ -128,7 +136,7 @@ namespace Robot {
 
       delay (1000);
 
-      rightArm.placeObjectInContainer();
+      //rightArm.placeObjectInContainer();
 
       break;
 
@@ -162,7 +170,7 @@ namespace Robot {
         shuffleRight();
       }
 
-      rightArm.placeObjectInContainer();
+      //rightArm.placeObjectInContainer();
 
       break;
 

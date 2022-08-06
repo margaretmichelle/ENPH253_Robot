@@ -27,7 +27,7 @@ void setup() {
 
     attachInterrupt(digitalPinToInterrupt(PA2), slaveInterrupt, RISING);
 
-    // master.setState(Robot::MasterState::PickUpObject);
+    master.setState(Robot::MasterState::EdgeFollow);
 
     // while (!oledDisplay.stateChosen()) {
     //   oledDisplay.chooseState();
@@ -39,8 +39,8 @@ void setup() {
 }
 
 void loop() {
-  // master.poll(oledDisplay);
-  oledDisplay.displayScreen(1,2,3,4,5,6,7,8,9);
+  master.poll(oledDisplay);
+  //oledDisplay.displayScreen(1,2,3,4,5,6,7,8);
 
   unsigned long currentMillis = millis();
 
