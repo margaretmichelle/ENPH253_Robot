@@ -73,7 +73,7 @@ void PID::usePID(int KP, int KI, int KD) {
       break;
   }
 
-  summedError = getSummedError(error, summedError, summedErrorLimit);
+  // summedError = getSummedError(error, summedError, summedErrorLimit);
 
   double derivativeError;
 
@@ -163,20 +163,20 @@ bool PID::sensorOnEdge(int sensorValue, int highReading) {
   }
 }
 
-int PID::getSummedError(int error, int lastSummedError, int summedErrorLimit) { // there integral term KI = 0 so we will need to change summedErrorLimit and KI to stabilize robot
-  // get absolute value of summedErrorLimit
-  if (summedErrorLimit < 0) {
-    summedErrorLimit = -summedErrorLimit;
-  }
+// int PID::getSummedError(int error, int lastSummedError, int summedErrorLimit) { // there integral term KI = 0 so we will need to change summedErrorLimit and KI to stabilize robot
+//   // get absolute value of summedErrorLimit
+//   if (summedErrorLimit < 0) {
+//     summedErrorLimit = -summedErrorLimit;
+//   }
 
-  int summedError = lastSummedError + error;
+//   int summedError = lastSummedError + error;
 
-  // anti-windup
-  if (summedError > summedErrorLimit) {
-    summedError = summedErrorLimit;
-  } else if (summedError < -summedErrorLimit) {
-    summedError = -summedErrorLimit;
-  }
+//   // anti-windup
+//   if (summedError > summedErrorLimit) {
+//     summedError = summedErrorLimit;
+//   } else if (summedError < -summedErrorLimit) {
+//     summedError = -summedErrorLimit;
+//   }
 
-  return summedError;
-}
+//   return summedError;
+// }

@@ -173,8 +173,10 @@ namespace ObstacleNS {;
 }
 
 namespace EncoderNS{
-  const int LEFT_MOTOR_ENCODER_PIN = PA11;
-  const int RIGHT_MOTOR_ENCODER_PIN = PA12;
+  const int LEFT_ENCODER_DT_PIN = PA11;
+  const int LEFT_ENCODER_CLK_PIN = PA12;
+  const int RIGHT_ENCODER_DT_PIN = PB11;
+  const int RIGHT_ENCODER_CLK_PIN = PB10;
   const float WHEEL_DIA_MM = 88.9;
   const float ROTATION_DISTANCE_MM = WHEEL_DIA_MM * PI;
   const int PULSES_PER_ROTATION = 131*11*7/5;

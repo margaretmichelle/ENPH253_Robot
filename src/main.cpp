@@ -27,15 +27,15 @@ void setup() {
 
     attachInterrupt(digitalPinToInterrupt(PA2), slaveInterrupt, RISING);
 
-    master.setState(Robot::MasterState::EdgeFollow);
+    master.setState(Robot::MasterState::IRFollow);
 
-    while (!oledDisplay.stateChosen()) {
-      oledDisplay.chooseState();
-      if (oledDisplay.stateChosen()) {
-        master.setState((Robot::MasterState) oledDisplay.getState()); //Just for Testing Purposes
-        delay(1000);
-      }
-    }
+    // while (!oledDisplay.stateChosen()) {
+    //   oledDisplay.chooseState();
+    //   if (oledDisplay.stateChosen()) {
+    //     master.setState((Robot::MasterState) oledDisplay.getState()); //Just for Testing Purposes
+    //     delay(1000);
+    //   }
+    // }
 }
 
 void loop() {

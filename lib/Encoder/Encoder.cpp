@@ -4,21 +4,18 @@
 #include <Motor.h>
 #include <PID.h>
 
-void leftEncoderPulse();
-void rightEncoderPulse();
-
-long int leftEncoderPulses;
-long int rightEncoderPulses;
+volatile long int leftEncoderPulses;
+volatile long int rightEncoderPulses;
 
 Motor leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2);
 Motor rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2);
 
 Encoder::Encoder(){
-    pinMode(EncoderNS::LEFT_MOTOR_ENCODER_PIN, INPUT);
-    pinMode(EncoderNS::RIGHT_MOTOR_ENCODER_PIN, INPUT);
+    pinMode(EncoderNS::LEFT_ENCODER_CLK_PIN, INPUT);
+    pinMode(EncoderNS::RIGHT_ENCODER_CLK_PIN, INPUT);
 
-    attachInterrupt(digitalPinToInterrupt(EncoderNS::LEFT_MOTOR_ENCODER_PIN), leftEncoderPulse, RISING);
-    attachInterrupt(digitalPinToInterrupt(EncoderNS::RIGHT_MOTOR_ENCODER_PIN), rightEncoderPulse, RISING);
+    attachInterrupt(digitalPinToInterrupt(EncoderNS::LEFT_ENCODER_CLK_PIN), std::bind(&Encoder::leftEncoderPulse, this), RISING);
+    attachInterrupt(digitalPinToInterrupt(EncoderNS::RIGHT_ENCODER_CLK_PIN), std::bind(&Encoder::rightEncoderPulse, this), RISING);
 
     leftEncoderPulses = 0;
     rightEncoderPulses = 0;
@@ -128,11 +125,11 @@ void pivotAngle(float angleDegrees) {
     rightMotor.stop();
     delay(250);
 }
-void leftEncoderPulse(){
+void Encoder::leftEncoderPulse(){
     leftEncoderPulses++;
 }
 
-void rightEncoderPulse(){
+void Encoder::rightEncoderPulse(){
     rightEncoderPulses++;
 }
 

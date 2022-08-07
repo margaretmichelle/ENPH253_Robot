@@ -77,7 +77,6 @@ namespace Robot {
       break;
 
       case MasterState::IRFollow:
-
         encoder.pivotAngle(45.0);
         encoder.driveStraight(1000,200);
         // obstacle.useObstacle();
