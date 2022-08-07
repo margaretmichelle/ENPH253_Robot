@@ -4,142 +4,116 @@
 #include <Motor.h>
 #include <PID.h>
 
-void leftEncoderPulse();
-void rightEncoderPulse();
+Encoder::Encoder(uint8_t CLK, uint8_t DT, uint16_t revPerWheelSpin) : CLK(CLK),
+                                                                      DT(DT)
+{
 
-long int leftEncoderPulses;
-long int rightEncoderPulses;
+    dir = 0;
+    radiansConversionRatio = (2.0 * PI) / (double)revPerWheelSpin;
 
-Motor leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2);
-Motor rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2);
-
-Encoder::Encoder(){
-    pinMode(EncoderNS::LEFT_MOTOR_ENCODER_PIN, INPUT);
-    pinMode(EncoderNS::RIGHT_MOTOR_ENCODER_PIN, INPUT);
-
-    attachInterrupt(digitalPinToInterrupt(EncoderNS::LEFT_MOTOR_ENCODER_PIN), leftEncoderPulse, RISING);
-    attachInterrupt(digitalPinToInterrupt(EncoderNS::RIGHT_MOTOR_ENCODER_PIN), rightEncoderPulse, RISING);
-
-    leftEncoderPulses = 0;
-    rightEncoderPulses = 0;
 }
 
-void Encoder::driveStraight(float distance, int motorSpeed){
+Encoder::~Encoder(void)
+{
+    detachInterrupt(digitalPinToInterrupt(CLK));
+    ISRUsed &= ~_BV(myISRId); // free up the ISR slot for someone else
+}
 
-    // Sets target number of counts for the encoder
-    float numOfRevs = abs(distance) / EncoderNS::ROTATION_DISTANCE_MM;
-    unsigned long targetCount = numOfRevs * EncoderNS::PULSES_PER_ROTATION;
+bool Encoder::begin(void)
+{
+    int8_t irq = digitalPinToInterrupt(CLK);
 
-    // Sets inital encoder counts to keep track of new changes to encoder counts
-    unsigned long initalLeftCount = leftEncoderPulses;
-    unsigned long initalRightCount = rightEncoderPulses;
+    if (irq != NOT_AN_INTERRUPT)
+    {
+        pinMode(CLK, INPUT);
+        pinMode(DT, INPUT);
 
-    unsigned long lastError = 0;
-    unsigned long lastTime = 0;
-
-    //travels until one wheel reaches the end
-    while ( (leftEncoderPulses - initalLeftCount) < targetCount && rightEncoderPulses - initalRightCount < targetCount ){
-        // Chooses a sample count, have to do it this way since the interupted value will constantly change
-        unsigned long currentLeftCount = leftEncoderPulses;
-        unsigned long currentRightCount = rightEncoderPulses;
-
-        //Looks at the change in encoder pulses from the initial code to see what motor needs to travel more
-        unsigned long diffLeft = currentLeftCount - initalLeftCount;
-        unsigned long diffRight = currentRightCount - initalRightCount;
-
-        unsigned long error = diffLeft - diffRight;
-        double derivativeError;
-
-        if (lastError != error) {
-            derivativeError = (error - lastError) / (micros() - lastTime);
-        } else {
-            derivativeError = 0;
+        // assign ourselves a ISR ID ...
+        myISRId = UINT8_MAX;
+        for (uint8_t i = 0; i < MAX_ISR; i++)
+        {
+            if (!(ISRUsed & _BV(i))) // found a free ISR Id?
+            {
+                myISRId = i;                // remember who this instance is
+                myInstance[myISRId] = this; // record this instance
+                ISRUsed |= _BV(myISRId);    // lock this in the allocations table
+                break;
+            }
         }
+        // ... and attach corresponding ISR callback from the lookup table
+        {
+            static void((*ISRfunc[MAX_ISR])(void)) =
+                {
+                    globalISR0,
+                    globalISR1,
+                    globalISR2,
+                    globalISR3,
+                    globalISR4,
+                    globalISR5,
+                    globalISR6,
+                    globalISR7,
+                };
 
-        // reset last values
-        lastError = error;
-        lastTime = micros();
+            if (myISRId != UINT8_MAX)
+                attachInterrupt(irq, ISRfunc[myISRId], RISING);
+            else
+                irq = NOT_AN_INTERRUPT;
+        }
+        reset();
+    }
+    return (irq != NOT_AN_INTERRUPT);
+}
 
-        // set new motor speeds
-        double adjustment = (EncoderNS::STRAIGHT_KP * error) + (EncoderNS::STRAIGHT_KD * derivativeError);
-        int leftMotorSpeed = motorSpeed - adjustment;
-        int rightMotorSpeed = motorSpeed + adjustment;
-        leftMotor.speed(leftMotorSpeed);
-        rightMotor.speed(rightMotorSpeed);
+void Encoder::reset(void) { count = 0; }
 
-        //delay to give motors time to change speeds
-        delay(10);
+float Encoder::angleRadians(void)
+{
+    return ((float)count) * radiansConversionRatio;
+}
+
+int8_t Encoder::direction(void)
+{
+    return dir;
+}
+
+int16_t Encoder::counter(void)
+{
+    return count;
+}
+
+double Encoder::conversionRatio(void)
+{
+    return radiansConversionRatio;
+}
+
+void Encoder::instanceISR(void)
+{
+    bool DT_state = digitalRead(DT);
+
+    // double check if the directions work out right
+    if (!DT_state)
+    {
+        dir = -1;
+        count--;
+    }
+    else
+    {
+        dir = +1;
+        count++;
     }
 
-    //stop moving motors
-    leftMotor.stop();
-    rightMotor.stop();
-}
+} // Instance ISR handler called from static ISR globalISRx
 
-void pivotAngle(float angleDegrees) {
-// use wheel encoders to pivot (turn) by specified angle
+// Interrupt handling declarations required outside the class
+uint8_t Encoder::ISRUsed = 0;          // allocation table for the globalISRx()
+Encoder *Encoder::myInstance[MAX_ISR]; // callback instance handle for the ISR
 
-    // set motor speed for pivoting
-    int speed = EncoderNS::PIVOT_WHEEL_SPEED; // clockwise
-    int angle = angleDegrees;
-
-    if (angleDegrees < 0) {
-        speed *= -1; 
-    }
-
-    // use correction to improve angle accuracy
-    // adjust correction value based on test results
-    float correction = -2.0; // need decimal point for float value
-    if (angle > 0) {
-        angle += correction; 
-    }
-    else if (angle < 0) {
-        angle -= correction;
-    }
-
-    // variable for tracking wheel encoder counts
-    long rightCount = 0;
-
-    // based on angle, calculate distance (arc length) for pivot
-    float distance = abs(angle) / 360.0 * EncoderNS::PIVOT_CIRCUMFERENCE;
-
-    // based on distance, calculate number of wheel revolutions
-    float numRev = distance / EncoderNS::ROTATION_DISTANCE_MM;
-
-    // based on number of revolutions, calculate target encoder count
-    float targetCount = numRev * EncoderNS::PULSES_PER_ROTATION;
-
-    // reset encoder counters and start pivoting
-    leftEncoderPulses = 0;
-    rightEncoderPulses = 0;
-    delay(100);
-    leftMotor.speed(speed);
-    rightMotor.speed(-speed); //will go counterclockwise if angle is - therefore speeds will be negative 
-
-    // keeps looping while right encoder count less than target count
-    while (abs(rightCount) < abs(targetCount)) {
-        // get current wheel encoder count
-        rightCount = rightEncoderPulses;
-        delay(10);  // short delay before next reading
-    }
-
-    // target count reached
-    leftMotor.stop();
-    rightMotor.stop();
-    delay(250);
-}
-void leftEncoderPulse(){
-    leftEncoderPulses++;
-}
-
-void rightEncoderPulse(){
-    rightEncoderPulses++;
-}
-
-int getLeftPulses(){
-    return leftEncoderPulses;
-}
-
-int getRightPulses(){
-    return rightEncoderPulses;
-}
+// ISR for each myISRId
+void Encoder::globalISR0(void) { Encoder::myInstance[0]->instanceISR(); }
+void Encoder::globalISR1(void) { Encoder::myInstance[1]->instanceISR(); }
+void Encoder::globalISR2(void) { Encoder::myInstance[2]->instanceISR(); }
+void Encoder::globalISR3(void) { Encoder::myInstance[3]->instanceISR(); }
+void Encoder::globalISR4(void) { Encoder::myInstance[4]->instanceISR(); }
+void Encoder::globalISR5(void) { Encoder::myInstance[5]->instanceISR(); }
+void Encoder::globalISR6(void) { Encoder::myInstance[6]->instanceISR(); }
+void Encoder::globalISR7(void) { Encoder::myInstance[7]->instanceISR(); }
