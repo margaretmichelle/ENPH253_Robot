@@ -188,4 +188,9 @@ namespace EncoderNS{
   const float PIVOT_CIRCUMFERENCE = PIVOT_DIAMETER * PI;
 }
 
+namespace ZiplineNS {
+  const int ZIPLINE_MOTOR_PIN = PB_1;
+  const int ZIPLINE_MICROSWITCH_PIN = PB2; //Not sure if this is actually the pin double check andy 
+}
+
 #endif
