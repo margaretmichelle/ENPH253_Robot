@@ -20,6 +20,11 @@ void setup() {
     oledDisplay.start();
 
     pinMode(LED_BUILTIN, OUTPUT);
+    // pinMode(PA8,OUTPUT);
+    // pinMode(PB8,OUTPUT);
+
+    // pwm_start(PA_8,500,2000,RESOLUTION_12B_COMPARE_FORMAT);
+    // pwm_start(PB_8,500,2000,RESOLUTION_12B_COMPARE_FORMAT);
 
     //Attach interrupts to the back edge detection
     attachInterrupt(digitalPinToInterrupt(EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN), useEdgeDetection, RISING);
@@ -39,8 +44,8 @@ void setup() {
 }
 
 void loop() {
-  // master.poll(oledDisplay);
-  oledDisplay.displayScreen(1,2,3,4,5,6,7,8);
+  master.poll(oledDisplay);
+  // oledDisplay.displayScreen(1,2,3,4,5,6,7,8);
 
   unsigned long currentMillis = millis();
 

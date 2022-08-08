@@ -426,7 +426,7 @@ void OLED::displayCustom(String label, int val) {
   oled.display();
 }
 
-void OLED::displayCustom(String labelA, int valA, String labelB, int valB) {
+void OLED::displayCustom(String labelA, int valA, String labelB, double valB) {
   oled.clearDisplay();
   oled.setTextColor(SSD1306_WHITE);
   oled.setCursor(0,0);

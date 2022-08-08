@@ -3,9 +3,8 @@
 #include <Encoder.h>
 #include <Motor.h>
 #include <PID.h>
+#include <OLED.h>
 
-volatile long int leftEncoderPulses;
-volatile long int rightEncoderPulses;
 
 Motor leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2);
 Motor rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2);
@@ -21,10 +20,12 @@ Encoder::Encoder(){
     rightEncoderPulses = 0;
 }
 
-void Encoder::driveStraight(float distance, int motorSpeed){
+void Encoder::driveStraight(float distance, int motorSpeed, OLED o){
+
+    float correction = -200.0;
 
     // Sets target number of counts for the encoder
-    float numOfRevs = abs(distance) / EncoderNS::ROTATION_DISTANCE_MM;
+    float numOfRevs = abs(distance + correction) / EncoderNS::ROTATION_DISTANCE_MM;
     unsigned long targetCount = numOfRevs * EncoderNS::PULSES_PER_ROTATION;
 
     // Sets inital encoder counts to keep track of new changes to encoder counts
@@ -40,6 +41,8 @@ void Encoder::driveStraight(float distance, int motorSpeed){
         unsigned long currentLeftCount = leftEncoderPulses;
         unsigned long currentRightCount = rightEncoderPulses;
 
+        // o.displayCustom("Left:",currentLeftCount,"Right:", currentRightCount);
+
         //Looks at the change in encoder pulses from the initial code to see what motor needs to travel more
         unsigned long diffLeft = currentLeftCount - initalLeftCount;
         unsigned long diffRight = currentRightCount - initalRightCount;
@@ -47,20 +50,23 @@ void Encoder::driveStraight(float distance, int motorSpeed){
         unsigned long error = diffLeft - diffRight;
         double derivativeError;
 
-        if (lastError != error) {
-            derivativeError = (error - lastError) / (micros() - lastTime);
-        } else {
-            derivativeError = 0;
-        }
+        // if (lastError != error) {
+        //     derivativeError = (error - lastError) / (micros() - lastTime);
+        // } else {
+        //     derivativeError = 0;
+        // }
+
+        // o.displayCustom("Error:", error, "Derivative error:", derivativeError);
 
         // reset last values
         lastError = error;
         lastTime = micros();
 
         // set new motor speeds
-        double adjustment = (EncoderNS::STRAIGHT_KP * error) + (EncoderNS::STRAIGHT_KD * derivativeError);
+        int adjustment = (EncoderNS::STRAIGHT_KP * error) /*+ (EncoderNS::STRAIGHT_KD * (double) derivativeError)*/;
         int leftMotorSpeed = motorSpeed - adjustment;
         int rightMotorSpeed = motorSpeed + adjustment;
+        o.displayCustom("Left motor:", leftMotorSpeed, "Adjustment:", adjustment);
         leftMotor.speed(leftMotorSpeed);
         rightMotor.speed(rightMotorSpeed);
 
@@ -73,7 +79,7 @@ void Encoder::driveStraight(float distance, int motorSpeed){
     rightMotor.stop();
 }
 
-void pivotAngle(float angleDegrees) {
+void Encoder::pivotAngle(float angleDegrees) {
 // use wheel encoders to pivot (turn) by specified angle
 
     // set motor speed for pivoting
@@ -86,7 +92,7 @@ void pivotAngle(float angleDegrees) {
 
     // use correction to improve angle accuracy
     // adjust correction value based on test results
-    float correction = -2.0; // need decimal point for float value
+    float correction = -22.0; // need decimal point for float value
     if (angle > 0) {
         angle += correction; 
     }
@@ -131,12 +137,4 @@ void Encoder::leftEncoderPulse(){
 
 void Encoder::rightEncoderPulse(){
     rightEncoderPulses++;
-}
-
-int getLeftPulses(){
-    return leftEncoderPulses;
-}
-
-int getRightPulses(){
-    return rightEncoderPulses;
 }

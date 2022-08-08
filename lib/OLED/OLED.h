@@ -62,7 +62,7 @@ class OLED {
     /**
      * @brief Display custom screen with two values and their labels
      */
-    void displayCustom(String labelA, int valA, String labelB, int valB);
+    void displayCustom(String labelA, int valA, String labelB, double valB);
 
     // Getter methods
     

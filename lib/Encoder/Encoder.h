@@ -2,6 +2,7 @@
 #define encoder_h
 
 #include <Arduino.h>
+#include <OLED.h>
 
 class Encoder{
     public:
@@ -10,12 +11,20 @@ class Encoder{
 
     void pivotAngle(float angleDegrees);
 
-    void driveStraight(float distanceMm, int motorPower);
+    void driveStraight(float distanceMm, int motorPower, OLED o);
     /**
      * @brief Attach interrupts in begin method which will be used in main 
      * 
      */
     void begin();
+
+    int getLeftPulses(){
+        return leftEncoderPulses;
+    }
+
+    int getRightPulses(){
+        return rightEncoderPulses;
+    }
 
     private:
         /**
@@ -28,6 +37,10 @@ class Encoder{
          * 
          */
         void rightEncoderPulse();
+
+    volatile long int leftEncoderPulses;
+    volatile long int rightEncoderPulses;
+    OLED o;
 };
 
 #endif

@@ -77,8 +77,13 @@ namespace Robot {
       break;
 
       case MasterState::IRFollow:
+
+        delay(2000);
+
+        //encoder.driveStraight(1000,200,o);
         encoder.pivotAngle(45.0);
-        encoder.driveStraight(1000,200);
+        delay(2000);
+        encoder.pivotAngle(-270.0);
         // obstacle.useObstacle();
 
         // tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
