@@ -180,4 +180,9 @@ namespace ServoNS {
   const int MIN_PULSE_WIDTH = 500;
 }
 
+namespace ZiplineNS {
+  const int ZIPLINE_MOTOR_PIN = PB_1;
+  const int ZIPLINE_MICROSWITCH_PIN = PB1; //not sure waht these are double check andy
+}
+
 #endif
