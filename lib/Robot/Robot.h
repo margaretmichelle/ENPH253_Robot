@@ -26,8 +26,8 @@ namespace Robot {
     EdgeFollow,
     Done,
     JustTape,
-    PickUpObject,
-    PositionObject,
+    TestServos,
+    PositionandPickUpObject,
     Bridge,
     JustEdge,
     UpToArch,
@@ -54,18 +54,15 @@ namespace Robot {
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
         tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 200),
         edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 200),
-        rightForwardUltrasonic(ObstacleNS::FORWARD_TRIG_PIN,ObstacleNS::FORWARD_ECHO_PIN),
-        rightMidUltrasonic(ObstacleNS::FORWARD_TRIG_PIN, ObstacleNS::MID_ECHO_PIN),
+        leftUltrasonic(ObstacleNS::LEFT_TRIG_PIN,ObstacleNS::LEFT_ECHO_PIN),
+        rightUltrasonic(ObstacleNS::RIGHT_TRIG_PIN, ObstacleNS::RIGHT_ECHO_PIN),
         edgeBack(leftMotor,rightMotor,200),
         bridge(leftMotor,rightMotor),
         encoder(),
-        // leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
-        // rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
-        // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN),
-        // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
         state(MasterState::Inactive)
         {
           //Set-up Communication Pins
+          pinMode(MasterNS::BP_COMM_IN, INPUT);
           pinMode(MasterNS::BP_COMM_OUT, OUTPUT);
           digitalWrite(MasterNS::BP_COMM_OUT, LOW);
         }
@@ -125,7 +122,7 @@ namespace Robot {
       void goSlave();
 
       /**
-       * @brief stop replica from performing actions 
+       * @brief stop motors
        * 
        */
       void stop();
@@ -144,6 +141,9 @@ namespace Robot {
        */
       void shuffleRight();
 
+      void moveToObjectOnRight();
+      void moveToObjectOnLeft();
+
       Motor leftMotor;
       Motor rightMotor;
       PID tapeFollow;
@@ -151,8 +151,8 @@ namespace Robot {
 
       BridgeDeploy bridge;
 
-      Obstacle rightForwardUltrasonic;
-      Obstacle rightMidUltrasonic;
+      Obstacle leftUltrasonic;
+      Obstacle rightUltrasonic;
       EdgeBack edgeBack;
       
       Encoder encoder;
@@ -162,27 +162,22 @@ namespace Robot {
       bool stopped;
 
       MasterState state;
-
-      // Claw leftClaw;
-      // Claw rightClaw;
-      // Arm leftArm;
-      // Arm rightArm;
-
   };
 
   class Slave {
     public:
         Slave(): 
-        // leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN),
-        // rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN),
-        // leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN),
-        // rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN),
+        leftClaw(ClawNS::LEFT_CLAW_SERVO_PIN, ClawNS::LEFT_CLAW_OPEN, ClawNS::LEFT_CLAW_CLOSED),
+        rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_CLAW_OPEN, ClawNS::RIGHT_CLAW_CLOSED),
+        leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN, ArmNS::LEFT_ARM_UP, ArmNS::LEFT_ARM_DOWN),
+        rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN, ArmNS::RIGHT_ARM_UP, ArmNS::RIGHT_ARM_DOWN),
+
           //Put Constructors for Claw and zipline 
         state(SlaveState::Inactive) { 
+          pinMode(SlaveNS::BP_COMM_IN, INPUT);
           pinMode(SlaveNS::BP_COMM_OUT, OUTPUT);
           digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
         }
-
 
         /*
         @brief Returns current state of robot and performs action for one loop.
@@ -199,10 +194,10 @@ namespace Robot {
         bool stopped;
         void stop();
 
-        // Claw leftClaw;
-        // Claw rightClaw;
-        // Arm leftArm;
-        // Arm rightArm;
+        Claw leftClaw;
+        Claw rightClaw;
+        Arm leftArm;
+        Arm rightArm;
         
         /*
         @brief Advances the big bot state

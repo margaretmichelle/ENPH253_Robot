@@ -28,6 +28,11 @@ class Encoder{
 
     void resetPulses();
 
+    /**
+     * @brief Tells robot to drive straight for a distance in millimetres with an initial speed
+     */
+    void drive(int distance, int motorSpeed);
+
     private:
         /**
          * @brief interrupt increment

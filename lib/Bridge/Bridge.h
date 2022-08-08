@@ -15,7 +15,7 @@ public:
   BridgeDeploy(Motor leftMotor, Motor rightMotor);
 
   /**
-   * @brief deploy bridge. Puts servos both in bridge release angle, then puts them back
+   * @brief deploy bridge. Puts servo in bridge release angle, then put it back
    */
   void deployBridge();
   

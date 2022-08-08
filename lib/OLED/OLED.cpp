@@ -78,8 +78,8 @@ void OLED::chooseState() {
       oled.setTextColor(BLACK, WHITE);
       oled.println("Tape follow");
       oled.setTextColor(WHITE);
-      oled.println("Pick up idol");
-      oled.println("Position object");
+      oled.println("Test servos");
+      oled.println("Position & pick up object");
       oled.println("Bridge");
       oled.println("Edge follow");
       oled.println("Up to arch");
@@ -90,9 +90,9 @@ void OLED::chooseState() {
       oled.setTextColor(WHITE);
       oled.println("Tape follow");
       oled.setTextColor(BLACK, WHITE);
-      oled.println("Pick up idol");
+      oled.println("Test servos");
       oled.setTextColor(WHITE);
-      oled.println("Position object");
+      oled.println("Position & pick up object");
       oled.println("Bridge");
       oled.println("Edge follow");
       oled.println("Up to arch");
@@ -102,9 +102,9 @@ void OLED::chooseState() {
       oled.clearDisplay();
       oled.setTextColor(WHITE);
       oled.println("Tape follow");
-      oled.println("Pick up idol");
+      oled.println("Test servos");
       oled.setTextColor(BLACK, WHITE);
-      oled.println("Position object");
+      oled.println("Position & pick up object");
       oled.setTextColor(WHITE);
       oled.println("Bridge");
       oled.println("Edge follow");
@@ -115,8 +115,8 @@ void OLED::chooseState() {
       oled.clearDisplay();
       oled.setTextColor(WHITE);
       oled.println("Tape follow");
-      oled.println("Pick up idol");
-      oled.println("Position object");
+      oled.println("Test servos");
+      oled.println("Position & pick up object");
       oled.setTextColor(BLACK, WHITE);
       oled.println("Bridge");
       oled.setTextColor(WHITE);
@@ -128,8 +128,8 @@ void OLED::chooseState() {
       oled.clearDisplay();
       oled.setTextColor(WHITE);
       oled.println("Tape follow");
-      oled.println("Pick up idol");
-      oled.println("Position object");
+      oled.println("Test servos");
+      oled.println("Position & pick up object");
       oled.println("Bridge");
       oled.setTextColor(BLACK, WHITE);
       oled.println("Edge follow");
@@ -141,8 +141,8 @@ void OLED::chooseState() {
       oled.clearDisplay();
       oled.setTextColor(WHITE);
       oled.println("Tape follow");
-      oled.println("Pick up idol");
-      oled.println("Position object");
+      oled.println("Test servos");
+      oled.println("Position & pick up object");
       oled.println("Bridge");
       oled.println("Edge follow");
       oled.setTextColor(BLACK, WHITE);

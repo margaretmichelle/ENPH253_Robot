@@ -1,7 +1,6 @@
 #include <Arduino.h>
 
 #include <Constants.h>
-// #include <IR.h>
 #include <Motor.h>
 #include <PID.h>
 #include <Robot.h>
@@ -79,13 +78,13 @@ namespace Robot {
       case MasterState::IRFollow:
 
         delay(2000);
-
+        
         //encoder.driveStraight(1000,200,o);
         encoder.pivotAngle(45.0);
         delay(2000);
         encoder.pivotAngle(-270.0);
         // obstacle.useObstacle();
-
+        
         // tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
 
         // if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 0) {
@@ -108,6 +107,7 @@ namespace Robot {
         //   while(!tapeFollow.bothOnBlack(TapeFollowerNS::BLACK_THRESHOLD)) {
         //       moveForCertainTime(150,70,100);
         //   }
+      break;
 
     case MasterState::ObstacleFollow:
       // obstacle.useObstacle();
@@ -127,7 +127,7 @@ namespace Robot {
         stop();
         break;
 
-    // Testing and Time Trials States
+    // Testing States
 
     case MasterState::JustTape:
       tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
@@ -135,28 +135,100 @@ namespace Robot {
       o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0,0,0,0);
       break;
     
-    case MasterState::PickUpObject:
-    // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0);
+    case MasterState::TestServos:
+      
+      delay(500);
 
-      delay (1000);
+      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
 
-      //rightArm.placeObjectInContainer();
+      while (slaveBusy) {
+        o.displayCustom("Right: First idol",1);
+      }
+
+      delay(800);
+      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+
+      while (slaveBusy) {
+        o.displayCustom("Right: Second idol",2);
+      }
+
+      delay(800);
+      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+
+      while (slaveBusy) {
+        o.displayCustom("Left: Third idol",3);
+      }
+
+      // delay(800);
+      // digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      // digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+
+      // while (slaveBusy) {
+      //   o.displayCustom("Right: Fourth idol",4);
+      // }
+
+      // delay(800);
+      // digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      // digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+
+      // while (slaveBusy) {
+      //   o.displayCustom("Bridge",0);
+      // }
 
       break;
 
-    case MasterState::PositionObject:
-      rightForwardUltrasonic.useObstacle();
+    case MasterState::PositionandPickUpObject:
 
-      o.displayCustom("Front sonar: ", rightForwardUltrasonic.getDistance());
-      
-      while (rightForwardUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL && rightForwardUltrasonic.getDistance() > 15) {
-        shuffleRight();
+      // check sonar distances for 2 seconds
+      for (int i = 0; i < 40; i++) {
+        leftUltrasonic.useObstacle();
+        rightUltrasonic.useObstacle();
+        o.displayCustom("Left sonar:", leftUltrasonic.getDistance(), "Right sonar:", rightUltrasonic.getDistance());
+        delay(50);
+      }
+
+      moveToObjectOnRight();
+
+      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+
+      while (slaveBusy) {
+        o.displayCustom("Picking up object",0);
       }
       
       break;
 
     case MasterState::Bridge:
-      bridge.deployBridge();
+      o.displayCustom("WATCH OUT FOR THE ARMS!",0);
+
+      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+      while (slaveBusy) {}; // first idol
+
+      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+      while (slaveBusy) {}; // second idol
+
+      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+      while (slaveBusy) {}; // third idol
+
+      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+      while (slaveBusy) {}; // fourth idol
+
+      o.displayCustom("Bridging the gap...",0);
+      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+
+      while (slaveBusy) {};
+
+      // Find bridge tape?
+      encoder.drive(500, 200);
+
       tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
       break;
 
@@ -167,16 +239,54 @@ namespace Robot {
       break;
 
     case MasterState::UpToArch:
-      tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+      // check if pedastal gets read by sonar (if it does, robot will not tape follow again after picking up idols)
+      rightUltrasonic.useObstacle();
 
-      rightForwardUltrasonic.useObstacle();
-
-      while (rightForwardUltrasonic.getDistance() <= ObstacleNS::DISTANCE_TO_IDOL && rightForwardUltrasonic.getDistance() > 15) {
-        shuffleRight();
+      // after picking up second idol (expecting wall to be close (idk if it is within the distance though))
+      if (countIdolPickUp == 2 && rightUltrasonic.getDistance() < ObstacleNS::DISTANCE_TO_IDOL) {
+        tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+        break;
       }
 
-      //rightArm.placeObjectInContainer();
+      if (countIdolPickUp == 2 && rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+        stop(); // robot has passed the archway
+        break;
+      }
 
+      if (rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+        tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+        break;
+      }
+
+      stop();
+
+      if (countIdolPickUp == 0) {
+        moveToObjectOnRight();
+
+        digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+        digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+
+        while (slaveBusy) {
+          o.displayCustom("Picking up idol:",1);
+        }
+        countIdolPickUp++;
+      } else if (countIdolPickUp == 1) {
+        moveToObjectOnRight();
+
+        digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+        digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+
+        while (slaveBusy) {
+          o.displayCustom("Picking up idol:",2);
+          countIdolPickUp++;
+        }
+      }
+
+      encoder.pivotAngle(-90);
+      encoder.drive((rightUltrasonic.getDistance() - 10) * 10, 200);
+      while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
+        moveForCertainTime(80,-80,100); 
+      }
       break;
 
     default:
@@ -189,8 +299,6 @@ namespace Robot {
   void Master::useEdgeDetection() {
     edgeBack.useEdge();
   }
-
-
 
   void Master::stop() {
     // if(stopped) { return; }
@@ -232,7 +340,8 @@ namespace Robot {
   }
 
   void Master::changeSlaveState() {
-    slaveBusy = false;
+    if (slaveBusy) slaveBusy = false;
+    else slaveBusy = true;
   }
 
   void Master::shuffleRight() {
@@ -240,17 +349,39 @@ namespace Robot {
     moveForCertainTime(0,0,100);
     moveForCertainTime(0,100,600);
 
-    rightForwardUltrasonic.useObstacle();
+    rightUltrasonic.useObstacle();
 
     moveForCertainTime(0,0,100);
 
-    while (rightForwardUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+    while (rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
       moveForCertainTime(-80,-80,100);
-      rightForwardUltrasonic.useObstacle();
+      rightUltrasonic.useObstacle();
       moveForCertainTime(0,0,100);
     }
 
     moveForCertainTime(0,0,100);
+  }
+
+  void Master::moveToObjectOnRight() {
+    rightUltrasonic.useObstacle();
+
+    encoder.pivotAngle(-90);
+    delay(50);
+    encoder.drive((rightUltrasonic.getDistance() - 10) * 10, -150);
+    delay(50);
+    encoder.pivotAngle(90);
+    delay(50);
+  }
+
+  void Master::moveToObjectOnLeft() {
+    leftUltrasonic.useObstacle();
+
+    encoder.pivotAngle(90);
+    delay(50);
+    encoder.drive((leftUltrasonic.getDistance() - 10) * 10, -150);
+    delay(50);
+    encoder.pivotAngle(-90);
+    delay(50);
   }
 
 }
