@@ -12,6 +12,8 @@ Motor rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2);
 Encoder::Encoder(){
     pinMode(EncoderNS::LEFT_ENCODER_CLK_PIN, INPUT);
     pinMode(EncoderNS::RIGHT_ENCODER_CLK_PIN, INPUT);
+    pinMode(EncoderNS::LEFT_ENCODER_DT_PIN, INPUT);
+    pinMode(EncoderNS::RIGHT_ENCODER_DT_PIN, INPUT);
 
     attachInterrupt(digitalPinToInterrupt(EncoderNS::LEFT_ENCODER_CLK_PIN), std::bind(&Encoder::leftEncoderPulse, this), RISING);
     attachInterrupt(digitalPinToInterrupt(EncoderNS::RIGHT_ENCODER_CLK_PIN), std::bind(&Encoder::rightEncoderPulse, this), RISING);
@@ -20,51 +22,69 @@ Encoder::Encoder(){
     rightEncoderPulses = 0;
 }
 
-void Encoder::driveStraight(float distance, int motorSpeed, OLED o){
+void Encoder::driveStraight(int distanceMm, int motorSpeed, OLED o){
+    int adjustmentFactor = 1;
 
     // Sets target number of counts for the encoder
-    float numOfRevs = abs(distance) / EncoderNS::ROTATION_DISTANCE_MM;
-    unsigned long targetCount = numOfRevs * EncoderNS::PULSES_PER_ROTATION;
+    float numOfRevs = distanceMm / EncoderNS::ROTATION_DISTANCE_MM;
+    int targetRadians = numOfRevs * 2 * PI;
+
+    if (distanceMm < 0 ){
+        adjustmentFactor = -1;
+    }
 
     // Sets inital encoder counts to keep track of new changes to encoder counts
-    unsigned long initalLeftCount = leftEncoderPulses;
-    unsigned long initalRightCount = rightEncoderPulses;
+    int initalLeftCount = leftEncoderPulses;
+    int initalRightCount = rightEncoderPulses;
 
-    unsigned long lastRotError = 0;
-    unsigned long lastDistanceError = 0;
+    int lastRotError = 0;
+    int lastRadiansError = 0;
+    int startingTime = millis();
+    int lastTime = startingTime;
 
     //travels until one wheel reaches the end
-    while ( (leftEncoderPulses - initalLeftCount) < targetCount && rightEncoderPulses - initalRightCount < targetCount ){
-        // Chooses a sample count, have to do it this way since the interupted value will constantly change
-        unsigned long currentLeftCount = leftEncoderPulses;
-        unsigned long currentRightCount = rightEncoderPulses;
+    while ( (leftEncoderPulses - initalLeftCount) /* EncoderNS::PULSES_PER_RAD != targetRadians || EncoderNS::PULSES_PER_RAD != targetCount */ ){
+        //Set sample pulse count
+        int currentLeftCount = leftEncoderPulses;
+        int currentRightCount = rightEncoderPulses;
 
+        //Find net change in pulse counts from beggining
+        int diffLeft = currentLeftCount - initalLeftCount;
+        int diffRight = currentRightCount - initalRightCount;
 
-        //Looks at the change in encoder pulses from the initial code to see what motor needs to travel more
-        unsigned long diffLeft = currentLeftCount - initalLeftCount;
-        unsigned long diffRight = currentRightCount - initalRightCount;
+        int currentTime = millis();
 
-        unsigned long rotError = diffLeft - diffRight;
-        unsigned long derivativeRotError = rotError - lastRotError;
+        //Find rotational velocities relative to start
+        int leftRotVelocity = diffLeft / (currentTime - startingTime) / EncoderNS::PULSES_PER_RAD * 1000;
+        int rightRotVelocity = diffLeft / (currentTime - startingTime) / EncoderNS::PULSES_PER_RAD * 1000; 
+
+        //Find rotational and derivative rotational errors
+        int rotError = leftRotVelocity - rightRotVelocity;
+        int derivativeRotError = (rotError - lastRotError)/(currentTime - lastTime);
+
         lastRotError = rotError;
 
-        int rotAdjustment = int ((EncoderNS::ROT_KP * rotError) + (EncoderNS::ROT_KD * derivativeRotError));
+        //Find the rotational adjustment
+        int rotAdjustment = (EncoderNS::ROT_KP * rotError) + (EncoderNS::ROT_KD * derivativeRotError);
 
-        unsigned long avgPulses = (diffLeft+diffRight)/2;
-        unsigned long distanceError = targetCount - avgPulses;
-        unsigned long derivativeDistanceError = distanceError - lastDistanceError;
-        lastDistanceError = distanceError;
+        //Find the average radians distance travelled and error and derivative error
+        int avgRadians = (diffLeft+diffRight)/2*EncoderNS::PULSES_PER_RAD;
+        int radiansError = targetRadians - avgRadians;
+        int derivativeRadiansError = (radiansError - lastRadiansError)/(currentTime - lastTime);
 
-        int distanceAdjustment = int ((EncoderNS::DIST_KP*distanceError) + (EncoderNS::DIST_KD * derivativeDistanceError));
+        lastRadiansError = radiansError;
+        lastTime = currentTime;
 
+        // //Make adjustment for radians distance
+        // int radiansAdjustment = int ((EncoderNS::DIST_KP*distanceError) + (EncoderNS::DIST_KD * derivativeDistanceError));
 
-        int leftMotorSpeed = motorSpeed - rotAdjustment + distanceAdjustment;
-        int rightMotorSpeed = motorSpeed + rotAdjustment + distanceAdjustment;
+        //Update motor speeds
+        // int leftMotorSpeed = (motorSpeed - rotAdjustment + radiansAdjustment) * adjustmentFactor;
+        // int rightMotorSpeed = (motorSpeed + rotAdjustment + radiansAdjustment) * adjustmentFactor;
+        // leftMotor.speed(leftMotorSpeed);
+        // rightMotor.speed(rightMotorSpeed);
 
-        leftMotor.speed(leftMotorSpeed);
-        rightMotor.speed(rightMotorSpeed);
-
-        //delay to give motors time to change speeds
+        //Delay to give motors time to adjust velocities
         delay(10);
     }
 
@@ -126,11 +146,21 @@ void Encoder::pivotAngle(float angleDegrees) {
     delay(250);
 }
 void Encoder::leftEncoderPulse(){
-    leftEncoderPulses++;
+    if (digitalRead(EncoderNS::LEFT_ENCODER_DT_PIN) == LOW){
+        leftEncoderPulses++;
+    }
+    else {
+        leftEncoderPulses--;
+    }
 }
 
 void Encoder::rightEncoderPulse(){
-    rightEncoderPulses++;
+    if (digitalRead(EncoderNS::RIGHT_ENCODER_DT_PIN)== HIGH){
+        rightEncoderPulses++;
+    }
+    else{
+        rightEncoderPulses--;
+    }
 }
 
 void Encoder::resetPulses(){
