@@ -50,14 +50,14 @@ void Encoder::driveStraight(float distance, int motorSpeed, OLED o){
         unsigned long derivativeRotError = rotError - lastRotError;
         lastRotError = rotError;
 
-        int rotAdjustment = (EncoderNS::ROT_KP * rotError) + (EncoderNS::ROT_KD * derivativeRotError);
+        int rotAdjustment = int ((EncoderNS::ROT_KP * rotError) + (EncoderNS::ROT_KD * derivativeRotError));
 
         unsigned long avgPulses = (diffLeft+diffRight)/2;
         unsigned long distanceError = targetCount - avgPulses;
         unsigned long derivativeDistanceError = distanceError - lastDistanceError;
         lastDistanceError = distanceError;
 
-        int distanceAdjustment = (EncoderNS::DIST_KP*distanceError) + (EncoderNS::DIST_KD * derivativeDistanceError);
+        int distanceAdjustment = int ((EncoderNS::DIST_KP*distanceError) + (EncoderNS::DIST_KD * derivativeDistanceError));
 
 
         int leftMotorSpeed = motorSpeed - rotAdjustment + distanceAdjustment;
