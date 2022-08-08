@@ -178,8 +178,10 @@ namespace EncoderNS{
   const float WHEEL_DIA_MM = 88.9;
   const float ROTATION_DISTANCE_MM = WHEEL_DIA_MM * PI;
   const int PULSES_PER_ROTATION = 131*11*7/5;
-  const int STRAIGHT_KP = 1;
-  const int STRAIGHT_KD = 0;
+  const int ROT_KP = .25;
+  const int ROT_KD = 0;
+  const int DIST_KP = 1;
+  const int DIST_KD = 10;
   const int POWER_OFFSET = 5;
   const float CENTRE_TO_RIGHT_WHEEL_MM = 99.5;
   const float CENTRE_TO_LEFT_WHEEL_MM = 99.5;

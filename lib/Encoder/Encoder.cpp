@@ -32,8 +32,8 @@ void Encoder::driveStraight(float distance, int motorSpeed, OLED o){
     unsigned long initalLeftCount = leftEncoderPulses;
     unsigned long initalRightCount = rightEncoderPulses;
 
-    unsigned long lastError = 0;
-    unsigned long lastTime = 0;
+    unsigned long lastRotError = 0;
+    unsigned long lastDistanceError = 0;
 
     //travels until one wheel reaches the end
     while ( (leftEncoderPulses - initalLeftCount) < targetCount && rightEncoderPulses - initalRightCount < targetCount ){
@@ -41,31 +41,27 @@ void Encoder::driveStraight(float distance, int motorSpeed, OLED o){
         unsigned long currentLeftCount = leftEncoderPulses;
         unsigned long currentRightCount = rightEncoderPulses;
 
-        // o.displayCustom("Left:",currentLeftCount,"Right:", currentRightCount);
 
         //Looks at the change in encoder pulses from the initial code to see what motor needs to travel more
         unsigned long diffLeft = currentLeftCount - initalLeftCount;
         unsigned long diffRight = currentRightCount - initalRightCount;
 
-        unsigned long error = diffLeft - diffRight;
-        double derivativeError;
+        unsigned long rotError = diffLeft - diffRight;
+        unsigned long derivativeRotError = rotError - lastRotError;
+        lastRotError = rotError;
 
-        // if (lastError != error) {
-        //     derivativeError = (error - lastError) / (micros() - lastTime);
-        // } else {
-        //     derivativeError = 0;
-        // }
+        int rotAdjustment = (EncoderNS::ROT_KP * rotError) + (EncoderNS::ROT_KD * derivativeRotError);
 
-        // o.displayCustom("Error:", error, "Derivative error:", derivativeError);
+        unsigned long avgPulses = (diffLeft+diffRight)/2;
+        unsigned long distanceError = targetCount - avgPulses;
+        unsigned long derivativeDistanceError = distanceError - lastDistanceError;
+        lastDistanceError = distanceError;
 
-        // reset last values
-        lastError = error;
-        lastTime = micros();
+        int distanceAdjustment = (EncoderNS::DIST_KP*distanceError) + (EncoderNS::DIST_KD * derivativeDistanceError);
 
-        // set new motor speeds
-        int adjustment = (EncoderNS::STRAIGHT_KP * error) /*+ (EncoderNS::STRAIGHT_KD * (double) derivativeError)*/;
-        int leftMotorSpeed = motorSpeed - adjustment;
-        int rightMotorSpeed = motorSpeed + adjustment;
+
+        int leftMotorSpeed = motorSpeed - rotAdjustment + distanceAdjustment;
+        int rightMotorSpeed = motorSpeed + rotAdjustment + distanceAdjustment;
         o.displayCustom("Left motor:", leftMotorSpeed, "Adjustment:", adjustment);
         leftMotor.speed(leftMotorSpeed);
         rightMotor.speed(rightMotorSpeed);
@@ -137,4 +133,9 @@ void Encoder::leftEncoderPulse(){
 
 void Encoder::rightEncoderPulse(){
     rightEncoderPulses++;
+}
+
+void Encoder::resetPulses(){
+    leftEncoderPulses = 0;
+    rightEncoderPulses = 0;
 }

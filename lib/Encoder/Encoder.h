@@ -26,6 +26,8 @@ class Encoder{
         return rightEncoderPulses;
     }
 
+    void resetPulses();
+
     private:
         /**
          * @brief interrupt increment
