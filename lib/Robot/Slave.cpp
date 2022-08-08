@@ -14,35 +14,37 @@ namespace Robot {
         break;
 
       case SlaveState::ClawActivateIdolOne:
-        // rightArm.placeObjectInContainer();
-        //advanceState();
-        //send signal for master to GOOOO
+        rightArm.placeObjectInContainer();
+        advanceState();
+        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
+
         break;
       
       case SlaveState::ClawActivateIdolTwo:
-        // rightArm.placeObjectInContainer();
-        //advanceState();
-                //send signal for master to GOOOO
+        rightArm.placeObjectInContainer();
+        advanceState();
+        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
 
       case SlaveState::ClawActivateIdolThree:
-        // leftArm.placeObjectInContainer(); //probably left arm 
-        //advanceState();
-                //send signal for master to GOOOO
+        leftArm.placeObjectInContainer();
+        advanceState();
+        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
 
       case SlaveState::ClawActivateIdolFour:
-        // rightArm.placeObjectInContainer();
-        //advanceState();
-                //send signal for master to GOOOO
+        rightArm.placeObjectInContainer();
+        advanceState();
+        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
 
       case SlaveState::BridgeDeploy:
         advanceState();
-              //send signal for master to GOOOO
+        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
+
         break;
 
       case SlaveState::ClawActivateIdolFive:
@@ -55,10 +57,7 @@ namespace Robot {
         // rightArm.placeObjectInContainer(); //Don;t know which one 
         advanceState();
                 //send signal for master to GOOOO
-
-
-
-
+        break;
 
       case SlaveState::Done:
         // complete, so do nothing and stop the replica/slave 

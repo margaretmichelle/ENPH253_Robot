@@ -20,32 +20,26 @@ void setup() {
     oledDisplay.start();
 
     pinMode(LED_BUILTIN, OUTPUT);
-    // pinMode(PA8,OUTPUT);
-    // pinMode(PB8,OUTPUT);
-
-    // pwm_start(PA_8,500,2000,RESOLUTION_12B_COMPARE_FORMAT);
-    // pwm_start(PB_8,500,2000,RESOLUTION_12B_COMPARE_FORMAT);
 
     //Attach interrupts to the back edge detection
     attachInterrupt(digitalPinToInterrupt(EdgeFollowerNS::BOTTOM_LEFT_SENSOR_PIN), useEdgeDetection, RISING);
     attachInterrupt(digitalPinToInterrupt(EdgeFollowerNS::BOTTOM_RIGHT_SENSOR_PIN), useEdgeDetection, RISING);
 
-    attachInterrupt(digitalPinToInterrupt(PA2), slaveInterrupt, RISING);
+    attachInterrupt(digitalPinToInterrupt(MasterNS::BP_COMM_IN), slaveInterrupt, CHANGE);
 
-    master.setState(Robot::MasterState::IRFollow);
+    // master.setState(Robot::MasterState::PositionandPickUpObject);
 
-    // while (!oledDisplay.stateChosen()) {
-    //   oledDisplay.chooseState();
-    //   if (oledDisplay.stateChosen()) {
-    //     master.setState((Robot::MasterState) oledDisplay.getState()); //Just for Testing Purposes
-    //     delay(1000);
-    //   }
-    // }
+    while (!oledDisplay.stateChosen()) {
+      oledDisplay.chooseState();
+      if (oledDisplay.stateChosen()) {
+        master.setState((Robot::MasterState) oledDisplay.getState()); //Just for Testing Purposes
+        delay(1000);
+      }
+    }
 }
 
 void loop() {
   master.poll(oledDisplay);
-  // oledDisplay.displayScreen(1,2,3,4,5,6,7,8);
 
   unsigned long currentMillis = millis();
 

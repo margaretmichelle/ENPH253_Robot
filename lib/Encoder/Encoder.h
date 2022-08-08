@@ -11,7 +11,7 @@ class Encoder{
 
     void pivotAngle(float angleDegrees);
 
-    void driveStraight(float distanceMm, int motorPower, OLED o);
+    void driveStraight(int distanceMm, int motorPower, OLED o);
     /**
      * @brief Attach interrupts in begin method which will be used in main 
      * 
@@ -26,6 +26,13 @@ class Encoder{
         return rightEncoderPulses;
     }
 
+    void resetPulses();
+
+    /**
+     * @brief Tells robot to drive straight for a distance in millimetres with an initial speed
+     */
+    void drive(int distance, int motorSpeed);
+
     private:
         /**
          * @brief interrupt increment
@@ -38,8 +45,8 @@ class Encoder{
          */
         void rightEncoderPulse();
 
-    volatile long int leftEncoderPulses;
-    volatile long int rightEncoderPulses;
+    volatile int leftEncoderPulses;
+    volatile int rightEncoderPulses;
     OLED o;
 };
 

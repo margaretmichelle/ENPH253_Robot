@@ -12,6 +12,8 @@ Motor rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2);
 Encoder::Encoder(){
     pinMode(EncoderNS::LEFT_ENCODER_CLK_PIN, INPUT);
     pinMode(EncoderNS::RIGHT_ENCODER_CLK_PIN, INPUT);
+    pinMode(EncoderNS::LEFT_ENCODER_DT_PIN, INPUT);
+    pinMode(EncoderNS::RIGHT_ENCODER_DT_PIN, INPUT);
 
     attachInterrupt(digitalPinToInterrupt(EncoderNS::LEFT_ENCODER_CLK_PIN), std::bind(&Encoder::leftEncoderPulse, this), RISING);
     attachInterrupt(digitalPinToInterrupt(EncoderNS::RIGHT_ENCODER_CLK_PIN), std::bind(&Encoder::rightEncoderPulse, this), RISING);
@@ -20,57 +22,69 @@ Encoder::Encoder(){
     rightEncoderPulses = 0;
 }
 
-void Encoder::driveStraight(float distance, int motorSpeed, OLED o){
-
-    float correction = -200.0;
+void Encoder::driveStraight(int distanceMm, int motorSpeed, OLED o){
+    int adjustmentFactor = 1;
 
     // Sets target number of counts for the encoder
-    float numOfRevs = abs(distance + correction) / EncoderNS::ROTATION_DISTANCE_MM;
-    unsigned long targetCount = numOfRevs * EncoderNS::PULSES_PER_ROTATION;
+    float numOfRevs = distanceMm / EncoderNS::ROTATION_DISTANCE_MM;
+    int targetRadians = numOfRevs * 2 * PI;
+
+    if (distanceMm < 0 ){
+        adjustmentFactor = -1;
+    }
 
     // Sets inital encoder counts to keep track of new changes to encoder counts
-    unsigned long initalLeftCount = leftEncoderPulses;
-    unsigned long initalRightCount = rightEncoderPulses;
+    int initalLeftCount = leftEncoderPulses;
+    int initalRightCount = rightEncoderPulses;
 
-    unsigned long lastError = 0;
-    unsigned long lastTime = 0;
+    int lastRotError = 0;
+    int lastRadiansError = 0;
+    int startingTime = millis();
+    int lastTime = startingTime;
 
     //travels until one wheel reaches the end
-    while ( (leftEncoderPulses - initalLeftCount) < targetCount && rightEncoderPulses - initalRightCount < targetCount ){
-        // Chooses a sample count, have to do it this way since the interupted value will constantly change
-        unsigned long currentLeftCount = leftEncoderPulses;
-        unsigned long currentRightCount = rightEncoderPulses;
+    while ( (leftEncoderPulses - initalLeftCount) /* EncoderNS::PULSES_PER_RAD != targetRadians || EncoderNS::PULSES_PER_RAD != targetCount */ ){
+        //Set sample pulse count
+        int currentLeftCount = leftEncoderPulses;
+        int currentRightCount = rightEncoderPulses;
 
-        // o.displayCustom("Left:",currentLeftCount,"Right:", currentRightCount);
+        //Find net change in pulse counts from beggining
+        int diffLeft = currentLeftCount - initalLeftCount;
+        int diffRight = currentRightCount - initalRightCount;
 
-        //Looks at the change in encoder pulses from the initial code to see what motor needs to travel more
-        unsigned long diffLeft = currentLeftCount - initalLeftCount;
-        unsigned long diffRight = currentRightCount - initalRightCount;
+        int currentTime = millis();
 
-        unsigned long error = diffLeft - diffRight;
-        double derivativeError;
+        //Find rotational velocities relative to start
+        int leftRotVelocity = diffLeft / (currentTime - startingTime) / EncoderNS::PULSES_PER_RAD * 1000;
+        int rightRotVelocity = diffLeft / (currentTime - startingTime) / EncoderNS::PULSES_PER_RAD * 1000; 
 
-        // if (lastError != error) {
-        //     derivativeError = (error - lastError) / (micros() - lastTime);
-        // } else {
-        //     derivativeError = 0;
-        // }
+        //Find rotational and derivative rotational errors
+        int rotError = leftRotVelocity - rightRotVelocity;
+        int derivativeRotError = (rotError - lastRotError)/(currentTime - lastTime);
 
-        // o.displayCustom("Error:", error, "Derivative error:", derivativeError);
+        lastRotError = rotError;
 
-        // reset last values
-        lastError = error;
-        lastTime = micros();
+        //Find the rotational adjustment
+        int rotAdjustment = (EncoderNS::ROT_KP * rotError) + (EncoderNS::ROT_KD * derivativeRotError);
 
-        // set new motor speeds
-        int adjustment = (EncoderNS::STRAIGHT_KP * error) /*+ (EncoderNS::STRAIGHT_KD * (double) derivativeError)*/;
-        int leftMotorSpeed = motorSpeed - adjustment;
-        int rightMotorSpeed = motorSpeed + adjustment;
-        o.displayCustom("Left motor:", leftMotorSpeed, "Adjustment:", adjustment);
-        leftMotor.speed(leftMotorSpeed);
-        rightMotor.speed(rightMotorSpeed);
+        //Find the average radians distance travelled and error and derivative error
+        int avgRadians = (diffLeft+diffRight)/2*EncoderNS::PULSES_PER_RAD;
+        int radiansError = targetRadians - avgRadians;
+        int derivativeRadiansError = (radiansError - lastRadiansError)/(currentTime - lastTime);
 
-        //delay to give motors time to change speeds
+        lastRadiansError = radiansError;
+        lastTime = currentTime;
+
+        // //Make adjustment for radians distance
+        // int radiansAdjustment = int ((EncoderNS::DIST_KP*distanceError) + (EncoderNS::DIST_KD * derivativeDistanceError));
+
+        //Update motor speeds
+        // int leftMotorSpeed = (motorSpeed - rotAdjustment + radiansAdjustment) * adjustmentFactor;
+        // int rightMotorSpeed = (motorSpeed + rotAdjustment + radiansAdjustment) * adjustmentFactor;
+        // leftMotor.speed(leftMotorSpeed);
+        // rightMotor.speed(rightMotorSpeed);
+
+        //Delay to give motors time to adjust velocities
         delay(10);
     }
 
@@ -132,9 +146,74 @@ void Encoder::pivotAngle(float angleDegrees) {
     delay(250);
 }
 void Encoder::leftEncoderPulse(){
-    leftEncoderPulses++;
+    if (digitalRead(EncoderNS::LEFT_ENCODER_DT_PIN) == LOW){
+        leftEncoderPulses++;
+    }
+    else {
+        leftEncoderPulses--;
+    }
 }
 
 void Encoder::rightEncoderPulse(){
-    rightEncoderPulses++;
+    if (digitalRead(EncoderNS::RIGHT_ENCODER_DT_PIN)== HIGH){
+        rightEncoderPulses++;
+    }
+    else{
+        rightEncoderPulses--;
+    }
+}
+
+void Encoder::resetPulses(){
+    leftEncoderPulses = 0;
+    rightEncoderPulses = 0;
+}
+
+void Encoder::drive(int distance, int motorSpeed) {
+
+    float slowDownDistance = 300.0; // millimetres
+
+    // Sets target number of counts for the encoder
+    float numOfRevs = abs(distance) / EncoderNS::ROTATION_DISTANCE_MM;
+    unsigned long targetCount = numOfRevs * EncoderNS::PULSES_PER_ROTATION;
+
+    // Sets inital encoder counts to keep track of new changes to encoder counts
+    unsigned long initalLeftCount = leftEncoderPulses;
+    unsigned long initalRightCount = rightEncoderPulses;
+
+    //travels until one wheel reaches the end
+    while ( (leftEncoderPulses - initalLeftCount) < targetCount && rightEncoderPulses - initalRightCount < targetCount ){
+        // Chooses a sample count, have to do it this way since the interupted value will constantly change
+        unsigned long currentLeftCount = leftEncoderPulses;
+        unsigned long currentRightCount = rightEncoderPulses;
+
+        //Looks at the change in encoder pulses from the initial code to see what motor needs to travel more
+        unsigned long diffLeft = currentLeftCount - initalLeftCount;
+        unsigned long diffRight = currentRightCount - initalRightCount;
+
+        unsigned long error = diffLeft - diffRight;
+
+        unsigned long avgPulses = (diffLeft+diffRight)/2;
+        unsigned long distanceToGo = distance - (avgPulses / EncoderNS::PULSES_PER_ROTATION * EncoderNS::ROTATION_DISTANCE_MM);
+
+        // set new motor speeds
+        int adjustment = (motorSpeed / abs(motorSpeed) * error);
+        
+        int slowDownFactor = 0;
+        if (distanceToGo <= slowDownDistance) {
+        int slowDownFactor = (motorSpeed * (1 - distanceToGo/slowDownDistance)) / 1.5;
+        }
+
+        int leftMotorSpeed = motorSpeed - adjustment - slowDownFactor;
+        int rightMotorSpeed = motorSpeed + adjustment - slowDownFactor;
+
+        leftMotor.speed(leftMotorSpeed);
+        rightMotor.speed(rightMotorSpeed);
+
+        //delay to give motors time to change speeds
+        delay(10);
+    }
+
+    //stop moving motors
+    leftMotor.stop();
+    rightMotor.stop();
 }
