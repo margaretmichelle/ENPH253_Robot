@@ -11,7 +11,7 @@ class Encoder{
 
     void pivotAngle(float angleDegrees);
 
-    void driveStraight(float distanceMm, int motorPower, OLED o);
+    void driveStraight(int distanceMm, int motorPower, OLED o);
     /**
      * @brief Attach interrupts in begin method which will be used in main 
      * 
@@ -40,8 +40,8 @@ class Encoder{
          */
         void rightEncoderPulse();
 
-    volatile long int leftEncoderPulses;
-    volatile long int rightEncoderPulses;
+    volatile int leftEncoderPulses;
+    volatile int rightEncoderPulses;
     OLED o;
 };
 
