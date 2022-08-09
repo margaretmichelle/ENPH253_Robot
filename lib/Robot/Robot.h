@@ -13,6 +13,7 @@
 #include <Claw.h>
 #include <Bridge.h>
 #include <Encoder.h>
+#include <BridgeServo.h>
 
 
 namespace Robot {
@@ -57,6 +58,7 @@ namespace Robot {
         leftUltrasonic(ObstacleNS::LEFT_TRIG_PIN,ObstacleNS::LEFT_ECHO_PIN),
         rightUltrasonic(ObstacleNS::RIGHT_TRIG_PIN, ObstacleNS::RIGHT_ECHO_PIN),
         edgeBack(leftMotor,rightMotor,200),
+        bridge(leftMotor,rightMotor),
         encoder(),
         state(MasterState::Inactive)
         {
@@ -133,6 +135,8 @@ namespace Robot {
       Obstacle leftUltrasonic;
       Obstacle rightUltrasonic;
       EdgeBack edgeBack;
+
+      BridgeDeploy bridge;
       
       Encoder encoder;
 
@@ -152,10 +156,7 @@ namespace Robot {
         rightClaw(ClawNS::RIGHT_CLAW_SERVO_PIN, ClawNS::RIGHT_CLAW_OPEN, ClawNS::RIGHT_CLAW_CLOSED),
         leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN, ArmNS::LEFT_ARM_UP, ArmNS::LEFT_ARM_DOWN),
         rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN, ArmNS::RIGHT_ARM_UP, ArmNS::RIGHT_ARM_DOWN),
-        bridge(leftMotor,rightMotor),
-
-        
-
+        bridgeServo(),
           //Put Constructors for Claw and zipline 
         state(SlaveState::Inactive) { 
           pinMode(SlaveNS::BP_COMM_IN, INPUT);
@@ -182,7 +183,8 @@ namespace Robot {
         Claw rightClaw;
         Arm leftArm;
         Arm rightArm;
-        BridgeDeploy bridge;
+
+        BridgeServos bridgeServo;
 
         
         /*
