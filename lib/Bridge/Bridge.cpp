@@ -8,11 +8,11 @@ BridgeDeploy::BridgeDeploy(Motor leftMotor, Motor rightMotor) :
   leftMotor(leftMotor),
   rightMotor(rightMotor),
   leftOnEdge(false),
-  rightOnEdge(false),
-  unHookServo(BridgeDeployNS::UnHookBridge::UNHOOK_BRIDGE_SERVO_PIN)
+  rightOnEdge(false)
   {
-    unHookServo.setupServo(BridgeDeployNS::SERVO_REST_ANGLE);
+
   }
+  
 
 bool BridgeDeploy::bothOnEdge() {
   leftOnEdge = getLeftSensor() > BridgeDeployNS::EDGE_THRESHOLD; //use Top left and right edge sensing pins
@@ -29,14 +29,7 @@ bool BridgeDeploy::onEdge() {
 }
 
 
-void BridgeDeploy::deployBridge() {
-    //wait a second for robot to fully stop
-    delay(1000);
 
-    //deploy bridge
-    unHookServo.write(BridgeDeployNS::UNHOOK_SERVO_FINAL_ANGLE);
-    delay(2000); //wait a bit to make sure unhooked 
-}
 
 void BridgeDeploy::edgeAlign() {
   while(!bothOnEdge()) {

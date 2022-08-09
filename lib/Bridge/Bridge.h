@@ -13,11 +13,6 @@ public:
    * Constructor
    */
   BridgeDeploy(Motor leftMotor, Motor rightMotor);
-
-  /**
-   * @brief deploy bridge. Puts servo in bridge release angle, then put it back
-   */
-  void deployBridge();
   
   /** 
    * @brief Align with edge. Stops robot when complete
@@ -53,7 +48,6 @@ private:
   // Motors + servos
   Motor leftMotor;
   Motor rightMotor;
-  ServoMotor unHookServo;
   // Sensors
   int leftSensor;
   int rightSensor;
