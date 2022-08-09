@@ -97,29 +97,11 @@ namespace Robot {
       */
       bool incrementState();
 
-      /*
-      @brief Advances the slave state
-
-      */
-      void signalSlaveAdvance();
-
-      /*
-      @brief Ends Advance signal
-
-      */
-      void endSlaveSignal();
-
       /**
-       * @brief Stop the replica 
+       * @brief Tell secondary blue pill to start and wait until it has completed its task
        * 
        */
-      void stopSlave();
-
-      /**
-       * @brief Tell replica to go
-       * 
-       */
-      void goSlave();
+      void sendSlaveSignalandWait();
 
       /**
        * @brief stop motors

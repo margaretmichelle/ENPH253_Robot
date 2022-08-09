@@ -91,6 +91,7 @@ void Encoder::driveStraight(int distanceMm, int motorSpeed, OLED o){
     //stop moving motors
     leftMotor.stop();
     rightMotor.stop();
+    delay(500);
 }
 
 void Encoder::driveDistance(int distance) {
@@ -174,7 +175,7 @@ void Encoder::driveDistance(int distance) {
     // target count reached
     leftMotor.stop();
     rightMotor.stop();
-    delay(500); // brief delay to wait for complete stop
+    delay(800); // brief delay to wait for complete stop
 }
 
 
@@ -228,24 +229,25 @@ void Encoder::pivotAngle(float angleDegrees) {
     // target count reached
     leftMotor.stop();
     rightMotor.stop();
-    delay(250);
+    delay(800);
 }
+
 void Encoder::leftEncoderPulse(){
-    if (digitalRead(EncoderNS::LEFT_ENCODER_DT_PIN) == LOW){
+    // if (digitalRead(EncoderNS::LEFT_ENCODER_DT_PIN) == LOW){
         leftEncoderPulses++;
-    }
-    else {
-        leftEncoderPulses--;
-    }
+    // }
+    // else {
+    //     leftEncoderPulses--;
+    // }
 }
 
 void Encoder::rightEncoderPulse(){
-    if (digitalRead(EncoderNS::RIGHT_ENCODER_DT_PIN)== HIGH){
+    // if (digitalRead(EncoderNS::RIGHT_ENCODER_DT_PIN)== HIGH){
         rightEncoderPulses++;
-    }
-    else{
-        rightEncoderPulses--;
-    }
+    // }
+    // else{
+    //     rightEncoderPulses--;
+    // }
 }
 
 void Encoder::resetPulses(){

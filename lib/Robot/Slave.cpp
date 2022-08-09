@@ -16,6 +16,7 @@ namespace Robot {
       case SlaveState::ClawActivateIdolOne:
         rightArm.placeObjectInContainer();
         advanceState();
+        delay(100);
         digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
@@ -23,6 +24,7 @@ namespace Robot {
       case SlaveState::ClawActivateIdolTwo:
         rightArm.placeObjectInContainer();
         advanceState();
+        delay(100);
         digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
@@ -30,6 +32,7 @@ namespace Robot {
       case SlaveState::ClawActivateIdolThree:
         leftArm.placeObjectInContainer();
         advanceState();
+        delay(100);
         digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
@@ -37,12 +40,15 @@ namespace Robot {
       case SlaveState::ClawActivateIdolFour:
         rightArm.placeObjectInContainer();
         advanceState();
+        delay(100);
         digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
 
       case SlaveState::BridgeDeploy:
+        // need bridge
         advanceState();
+        delay(100);
         digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
@@ -50,13 +56,15 @@ namespace Robot {
       case SlaveState::ClawActivateIdolFive:
         // leftArm.placeObjectInContainer();
         advanceState();
-                //send signal for master to GOOOO
+        delay(100);
+        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
 
       case SlaveState::ClawActivateIdolSix:
         // rightArm.placeObjectInContainer(); //Don;t know which one 
         advanceState();
-                //send signal for master to GOOOO
+        delay(100);
+        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
         break;
 
       case SlaveState::Done:

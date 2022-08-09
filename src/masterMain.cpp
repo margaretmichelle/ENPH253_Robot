@@ -62,7 +62,5 @@ void useEdgeDetection() {
 
 void slaveInterrupt() {
   master.changeSlaveState();
-  oledDisplay.displayCustom("Slave interrupt",0);
-  delay(1000);
 }
 

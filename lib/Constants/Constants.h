@@ -99,7 +99,7 @@ namespace ObstacleNS {;
   const int LEFT_ECHO_PIN = PA2;
   const int RIGHT_TRIG_PIN = PA1; //right 
   const int RIGHT_ECHO_PIN = PA0;
-  const int DISTANCE_TO_IDOL = 40; //cm
+  const int DISTANCE_TO_IDOL = 30; //cm
 }
 
 namespace EncoderNS{
@@ -141,7 +141,7 @@ namespace ArmNS {
   const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
 
   // Constants
-  const int LEFT_ARM_UP = 150;
+  const int LEFT_ARM_UP = 140;
   const int LEFT_ARM_DOWN = 0;
   const int RIGHT_ARM_UP = 10;
   const int RIGHT_ARM_DOWN = 160;

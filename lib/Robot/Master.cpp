@@ -8,8 +8,6 @@
 
 namespace Robot {
   MasterState Master::poll(OLED o) {
-    // turn off slave signal every loop
-    endSlaveSignal();
 
     switch (state) {
       case MasterState::Inactive:
@@ -133,28 +131,18 @@ namespace Robot {
       
       delay(500);
 
-      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
-
-      while (slaveBusy) {
-        o.displayCustom("Right: First idol",1);
-      }
+      o.displayCustom("Right: First idol",1);
+      sendSlaveSignalandWait();
 
       delay(800);
-      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
-
-      while (slaveBusy) {
-        o.displayCustom("Right: Second idol",2);
-      }
+      
+      o.displayCustom("Right: Second idol",2);
+      sendSlaveSignalandWait();
 
       delay(800);
-      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
 
-      while (slaveBusy) {
-        o.displayCustom("Left: Third idol",3);
-      }
+      o.displayCustom("Left: Third idol",3);
+      sendSlaveSignalandWait();
 
       // delay(800);
       // digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
@@ -186,41 +174,24 @@ namespace Robot {
 
       moveToObjectOnRight();
 
-      o.displayCustom("Sending signal...",0);
-      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-      o.displayCustom("Stopping signal...",1);
-      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
-
-      while (slaveBusy) {
-        o.displayCustom("Picking up object",0);
-      }
+      o.displayCustom("Picking up object",0);
+      sendSlaveSignalandWait();
       
       break;
 
     case MasterState::Bridge:
       o.displayCustom("WATCH OUT FOR THE ARMS!",0);
 
-      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
-      while (slaveBusy) {}; // first idol
+      sendSlaveSignalandWait(); // first idol
 
-      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
-      while (slaveBusy) {}; // second idol
+      sendSlaveSignalandWait(); // second idol
 
-      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
-      while (slaveBusy) {}; // third idol
+      sendSlaveSignalandWait(); // third idol
 
-      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
-      while (slaveBusy) {}; // fourth idol
+      sendSlaveSignalandWait(); // fourth idol
 
       o.displayCustom("Bridging the gap...",0);
-      digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-      digitalWrite(MasterNS::BP_COMM_OUT, LOW);
-
-      while (slaveBusy) {};
+      sendSlaveSignalandWait();
 
       // Find bridge tape?
       encoder.driveDistance(500);
@@ -251,45 +222,37 @@ namespace Robot {
 
       if (rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
         tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
-        o.displayCustom("Slave state:", slaveBusy);
         break;
       }
 
       stop();
 
-      delay(100);
+      delay(1000);
 
       if (countIdolPickUp == 0) {
-
-        o.displayCustom("Slave state:", slaveBusy);
+        o.displayCustom("Picking up idol:",1);
 
         moveToObjectOnRight();
 
-        digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-        digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+        sendSlaveSignalandWait();
 
-        o.displayCustom("Slave state:", slaveBusy);
-
-        while (slaveBusy) {
-          o.displayCustom("Picking up idol:",1);
-        }
         countIdolPickUp++;
       } else if (countIdolPickUp == 1) {
+        o.displayCustom("Picking up idol:",2);
+
         moveToObjectOnRight();
 
-        digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-        digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+        sendSlaveSignalandWait();
 
-        while (slaveBusy) {
-          o.displayCustom("Picking up idol:",2);
-          countIdolPickUp++;
-        }
+        countIdolPickUp++;
       }
 
-      encoder.pivotAngle(-90);
-      encoder.driveDistance((rightUltrasonic.getDistance() - 10) * 10);
+      delay(400);
+
+      // encoder.pivotAngle(-45);
+      // encoder.driveDistance((rightUltrasonic.getDistance() - 10) * 10);
       while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-        moveForCertainTime(80,-80,100); 
+        moveForCertainTime(-70,70,100); 
       }
       break;
 
@@ -329,18 +292,12 @@ namespace Robot {
     }
   }
 
-  void Master::endSlaveSignal() {
-    digitalWrite(MasterNS::BP_COMM_OUT, LOW);
-  }
-
-  void Master::stopSlave() {
+  void Master::sendSlaveSignalandWait() {
     digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
-    //Ensure slave has stopped before doing other things 
-    delay(500);
-  }
-
-  void Master::goSlave() {
     digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+    delay(200);
+
+    while (slaveBusy);
   }
 
   void Master::changeSlaveState() {
@@ -369,23 +326,28 @@ namespace Robot {
   void Master::moveToObjectOnRight() {
     rightUltrasonic.useObstacle();
 
+    while (rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+      encoder.driveDistance(-8); // counteract drift
+      rightUltrasonic.useObstacle();
+    }
+
     encoder.pivotAngle(-90);
-    delay(50);
-    // encoder.driveDistance(-(rightUltrasonic.getDistance() - 15) * 10);
-    // delay(50);
-    // encoder.pivotAngle(90);
-    // delay(50);
+    encoder.driveDistance(-(rightUltrasonic.getDistance() - 10) * 10);
+    encoder.pivotAngle(90);
   }
 
   void Master::moveToObjectOnLeft() {
     leftUltrasonic.useObstacle();
 
+    while (leftUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+      encoder.driveDistance(-8); // counteract drift
+      leftUltrasonic.useObstacle();
+    }
+
+    encoder.driveDistance(-30); // counteract drift
     encoder.pivotAngle(90);
-    delay(50);
     encoder.driveDistance(-(leftUltrasonic.getDistance() - 15) * 10);
-    delay(50);
     encoder.pivotAngle(-90);
-    delay(50);
   }
 
 }
