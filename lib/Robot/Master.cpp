@@ -19,63 +19,57 @@ namespace Robot {
 
       case MasterState::TapeFollow:
 
-        // tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
-        
-        moveForCertainTime(200,200,500);
-        delay(1000);
-        moveForCertainTime(-200,-200,500);
-        delay(500);
-        moveForCertainTime(150,100,500);
-        delay(500);
-        moveForCertainTime(100,150,500);
+           // check if pedastal gets read by sonar (if it does, robot will not tape follow again after picking up idols)
+      rightUltrasonic.useObstacle();
 
-      // o.displayScreen(tapeFollow.getLeftMotorSpeed(), tapeFollow.getRightMotorSpeed(), tapeFollow.getLeftSensorVal(), tapeFollow.getRightSensorVal(), 0, 0, 0, 0, obstacle.getDistance());
+      // after picking up second idol (expecting wall to be close (idk if it is within the distance though))
+      if (countIdolPickUp == 2 && rightUltrasonic.getDistance() < ObstacleNS::DISTANCE_TO_IDOL) {
+        tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+        break;
+      }
 
-      // obstacle.useObstacle();
+      if (countIdolPickUp == 2 && rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+        stop(); // robot has passed the archway
+        break;
+      }
 
-      // if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 0) {
-      //   moveForCertainTime(0,0,300); //stop for 300 ms 
+      if (rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+        tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+        break;
+      }
 
-      //   //Hardcode the first turn using moveForCertainTime()
+      stop();
 
-      //   moveForCertainTime(90,80,800);
-      //   moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
-      //   moveForCertainTime(0,0,100); //stop to prepare claw 
+      if (countIdolPickUp == 0) {
+        moveToObjectOnRight();
 
-      //   //Add claw code 
-      //   rightArm.placeObjectInContainer();
+        digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+        digitalWrite(MasterNS::BP_COMM_OUT, LOW);
 
-      //   countIdolPickUp++;
+        while (slaveBusy) {
+          o.displayCustom("Picking up idol:",1);
+        }
+        countIdolPickUp++;
+      } else if (countIdolPickUp == 1) {
+        moveToObjectOnRight();
 
-        
-      //   //Refind Tape and hardcode some good angle to continually move at 
-      //   while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-      //       moveForCertainTime(80,120,100);
-      //   }
-      // }
-      // else if(obstacle.getDistance() < ObstacleNS::DISTANCE_TO_IDOL && countIdolPickUp == 1) {
-      //   moveForCertainTime(0,0,300); //stop for 300 ms
+        digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+        digitalWrite(MasterNS::BP_COMM_OUT, LOW);
 
-      //   //Hardcode the second turn using moveForCertainTime()
-      //   moveForCertainTime(90,80,800);
-      //   moveForCertainTime(-80,-120,800); //these are just placeholders for the specific turns
-      //   moveForCertainTime(0,0,100); //stop to prepare claw 
+        while (slaveBusy) {
+          o.displayCustom("Picking up idol:",2);
+          countIdolPickUp++;
+        }
+      }
 
-      //   //Add claw code
-      //   rightArm.placeObjectInContainer();
-
-      //   countIdolPickUp++;
-
-        
-      //   //Refind Tape and hardcode some good angle to continually move at probably will want to have a sharper turn for this one 
-      //   while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-      //       moveForCertainTime(80,120,100);
-      //   }
-      // }
-      
+      encoder.pivotAngle(-90);
+      encoder.driveDistance(-(rightUltrasonic.getDistance() - 10) * 10);
+      while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
+        moveForCertainTime(80,-80,100); 
+      }
       break;
 
-      case MasterState::IRFollow:
+      case MasterState::IRRegion:
 
         delay(1000);
 
@@ -110,7 +104,7 @@ namespace Robot {
       break;
 
     case MasterState::ObstacleFollow:
-      // obstacle.useObstacle();
+      //obstacle.useObstacle();
 
       // o.displayDistance(obstacle.getDistance());
       
@@ -227,7 +221,7 @@ namespace Robot {
       while (slaveBusy) {};
 
       // Find bridge tape?
-      encoder.drive(500, 200);
+      encoder.driveDistance(500);
 
       tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
       break;
@@ -255,16 +249,24 @@ namespace Robot {
 
       if (rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
         tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+        o.displayCustom("Slave state:", slaveBusy);
         break;
       }
 
       stop();
 
+      delay(100);
+
       if (countIdolPickUp == 0) {
+
+        o.displayCustom("Slave state:", slaveBusy);
+
         moveToObjectOnRight();
 
         digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
         digitalWrite(MasterNS::BP_COMM_OUT, LOW);
+
+        o.displayCustom("Slave state:", slaveBusy);
 
         while (slaveBusy) {
           o.displayCustom("Picking up idol:",1);
@@ -283,7 +285,7 @@ namespace Robot {
       }
 
       encoder.pivotAngle(-90);
-      encoder.drive((rightUltrasonic.getDistance() - 10) * 10, 200);
+      encoder.driveDistance((rightUltrasonic.getDistance() - 10) * 10);
       while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
         moveForCertainTime(80,-80,100); 
       }
@@ -367,7 +369,7 @@ namespace Robot {
 
     encoder.pivotAngle(-90);
     delay(50);
-    encoder.drive((rightUltrasonic.getDistance() - 10) * 10, -150);
+    encoder.driveDistance(-(rightUltrasonic.getDistance() - 15) * 10);
     delay(50);
     encoder.pivotAngle(90);
     delay(50);
@@ -378,7 +380,7 @@ namespace Robot {
 
     encoder.pivotAngle(90);
     delay(50);
-    encoder.drive((leftUltrasonic.getDistance() - 10) * 10, -150);
+    encoder.driveDistance(-(leftUltrasonic.getDistance() - 15) * 10);
     delay(50);
     encoder.pivotAngle(-90);
     delay(50);

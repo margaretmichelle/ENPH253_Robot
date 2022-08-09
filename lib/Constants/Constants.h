@@ -141,9 +141,9 @@ namespace ArmNS {
   const int RIGHT_HALL_EFFECT_SENSOR_PIN = PA4;
 
   // Constants
-  const int LEFT_ARM_UP = 120;
+  const int LEFT_ARM_UP = 150;
   const int LEFT_ARM_DOWN = 0;
-  const int RIGHT_ARM_UP = 40;
+  const int RIGHT_ARM_UP = 10;
   const int RIGHT_ARM_DOWN = 160;
 }
 
@@ -182,7 +182,7 @@ namespace ServoNS {
 
 namespace ZiplineNS {
   const int ZIPLINE_MOTOR_PIN = PB_1;
-  const int ZIPLINE_MICROSWITCH_PIN = PB1; //not sure waht these are double check andy
+  const int ZIPLINE_MICROSWITCH_PIN = PB10; //not sure waht these are double check andy
 }
 
 #endif

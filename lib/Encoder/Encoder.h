@@ -12,6 +12,8 @@ class Encoder{
     void pivotAngle(float angleDegrees);
 
     void driveStraight(int distanceMm, int motorPower, OLED o);
+
+    void driveDistance(int distanceMm);
     /**
      * @brief Attach interrupts in begin method which will be used in main 
      * 

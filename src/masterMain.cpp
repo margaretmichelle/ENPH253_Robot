@@ -27,7 +27,7 @@ void setup() {
 
     attachInterrupt(digitalPinToInterrupt(MasterNS::BP_COMM_IN), slaveInterrupt, CHANGE);
 
-    // master.setState(Robot::MasterState::PositionandPickUpObject);
+    //master.setState(Robot::MasterState::PositionandPickUpObject);
 
     while (!oledDisplay.stateChosen()) {
       oledDisplay.chooseState();
@@ -62,5 +62,7 @@ void useEdgeDetection() {
 
 void slaveInterrupt() {
   master.changeSlaveState();
+  oledDisplay.displayCustom("Slave interrupt",0);
+  delay(1000);
 }
 

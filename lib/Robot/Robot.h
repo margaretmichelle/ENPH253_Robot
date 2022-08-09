@@ -21,7 +21,7 @@ namespace Robot {
   enum class MasterState {
     Inactive,
     TapeFollow,
-    IRFollow,
+    IRRegion,
     ObstacleFollow, 
     EdgeFollow,
     Done,
@@ -160,6 +160,8 @@ namespace Robot {
       int countIdolPickUp = 0;
 
       bool stopped;
+
+      OLED o;
 
       MasterState state;
   };
