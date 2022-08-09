@@ -186,7 +186,9 @@ namespace Robot {
 
       moveToObjectOnRight();
 
+      o.displayCustom("Sending signal...",0);
       digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
+      o.displayCustom("Stopping signal...",1);
       digitalWrite(MasterNS::BP_COMM_OUT, LOW);
 
       while (slaveBusy) {
@@ -369,10 +371,10 @@ namespace Robot {
 
     encoder.pivotAngle(-90);
     delay(50);
-    encoder.driveDistance(-(rightUltrasonic.getDistance() - 15) * 10);
-    delay(50);
-    encoder.pivotAngle(90);
-    delay(50);
+    // encoder.driveDistance(-(rightUltrasonic.getDistance() - 15) * 10);
+    // delay(50);
+    // encoder.pivotAngle(90);
+    // delay(50);
   }
 
   void Master::moveToObjectOnLeft() {
