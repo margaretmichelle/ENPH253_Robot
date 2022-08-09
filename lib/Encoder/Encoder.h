@@ -13,7 +13,7 @@ class Encoder{
 
     void driveStraight(int distanceMm, int motorPower, OLED o);
 
-    void driveDistance(int distanceMm);
+    void driveDistance(int distanceMm, int motorSpeed);
     /**
      * @brief Attach interrupts in begin method which will be used in main 
      * 
@@ -29,11 +29,6 @@ class Encoder{
     }
 
     void resetPulses();
-
-    /**
-     * @brief Tells robot to drive straight for a distance in millimetres with an initial speed
-     */
-    void drive(int distance, int motorSpeed);
 
     private:
         /**

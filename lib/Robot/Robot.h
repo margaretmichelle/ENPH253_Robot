@@ -89,7 +89,7 @@ namespace Robot {
 
     private:
 
-      bool slaveBusy = false;
+      volatile bool slaveBusy = false;
       
       /*
       @brief Increase the master state

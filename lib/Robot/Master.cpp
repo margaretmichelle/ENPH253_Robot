@@ -60,8 +60,8 @@ namespace Robot {
         }
       }
 
-      encoder.pivotAngle(-90);
-      encoder.driveDistance(-(rightUltrasonic.getDistance() - 10) * 10);
+      // encoder.pivotAngle(-90);
+      // encoder.driveDistance(-(rightUltrasonic.getDistance() - 10) * 10);
       while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
         moveForCertainTime(80,-80,100); 
       }
@@ -194,7 +194,7 @@ namespace Robot {
       sendSlaveSignalandWait();
 
       // Find bridge tape?
-      encoder.driveDistance(500);
+      encoder.driveDistance(500, 200);
 
       tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
       break;
@@ -254,6 +254,11 @@ namespace Robot {
       while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
         moveForCertainTime(-70,70,100); 
       }
+
+      for (int i = 0; i < 10; i++) {
+        tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+      }
+
       break;
 
     default:
@@ -295,9 +300,9 @@ namespace Robot {
   void Master::sendSlaveSignalandWait() {
     digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
     digitalWrite(MasterNS::BP_COMM_OUT, LOW);
-    delay(200);
+    delay(500);
 
-    while (slaveBusy);
+    while (slaveBusy) {}
   }
 
   void Master::changeSlaveState() {
@@ -327,27 +332,31 @@ namespace Robot {
     rightUltrasonic.useObstacle();
 
     while (rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
-      encoder.driveDistance(-8); // counteract drift
+      encoder.driveDistance(-30, 180); // counteract drift
       rightUltrasonic.useObstacle();
     }
 
     encoder.pivotAngle(-90);
-    encoder.driveDistance(-(rightUltrasonic.getDistance() - 10) * 10);
-    encoder.pivotAngle(90);
+    encoder.driveDistance(-(rightUltrasonic.getDistance() - 12) * 10, 100);
+    encoder.pivotAngle(95);
   }
 
   void Master::moveToObjectOnLeft() {
     leftUltrasonic.useObstacle();
 
     while (leftUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
-      encoder.driveDistance(-8); // counteract drift
+      encoder.driveDistance(-30, 180); // counteract drift
       leftUltrasonic.useObstacle();
     }
-
-    encoder.driveDistance(-30); // counteract drift
+    
     encoder.pivotAngle(90);
-    encoder.driveDistance(-(leftUltrasonic.getDistance() - 15) * 10);
-    encoder.pivotAngle(-90);
+    encoder.driveDistance(-(leftUltrasonic.getDistance() - 12) * 10, 100);
+    encoder.pivotAngle(-95);
+
+    while (leftUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+      encoder.driveDistance(-30, 180); // counteract drift
+      leftUltrasonic.useObstacle();
+    }
   }
 
 }
