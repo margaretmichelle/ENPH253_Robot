@@ -194,9 +194,9 @@ namespace Robot {
       sendSlaveSignalandWait();
 
       // Find bridge tape?
-      encoder.driveDistance(500, 200);
+      encoder.driveDistance(400, 200);
 
-      tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+      //tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
       break;
 
     case MasterState::JustEdge:
@@ -232,21 +232,13 @@ namespace Robot {
       if (countIdolPickUp == 0) {
         o.displayCustom("Picking up idol:",1);
 
-        moveToObjectOnRight(rightUltrasonic.getDistance());
-
-        sendSlaveSignalandWait();
-
-        countIdolPickUp++;
       } else if (countIdolPickUp == 1) {
         o.displayCustom("Picking up idol:",2);
-
-        moveToObjectOnRight(rightUltrasonic.getDistance());
-
-        sendSlaveSignalandWait();
-
-        countIdolPickUp++;
       }
 
+      moveToObjectOnRight(rightUltrasonic.getDistance());
+      sendSlaveSignalandWait();
+      countIdolPickUp++;
 
       o.displayCustom("Finding tape...",0);
 
@@ -255,7 +247,7 @@ namespace Robot {
       encoder.pivotAngle(-70);
       // encoder.driveDistance((rightUltrasonic.getDistance() - 10) * 10);
       while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-        moveForCertainTime(60,-60,100); 
+        moveForCertainTime(70,-70,100); 
       }
 
       delay(500);
@@ -331,7 +323,7 @@ namespace Robot {
 
   void Master::moveToObjectOnRight(int initalDistance) {
     do {
-      encoder.driveDistance(-20, 70); // counteract drift
+      encoder.driveDistance(-15, 70); // counteract drift
       rightUltrasonic.useObstacle();
     } while (rightUltrasonic.getDistance() >= initalDistance);
 

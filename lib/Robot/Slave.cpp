@@ -33,7 +33,7 @@ namespace Robot {
         leftArm.placeObjectInContainer();
         advanceState();
 
-        // digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
+        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
 
@@ -47,6 +47,7 @@ namespace Robot {
 
       case SlaveState::BridgeDeploy:
         // need bridge
+        bridgeServo.deployBridge();
         advanceState();
 
         digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
