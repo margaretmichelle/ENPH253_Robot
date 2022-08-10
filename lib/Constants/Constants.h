@@ -100,8 +100,8 @@ namespace ObstacleNS {;
   const int RIGHT_TRIG_PIN = PA1; //right 
   const int RIGHT_ECHO_PIN = PA0;
   const int DISTANCE_TO_IDOL = 30; //cm
-  const int IDOL_ONE_ANGLE = 91;
-  const int IDOL_TWO_ANGLE = 98;
+  const int IDOL_ONE_ANGLE = 90;
+  const int IDOL_TWO_ANGLE = 88;
 }
 
 namespace EncoderNS{

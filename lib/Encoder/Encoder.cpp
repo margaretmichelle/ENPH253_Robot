@@ -175,7 +175,7 @@ void Encoder::driveDistance(int distance, int motorSpeed) {
     // target count reached
     leftMotor.stop();
     rightMotor.stop();
-    delay(1000); // brief delay to wait for complete stop
+    delay(500); // brief delay to wait for complete stop
 }
 
 
