@@ -53,7 +53,7 @@ namespace Robot {
       Master():
         leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2),
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
-        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 200),
+        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 180),
         edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 200),
         leftUltrasonic(ObstacleNS::LEFT_TRIG_PIN,ObstacleNS::LEFT_ECHO_PIN),
         rightUltrasonic(ObstacleNS::RIGHT_TRIG_PIN, ObstacleNS::RIGHT_ECHO_PIN),
@@ -124,7 +124,7 @@ namespace Robot {
        */
       void shuffleRight();
 
-      void moveToObjectOnRight();
+      void moveToObjectOnRight(int initialDistance);
       void moveToObjectOnLeft();
 
       Motor leftMotor;

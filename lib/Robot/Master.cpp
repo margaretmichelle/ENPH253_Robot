@@ -39,7 +39,7 @@ namespace Robot {
       stop();
 
       if (countIdolPickUp == 0) {
-        moveToObjectOnRight();
+        // moveToObjectOnRight();
 
         digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
         digitalWrite(MasterNS::BP_COMM_OUT, LOW);
@@ -49,7 +49,7 @@ namespace Robot {
         }
         countIdolPickUp++;
       } else if (countIdolPickUp == 1) {
-        moveToObjectOnRight();
+        // moveToObjectOnRight();
 
         digitalWrite(MasterNS::BP_COMM_OUT, HIGH);
         digitalWrite(MasterNS::BP_COMM_OUT, LOW);
@@ -172,7 +172,7 @@ namespace Robot {
         delay(50);
       }
 
-      moveToObjectOnRight();
+      moveToObjectOnRight(rightUltrasonic.getDistance());
 
       o.displayCustom("Picking up object",0);
       sendSlaveSignalandWait();
@@ -232,7 +232,7 @@ namespace Robot {
       if (countIdolPickUp == 0) {
         o.displayCustom("Picking up idol:",1);
 
-        moveToObjectOnRight();
+        moveToObjectOnRight(rightUltrasonic.getDistance());
 
         sendSlaveSignalandWait();
 
@@ -240,24 +240,25 @@ namespace Robot {
       } else if (countIdolPickUp == 1) {
         o.displayCustom("Picking up idol:",2);
 
-        moveToObjectOnRight();
+        moveToObjectOnRight(rightUltrasonic.getDistance());
 
         sendSlaveSignalandWait();
 
         countIdolPickUp++;
       }
 
-      delay(400);
 
-      // encoder.pivotAngle(-45);
+      o.displayCustom("Finding tape...",0);
+
+      delay(200);
+
+      encoder.pivotAngle(-70);
       // encoder.driveDistance((rightUltrasonic.getDistance() - 10) * 10);
       while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-        moveForCertainTime(-70,70,100); 
+        moveForCertainTime(60,-60,100); 
       }
 
-      for (int i = 0; i < 10; i++) {
-        tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
-      }
+      delay(500);
 
       break;
 
@@ -328,33 +329,42 @@ namespace Robot {
     moveForCertainTime(0,0,100);
   }
 
-  void Master::moveToObjectOnRight() {
-    rightUltrasonic.useObstacle();
-
-    while (rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
-      encoder.driveDistance(-30, 180); // counteract drift
+  void Master::moveToObjectOnRight(int initalDistance) {
+    do {
+      encoder.driveDistance(-20, 70); // counteract drift
       rightUltrasonic.useObstacle();
-    }
+    } while (rightUltrasonic.getDistance() >= initalDistance);
 
     encoder.pivotAngle(-90);
-    encoder.driveDistance(-(rightUltrasonic.getDistance() - 12) * 10, 100);
-    encoder.pivotAngle(95);
+    encoder.driveDistance(-(initalDistance - 15) * 10, 70);
+
+    switch (countIdolPickUp) {
+      case 0:
+        encoder.pivotAngle(ObstacleNS::IDOL_ONE_ANGLE);
+        break;
+      case 1:
+        encoder.pivotAngle(ObstacleNS::IDOL_TWO_ANGLE);
+        break;
+      default:
+        encoder.pivotAngle(90);
+        break;
+    }
   }
 
   void Master::moveToObjectOnLeft() {
     leftUltrasonic.useObstacle();
 
     while (leftUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
-      encoder.driveDistance(-30, 180); // counteract drift
+      encoder.driveDistance(-20, 150); // counteract drift
       leftUltrasonic.useObstacle();
     }
     
     encoder.pivotAngle(90);
-    encoder.driveDistance(-(leftUltrasonic.getDistance() - 12) * 10, 100);
-    encoder.pivotAngle(-95);
+    encoder.driveDistance(-(leftUltrasonic.getDistance() - 14) * 10, 90);
+    encoder.pivotAngle(-92);
 
     while (leftUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
-      encoder.driveDistance(-30, 180); // counteract drift
+      encoder.driveDistance(-20, 150); // counteract drift
       leftUltrasonic.useObstacle();
     }
   }

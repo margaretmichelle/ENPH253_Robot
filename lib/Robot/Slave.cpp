@@ -33,7 +33,7 @@ namespace Robot {
         leftArm.placeObjectInContainer();
         advanceState();
 
-        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
+        // digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
 

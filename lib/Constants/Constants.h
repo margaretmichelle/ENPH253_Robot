@@ -40,9 +40,9 @@ namespace TapeFollowerNS {
   const int SUMMED_ERROR_LIMIT = 0;
 
   // Gains
-  const int KP = 60;
+  const int KP = 70;
   const int KI = 0;
-  const int KD = 2;
+  const int KD = 5;
 }
 
 namespace EdgeFollowerNS {
@@ -100,6 +100,8 @@ namespace ObstacleNS {;
   const int RIGHT_TRIG_PIN = PA1; //right 
   const int RIGHT_ECHO_PIN = PA0;
   const int DISTANCE_TO_IDOL = 30; //cm
+  const int IDOL_ONE_ANGLE = 91;
+  const int IDOL_TWO_ANGLE = 98;
 }
 
 namespace EncoderNS{
