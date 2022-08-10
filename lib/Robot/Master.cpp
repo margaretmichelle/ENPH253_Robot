@@ -216,7 +216,16 @@ namespace Robot {
       break;
 
     case MasterState::UpToArch:
-      // check if pedastal gets read by sonar (if it does, robot will not tape follow again after picking up idols)
+
+      int timeOfIdolPickup;
+      int timeOnCourse = millis() / 1000;
+
+      // turn off sonar when not needed, only tape follow
+      if (timeOnCourse <= 8 || (countIdolPickUp == 1 && (timeOnCourse - timeOfIdolPickup) <= 7)) {
+        tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+        break;
+      }
+
       rightUltrasonic.useObstacle();
 
       // after picking up second idol (expecting wall to be close (idk if it is within the distance though))
@@ -273,6 +282,8 @@ namespace Robot {
       moveToObjectOnRight(rightUltrasonic.getDistance());
       sendSlaveSignalandWait();
       countIdolPickUp++;
+
+      int timeOfIdolPickup = millis() / 1000;
 
       o.displayCustom("Finding tape...",0);
 
