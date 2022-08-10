@@ -28,9 +28,6 @@ bool BridgeDeploy::onEdge() {
   return (leftOnEdge || rightOnEdge);
 }
 
-
-
-
 void BridgeDeploy::edgeAlign() {
   while(!bothOnEdge()) {
     // left on edge => turn right wheel more
@@ -55,6 +52,7 @@ void BridgeDeploy::edgeAlign() {
   // when both on edge, stop
   leftMotor.stop();
   rightMotor.stop();
+  delay(500);
 }
 
 

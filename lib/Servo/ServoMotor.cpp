@@ -9,6 +9,8 @@ ServoMotor::ServoMotor(int controlPin) {
 void ServoMotor::setupServo(int angle) {
   pwm_start(pinName, ServoNS::SERVO_FREQ, mapAngleToPulseWidth(angle), MICROSEC_COMPARE_FORMAT);
   currentPos = angle;
+  delay(800);
+  pwm_start(pinName, ServoNS::SERVO_FREQ, 0, MICROSEC_COMPARE_FORMAT);
 }
 
 void ServoMotor::write(int angle) {

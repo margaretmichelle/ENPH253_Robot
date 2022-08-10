@@ -38,7 +38,6 @@ namespace Robot {
     Inactive,
     ClawActivateIdolOne,
     ClawActivateIdolTwo,
-    ClawActivateIdolThree,
     ClawActivateIdolFour,
     BridgeDeploy,
     ClawActivateIdolFive,
@@ -125,7 +124,7 @@ namespace Robot {
       void shuffleRight();
 
       void moveToObjectOnRight(int initialDistance);
-      void moveToObjectOnLeft();
+      void moveToObjectOnLeft(int initalDistance);
 
       Motor leftMotor;
       Motor rightMotor;

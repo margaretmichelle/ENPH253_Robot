@@ -23,21 +23,22 @@ namespace Robot {
       
       case SlaveState::ClawActivateIdolTwo:
         rightArm.placeObjectInContainer();
+
+        rightArm.goThroughArch();
+        leftArm.goThroughArch();
+        
         advanceState();
 
         digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
         break;
 
-      case SlaveState::ClawActivateIdolThree:
-        leftArm.placeObjectInContainer();
-        advanceState();
-
-        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
-
-        break;
+      // skipping first idol on left (in IR region)
 
       case SlaveState::ClawActivateIdolFour:
+        leftArm.setup();
+        rightArm.setup();
+        
         rightArm.placeObjectInContainer();
         advanceState();
 
@@ -55,14 +56,14 @@ namespace Robot {
         break;
 
       case SlaveState::ClawActivateIdolFive:
-        // leftArm.placeObjectInContainer();
+        leftArm.placeObjectInContainer();
         advanceState();
 
         digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
 
 
       case SlaveState::ClawActivateIdolSix:
-        // rightArm.placeObjectInContainer(); //Don;t know which one 
+        leftArm.placeObjectInContainer();
         advanceState();
 
         digitalWrite(SlaveNS::BP_COMM_OUT, LOW);

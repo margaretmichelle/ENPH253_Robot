@@ -4,9 +4,13 @@
 Arm::Arm(int armControlPin, Claw claw, int hallEffectPin, int upAngle, int downAngle) : 
                         claw(claw), armServo(armControlPin), 
                         hallEffectPin(hallEffectPin), up(upAngle), down(downAngle) {
-    armServo.setupServo(up);
+    setup();
 
     pinMode(hallEffectPin, INPUT);
+}
+
+void Arm::setup() {
+    armServo.setupServo(up);
 }
 
 void Arm::returnToHome() {
@@ -44,4 +48,12 @@ void Arm::placeObjectInContainer() {
 
     returnToHome();
     claw.open();
+}
+
+void Arm::goThroughArch() {
+    if (up == ArmNS::LEFT_ARM_UP) {
+        armServo.write(ArmNS::LEFT_ARM_ARCH);
+    } else {
+        armServo.write(ArmNS::RIGHT_ARM_ARCH);
+    }
 }

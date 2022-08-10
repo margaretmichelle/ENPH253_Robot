@@ -182,22 +182,31 @@ namespace Robot {
     case MasterState::Bridge:
       o.displayCustom("WATCH OUT FOR THE ARMS!",0);
 
-      // sendSlaveSignalandWait(); // first idol
+      sendSlaveSignalandWait(); // first idol
 
-      // sendSlaveSignalandWait(); // second idol
+      sendSlaveSignalandWait(); // second idol
 
-      // sendSlaveSignalandWait(); // third idol
+      sendSlaveSignalandWait(); // fourth idol
 
-      // sendSlaveSignalandWait(); // fourth idol
+      encoder.driveDistance(-80,100);
 
       o.displayCustom("Bridging the gap...",0);
       sendSlaveSignalandWait();
       
-      // Find bridge tape?
       edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
-      // encoder.driveDistance(400, 255);
 
-      //tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+      delay(1200);
+
+      do {
+          rightUltrasonic.useObstacle();
+          encoder.driveDistance(50,120);
+        } while(rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL);
+
+      moveToObjectOnLeft(leftUltrasonic.getDistance());
+      sendSlaveSignalandWait();
+      countIdolPickUp++;
+
+
       break;
 
     case MasterState::JustEdge:
@@ -218,11 +227,30 @@ namespace Robot {
 
       if (countIdolPickUp == 2 && rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
         stop(); // robot has passed the archway
+
         encoder.driveDistance(700,200);
+
         do {
           rightUltrasonic.useObstacle();
           encoder.driveDistance(50,120);
         } while(rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL);
+
+        moveToObjectOnRight(rightUltrasonic.getDistance());
+        sendSlaveSignalandWait();
+        countIdolPickUp++;
+
+        encoder.pivotAngle(-90);
+
+        bridge.edgeAlign();
+
+        encoder.driveDistance(-200,150);
+
+        encoder.pivotAngle(90);
+
+        bridge.edgeAlign();
+
+        delay(2000);
+
         break;
       }
 
@@ -349,22 +377,15 @@ namespace Robot {
     }
   }
 
-  void Master::moveToObjectOnLeft() {
-    leftUltrasonic.useObstacle();
-
-    while (leftUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
-      encoder.driveDistance(-20, 150); // counteract drift
+  void Master::moveToObjectOnLeft(int initalDistance) {
+    do {
+      encoder.driveDistance(-15, 70); // counteract drift
       leftUltrasonic.useObstacle();
-    }
-    
+    } while (leftUltrasonic.getDistance() >= initalDistance);
+
     encoder.pivotAngle(90);
-    encoder.driveDistance(-(leftUltrasonic.getDistance() - 14) * 10, 90);
-    encoder.pivotAngle(-92);
-
-    while (leftUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
-      encoder.driveDistance(-20, 150); // counteract drift
-      leftUltrasonic.useObstacle();
-    }
+    encoder.driveDistance(-(initalDistance - 15) * 10, 70);
+    encoder.pivotAngle(-90);
   }
 
 }
