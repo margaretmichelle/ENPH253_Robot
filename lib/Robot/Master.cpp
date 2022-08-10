@@ -182,19 +182,20 @@ namespace Robot {
     case MasterState::Bridge:
       o.displayCustom("WATCH OUT FOR THE ARMS!",0);
 
-      sendSlaveSignalandWait(); // first idol
+      // sendSlaveSignalandWait(); // first idol
 
-      sendSlaveSignalandWait(); // second idol
+      // sendSlaveSignalandWait(); // second idol
 
-      sendSlaveSignalandWait(); // third idol
+      // sendSlaveSignalandWait(); // third idol
 
-      sendSlaveSignalandWait(); // fourth idol
+      // sendSlaveSignalandWait(); // fourth idol
 
       o.displayCustom("Bridging the gap...",0);
       sendSlaveSignalandWait();
-
+      
       // Find bridge tape?
-      encoder.driveDistance(400, 200);
+      edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
+      // encoder.driveDistance(400, 255);
 
       //tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
       break;
@@ -217,6 +218,11 @@ namespace Robot {
 
       if (countIdolPickUp == 2 && rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
         stop(); // robot has passed the archway
+        encoder.driveDistance(700,200);
+        do {
+          rightUltrasonic.useObstacle();
+          encoder.driveDistance(50,120);
+        } while(rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL);
         break;
       }
 
