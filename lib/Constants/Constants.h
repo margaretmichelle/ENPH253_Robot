@@ -169,7 +169,7 @@ namespace BridgeDeployNS {
   const int EDGE_ALIGN_SPEED = 110;
 
   const int SERVO_REST_ANGLE = 0;
-  const int UNHOOK_SERVO_FINAL_ANGLE = 45;
+  const int UNHOOK_SERVO_FINAL_ANGLE = 120;
 
   namespace UnHookBridge {
     const int UNHOOK_BRIDGE_SERVO_PIN = PA_0;

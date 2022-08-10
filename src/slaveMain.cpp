@@ -25,7 +25,7 @@
 //     pinMode(LED_BUILTIN, OUTPUT);
 
 //     attachInterrupt(digitalPinToInterrupt(SlaveNS::BP_COMM_IN), slavePoll, RISING);
-//     slave.setState(Robot::SlaveState::ClawActivateIdolOne); //Just for Testing Purposes 
+//     slave.setState(Robot::SlaveState::BridgeDeploy); //Just for Testing Purposes 
 // }
 
 // void loop() {
