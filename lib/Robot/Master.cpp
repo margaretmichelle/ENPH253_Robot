@@ -248,8 +248,6 @@ namespace Robot {
         sendSlaveSignalandWait();
         countIdolPickUp++;
 
-        encoder.pivotAngle(-90);
-
         bridge.edgeAlign();
 
         encoder.driveDistance(-200,150);

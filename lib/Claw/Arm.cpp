@@ -4,13 +4,9 @@
 Arm::Arm(int armControlPin, Claw claw, int hallEffectPin, int upAngle, int downAngle) : 
                         claw(claw), armServo(armControlPin), 
                         hallEffectPin(hallEffectPin), up(upAngle), down(downAngle) {
-    setup();
+    armServo.setupServo(up);
 
     pinMode(hallEffectPin, INPUT);
-}
-
-void Arm::setup() {
-    armServo.setupServo(up);
 }
 
 void Arm::returnToHome() {

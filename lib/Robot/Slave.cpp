@@ -36,8 +36,8 @@ namespace Robot {
       // skipping first idol on left (in IR region)
 
       case SlaveState::ClawActivateIdolFour:
-        leftArm.setup();
-        rightArm.setup();
+        leftArm.returnToHome();
+        delay(500);
         
         rightArm.placeObjectInContainer();
         advanceState();

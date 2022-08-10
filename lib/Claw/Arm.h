@@ -10,8 +10,6 @@ class Arm {
     //Constructor
         Arm(int armControlPin, Claw claw, int hallEffectPin, int upAngle, int downAngle);
 
-        void setup();
-
         /**
          * @brief grab totem and place in the basket
          * 
