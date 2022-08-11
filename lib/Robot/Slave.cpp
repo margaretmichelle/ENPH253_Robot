@@ -24,8 +24,8 @@ namespace Robot {
       case SlaveState::ClawActivateIdolTwo:
         rightArm.placeObjectInContainer();
 
-        rightArm.goThroughArch();
         leftArm.goThroughArch();
+        rightArm.goThroughArch();
         
         advanceState();
 
@@ -36,9 +36,11 @@ namespace Robot {
       // skipping first idol on left (in IR region)
 
       case SlaveState::ClawActivateIdolFour:
+        rightArm.returnToHome();
         leftArm.returnToHome();
-        leftClaw.open();
+        // leftClaw.open();
         delay(500);
+        
         
         rightArm.placeObjectInContainer();
         advanceState();

@@ -146,10 +146,10 @@ namespace ArmNS {
   const int LEFT_ARM_UP = 110;
   const int LEFT_ARM_DOWN = 0;
   const int LEFT_ARM_DROP = 180;
-  const int LEFT_ARM_ARCH = 160;
-  const int RIGHT_ARM_UP = 35;
+  const int LEFT_ARM_ARCH = 180;
+  const int RIGHT_ARM_UP = 60;
   const int RIGHT_ARM_DOWN = 160;
-  const int RIGHT_ARM_DROP = 0;
+  const int RIGHT_ARM_DROP = 30;
   const int RIGHT_ARM_ARCH = 0;
 }
 
@@ -163,7 +163,7 @@ namespace ClawNS {
   const int LEFT_CLAW_CLOSED = 0;
   const int RIGHT_CLAW_OPEN = 0;
   const int RIGHT_CLAW_CLOSED = 180;
-  const int CLAW_PARTIAL_CLOSE = 70;
+  const int CLAW_PARTIAL_CLOSE = 160;
 }
 
 namespace BridgeDeployNS {

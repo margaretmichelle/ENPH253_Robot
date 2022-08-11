@@ -55,9 +55,9 @@ void Arm::placeObjectInContainer() {
 
 void Arm::goThroughArch() {
     if (up == ArmNS::LEFT_ARM_UP) {
-        claw.close();
         armServo.write(ArmNS::LEFT_ARM_ARCH);
     } else {
+        claw.partialClose();
         armServo.write(ArmNS::RIGHT_ARM_ARCH);
     }
 }

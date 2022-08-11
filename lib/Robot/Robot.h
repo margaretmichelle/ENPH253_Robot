@@ -124,8 +124,8 @@ namespace Robot {
        */
       void shuffleRight();
 
-      void moveToObjectOnRight(int initialDistance);
-      void moveToObjectOnLeft(int initalDistance);
+      void moveToObjectOnRight(long initialDistance);
+      void moveToObjectOnLeft(long initalDistance);
 
       Motor leftMotor;
       Motor rightMotor;

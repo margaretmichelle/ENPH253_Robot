@@ -164,18 +164,39 @@ namespace Robot {
 
     case MasterState::PositionandPickUpObject:
 
-      // check sonar distances for 2 seconds
-      for (int i = 0; i < 40; i++) {
-        leftUltrasonic.useObstacle();
-        rightUltrasonic.useObstacle();
-        o.displayCustom("Left sonar:", leftUltrasonic.getDistance(), "Right sonar:", rightUltrasonic.getDistance());
-        delay(50);
-      }
+      // // check sonar distances for 2 seconds
+      // for (int i = 0; i < 40; i++) {
+      //   leftUltrasonic.useObstacle();
+      //   rightUltrasonic.useObstacle();
+      //   o.displayCustom("Left sonar:", leftUltrasonic.getDistance(), "Right sonar:", rightUltrasonic.getDistance());
+      //   delay(50);
+      // }
 
-      moveToObjectOnRight(rightUltrasonic.getDistance());
+      // moveToObjectOnRight(rightUltrasonic.getDistance());
 
-      o.displayCustom("Picking up object",0);
-      sendSlaveSignalandWait();
+      // o.displayCustom("Picking up object",0);
+      // sendSlaveSignalandWait();
+
+        encoder.driveDistance(1200,200);
+
+        do {
+          rightUltrasonic.useObstacle();
+          encoder.driveDistance(-25,100);
+        } while(rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL);
+
+        countIdolPickUp =+ 2;
+        
+        moveToObjectOnRight(rightUltrasonic.getDistance());
+        sendSlaveSignalandWait();
+        countIdolPickUp++;
+
+        encoder.driveDistance(-100,150);
+
+        encoder.pivotAngle(90);
+
+        bridge.edgeAlign();
+
+        delay(2000);
       
       break;
 
@@ -188,7 +209,7 @@ namespace Robot {
 
       sendSlaveSignalandWait(); // fourth idol
 
-      encoder.driveDistance(-80,100);
+      encoder.driveDistance(-50,100);
 
       o.displayCustom("Bridging the gap...",0);
       sendSlaveSignalandWait();
@@ -199,7 +220,7 @@ namespace Robot {
 
       do {
           rightUltrasonic.useObstacle();
-          encoder.driveDistance(50,120);
+          encoder.driveDistance(30,100);
         } while(rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL);
 
       moveToObjectOnLeft(leftUltrasonic.getDistance());
@@ -249,35 +270,38 @@ namespace Robot {
       // after picking up second idol (expecting wall to be close (idk if it is within the distance though))
       if (countIdolPickUp == 2 && rightUltrasonic.getDistance() < ObstacleNS::DISTANCE_TO_IDOL) {
         tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
+        rightUltrasonic.useObstacle();
+
+        if (rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
+          stop(); // robot has passed the archway
+
+          delay(1000);
+
+          // encoder.pivotAngle(15);
+
+          encoder.driveDistance(1200,200);
+
+          do {
+            rightUltrasonic.useObstacle();
+            encoder.driveDistance(-50,120);
+          } while(rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL);
+          
+          moveToObjectOnRight(rightUltrasonic.getDistance());
+          sendSlaveSignalandWait();
+          countIdolPickUp++;
+
+          encoder.driveDistance(180,150);
+
+          encoder.pivotAngle(90);
+
+          bridge.edgeAlign();
+
+          delay(2000);
+        }
+
         break;
       }
 
-      if (countIdolPickUp == 2 && rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
-        stop(); // robot has passed the archway
-
-        encoder.driveDistance(700,200);
-
-        do {
-          rightUltrasonic.useObstacle();
-          encoder.driveDistance(50,120);
-        } while(rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL);
-        
-        moveToObjectOnRight(rightUltrasonic.getDistance());
-        sendSlaveSignalandWait();
-        countIdolPickUp++;
-
-        bridge.edgeAlign();
-
-        encoder.driveDistance(-200,150);
-
-        encoder.pivotAngle(90);
-
-        bridge.edgeAlign();
-
-        delay(2000);
-
-        break;
-      }
 
       if (rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL) {
         tapeFollow.usePID(o.getTKP(), o.getTKI(), o.getTKD());
@@ -286,14 +310,7 @@ namespace Robot {
 
       stop();
 
-      delay(1000);
-
-      if (countIdolPickUp == 0) {
-        o.displayCustom("Picking up idol:",1);
-
-      } else if (countIdolPickUp == 1) {
-        o.displayCustom("Picking up idol:",2);
-      }
+      delay(500);
 
       moveToObjectOnRight(rightUltrasonic.getDistance());
       sendSlaveSignalandWait();
@@ -302,16 +319,19 @@ namespace Robot {
 
       timeOfIdolPickup = millis() / 1000;
 
-      o.displayCustom("Finding tape...",0);
-
       delay(200);
 
-      encoder.pivotAngle(-70);
+      if (countIdolPickUp == 1) {
+       encoder.pivotAngle(-75); 
+      } else {
+        encoder.pivotAngle(-55);
+        encoder.driveDistance(-75, 100);
+      }
       while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-        moveForCertainTime(75,-75,100); 
+        moveForCertainTime(75,-75,90); 
       }
 
-      delay(500);
+      delay(300);
 
       break;
 
@@ -382,47 +402,47 @@ namespace Robot {
     moveForCertainTime(0,0,100);
   }
 
-  void Master::moveToObjectOnRight(int initalDistance) {
+  void Master::moveToObjectOnRight(long initalDistance) {
     do {
       encoder.driveDistance(-15, 80); // counteract drift
       rightUltrasonic.useObstacle();
     } while (rightUltrasonic.getDistance() >= initalDistance + 1);
 
-    if (initalDistance >= 12 && initalDistance <= 13) {
-      return;
-    }
+    encoder.driveDistance(-18, 90);
+
+    // if (initalDistance >= 13 && initalDistance <= 14) {
+    //   return;
+    // }
 
     switch (countIdolPickUp) {
       case 0:
-        encoder.pivotAngle(-90);
-        encoder.driveDistance(-(initalDistance - 14) * 10, 80);
-        encoder.pivotAngle(ObstacleNS::IDOL_ONE_ANGLE);
+        encoder.driveDistance(-20, 90);
         break;
       case 1:
-        encoder.pivotAngle(-90);
-        encoder.driveDistance(-(initalDistance - 12) * 10, 80);
-        encoder.pivotAngle(ObstacleNS::IDOL_TWO_ANGLE);
+        encoder.driveDistance(-13, 90);
         break;
       default:
         encoder.pivotAngle(-90);
-        encoder.driveDistance(-(initalDistance - 14) * 10, 80);
+        encoder.driveDistance(-(initalDistance - 15) * 10, 80);
         encoder.pivotAngle(90);
         break;
     }
   }
 
-  void Master::moveToObjectOnLeft(int initalDistance) {
+  void Master::moveToObjectOnLeft(long initalDistance) {
     do {
       encoder.driveDistance(-15, 80); // counteract drift
       leftUltrasonic.useObstacle();
     } while (leftUltrasonic.getDistance() >= initalDistance + 1);
 
-    if (initalDistance >= 12 && initalDistance <= 13) {
+    encoder.driveDistance(-25, 100);
+
+    if (initalDistance >= 13 && initalDistance <= 15) {
       return;
     }
 
     encoder.pivotAngle(90);
-    encoder.driveDistance(-(initalDistance - 14) * 10, 80);
+    encoder.driveDistance(-(initalDistance - 15) * 10, 80);
     encoder.pivotAngle(-90);
   }
 
