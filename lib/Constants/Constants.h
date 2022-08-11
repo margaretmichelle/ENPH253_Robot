@@ -40,7 +40,7 @@ namespace TapeFollowerNS {
   const int SUMMED_ERROR_LIMIT = 0;
 
   // Gains
-  const int KP = 70;
+  const int KP = 60;
   const int KI = 0;
   const int KD = 5;
 }
@@ -100,7 +100,7 @@ namespace ObstacleNS {;
   const int RIGHT_TRIG_PIN = PA1; //right 
   const int RIGHT_ECHO_PIN = PA0;
   const int DISTANCE_TO_IDOL = 30; //cm
-  const int IDOL_ONE_ANGLE = 88;
+  const int IDOL_ONE_ANGLE = 93;
   const int IDOL_TWO_ANGLE = 85;
 }
 
@@ -121,7 +121,7 @@ namespace EncoderNS{
   const int POWER_OFFSET = 5;
   const float CENTRE_TO_RIGHT_WHEEL_MM = 99.5;
   const float CENTRE_TO_LEFT_WHEEL_MM = 99.5;
-  const int PIVOT_WHEEL_SPEED = 70;
+  const int PIVOT_WHEEL_SPEED = 83;
   const float PIVOT_DIAMETER = 199;
   const float PIVOT_CIRCUMFERENCE = PIVOT_DIAMETER * PI;
 }
@@ -145,9 +145,11 @@ namespace ArmNS {
   // Constants
   const int LEFT_ARM_UP = 110;
   const int LEFT_ARM_DOWN = 0;
-  const int LEFT_ARM_ARCH = 150;
-  const int RIGHT_ARM_UP = 40;
+  const int LEFT_ARM_DROP = 180;
+  const int LEFT_ARM_ARCH = 160;
+  const int RIGHT_ARM_UP = 35;
   const int RIGHT_ARM_DOWN = 160;
+  const int RIGHT_ARM_DROP = 0;
   const int RIGHT_ARM_ARCH = 0;
 }
 
@@ -179,14 +181,16 @@ namespace BridgeDeployNS {
 }
 
 namespace ServoNS {
-  const int SERVO_FREQ = 50;
+  const int SERVO_FREQ = 100;
   const int MAX_PULSE_WIDTH = 2500;
   const int MIN_PULSE_WIDTH = 500;
 }
 
 namespace ZiplineNS {
-  const int ZIPLINE_MOTOR_PIN = PB_1;
-  const int ZIPLINE_MICROSWITCH_PIN = PB10; //not sure waht these are double check andy
+  const int ZIPLINE_MOTOR_PIN_1 = PB_1;
+  const int ZIPLINE_MOTOR_PIN_2 = PB_0;
+  const int ZIPLINE_SPEED_LIFT = 60;
+  const int ZIPLINE_OPERATION_TIME = 1000;
 }
 
 #endif
