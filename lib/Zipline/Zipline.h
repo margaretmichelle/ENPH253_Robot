@@ -15,13 +15,19 @@ class Zipline {
      * 
      * @param speed 
      */
-    void extendZipline(int speed);
+    void extendZipline(int speed, int time);
     
     /**
      * @brief Stop the zipline 
      * 
      */
     void stopZipline();
+
+    /**
+     * @brief Descend zipline
+     * 
+     */
+    void descendZipline(int speed, int time);
 
     private:
         Motor motor;

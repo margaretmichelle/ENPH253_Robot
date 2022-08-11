@@ -206,6 +206,26 @@ namespace Robot {
       sendSlaveSignalandWait();
       countIdolPickUp++;
 
+      encoder.pivotAngle(90);
+
+      do {
+        rightUltrasonic.useObstacle();
+        edgeFollow.usePID(o.getEKP(), o.getEKI(), o.getEKD());
+      } while (rightUltrasonic.getDistance() > 45);
+
+      encoder.pivotAngle(45);
+
+      do {
+        leftUltrasonic.useObstacle();
+        encoder.driveDistance(50,120);
+      } while (leftUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL);
+
+      moveToObjectOnLeft(leftUltrasonic.getDistance());
+      sendSlaveSignalandWait();
+      countIdolPickUp++;
+
+      stop();
+      delay(10000);
 
       break;
 
@@ -216,9 +236,7 @@ namespace Robot {
       break;
 
     case MasterState::UpToArch:
-
-      int timeOfIdolPickup;
-      int timeOnCourse = millis() / 1000;
+      timeOnCourse = millis() / 1000;
 
       // turn off sonar when not needed, only tape follow
       if (timeOnCourse <= 8 || (countIdolPickUp == 1 && (timeOnCourse - timeOfIdolPickup) <= 7)) {
@@ -243,7 +261,7 @@ namespace Robot {
           rightUltrasonic.useObstacle();
           encoder.driveDistance(50,120);
         } while(rightUltrasonic.getDistance() > ObstacleNS::DISTANCE_TO_IDOL);
-
+        
         moveToObjectOnRight(rightUltrasonic.getDistance());
         sendSlaveSignalandWait();
         countIdolPickUp++;
@@ -279,18 +297,18 @@ namespace Robot {
 
       moveToObjectOnRight(rightUltrasonic.getDistance());
       sendSlaveSignalandWait();
+      delay(500);
       countIdolPickUp++;
 
-      int timeOfIdolPickup = millis() / 1000;
+      timeOfIdolPickup = millis() / 1000;
 
       o.displayCustom("Finding tape...",0);
 
       delay(200);
 
       encoder.pivotAngle(-70);
-      // encoder.driveDistance((rightUltrasonic.getDistance() - 10) * 10);
       while(!tapeFollow.bothOnBlack(TapeFollowerNS::WHITE_THRESHOLD)) {
-        moveForCertainTime(70,-70,100); 
+        moveForCertainTime(75,-75,100); 
       }
 
       delay(500);
@@ -366,21 +384,28 @@ namespace Robot {
 
   void Master::moveToObjectOnRight(int initalDistance) {
     do {
-      encoder.driveDistance(-15, 70); // counteract drift
+      encoder.driveDistance(-15, 80); // counteract drift
       rightUltrasonic.useObstacle();
-    } while (rightUltrasonic.getDistance() >= initalDistance);
+    } while (rightUltrasonic.getDistance() >= initalDistance + 1);
 
-    encoder.pivotAngle(-90);
-    encoder.driveDistance(-(initalDistance - 15) * 10, 70);
+    if (initalDistance >= 12 && initalDistance <= 13) {
+      return;
+    }
 
     switch (countIdolPickUp) {
       case 0:
+        encoder.pivotAngle(-90);
+        encoder.driveDistance(-(initalDistance - 14) * 10, 80);
         encoder.pivotAngle(ObstacleNS::IDOL_ONE_ANGLE);
         break;
       case 1:
+        encoder.pivotAngle(-90);
+        encoder.driveDistance(-(initalDistance - 12) * 10, 80);
         encoder.pivotAngle(ObstacleNS::IDOL_TWO_ANGLE);
         break;
       default:
+        encoder.pivotAngle(-90);
+        encoder.driveDistance(-(initalDistance - 14) * 10, 80);
         encoder.pivotAngle(90);
         break;
     }
@@ -388,12 +413,16 @@ namespace Robot {
 
   void Master::moveToObjectOnLeft(int initalDistance) {
     do {
-      encoder.driveDistance(-15, 70); // counteract drift
+      encoder.driveDistance(-15, 80); // counteract drift
       leftUltrasonic.useObstacle();
-    } while (leftUltrasonic.getDistance() >= initalDistance);
+    } while (leftUltrasonic.getDistance() >= initalDistance + 1);
+
+    if (initalDistance >= 12 && initalDistance <= 13) {
+      return;
+    }
 
     encoder.pivotAngle(90);
-    encoder.driveDistance(-(initalDistance - 15) * 10, 70);
+    encoder.driveDistance(-(initalDistance - 14) * 10, 80);
     encoder.pivotAngle(-90);
   }
 

@@ -14,6 +14,7 @@
 #include <Bridge.h>
 #include <Encoder.h>
 #include <BridgeServo.h>
+#include <Zipline.h>
 
 
 namespace Robot {
@@ -52,8 +53,8 @@ namespace Robot {
       Master():
         leftMotor(MasterNS::LEFT_MOTOR_PIN_1, MasterNS::LEFT_MOTOR_PIN_2),
         rightMotor(MasterNS::RIGHT_MOTOR_PIN_1, MasterNS::RIGHT_MOTOR_PIN_2),
-        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 180),
-        edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 200),
+        tapeFollow(PIDType::TapeFollower, leftMotor, rightMotor, 240),
+        edgeFollow(PIDType::EdgeFollower, leftMotor, rightMotor, 220),
         leftUltrasonic(ObstacleNS::LEFT_TRIG_PIN,ObstacleNS::LEFT_ECHO_PIN),
         rightUltrasonic(ObstacleNS::RIGHT_TRIG_PIN, ObstacleNS::RIGHT_ECHO_PIN),
         edgeBack(leftMotor,rightMotor,200),
@@ -145,6 +146,10 @@ namespace Robot {
 
       OLED o;
 
+      int timeOnCourse;
+
+      int timeOfIdolPickup;
+
       MasterState state;
   };
 
@@ -156,6 +161,8 @@ namespace Robot {
         leftArm(ArmNS::LEFT_ARM_SERVO_PIN, leftClaw, ArmNS::LEFT_HALL_EFFECT_SENSOR_PIN, ArmNS::LEFT_ARM_UP, ArmNS::LEFT_ARM_DOWN),
         rightArm(ArmNS::RIGHT_ARM_SERVO_PIN, rightClaw, ArmNS::RIGHT_HALL_EFFECT_SENSOR_PIN, ArmNS::RIGHT_ARM_UP, ArmNS::RIGHT_ARM_DOWN),
         bridgeServo(),
+        ziplineMotor(ZiplineNS::ZIPLINE_MOTOR_PIN_1,ZiplineNS::ZIPLINE_MOTOR_PIN_2),
+        zipline(ziplineMotor),
           //Put Constructors for Claw and zipline 
         state(SlaveState::Inactive) { 
           pinMode(SlaveNS::BP_COMM_IN, INPUT);
@@ -184,6 +191,11 @@ namespace Robot {
         Arm rightArm;
 
         BridgeServos bridgeServo;
+
+        Zipline zipline;
+
+        Motor ziplineMotor;
+
 
         
         /*

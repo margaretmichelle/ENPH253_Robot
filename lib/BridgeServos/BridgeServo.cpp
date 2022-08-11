@@ -10,10 +10,6 @@ BridgeServos::BridgeServos() :
     unHookServo.setupServo(BridgeDeployNS::SERVO_REST_ANGLE);
   }
   
-
-
-
-
 void BridgeServos::deployBridge() {
     //wait a second for robot to fully stop
     delay(1000);

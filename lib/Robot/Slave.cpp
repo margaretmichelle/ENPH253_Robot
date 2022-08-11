@@ -37,6 +37,7 @@ namespace Robot {
 
       case SlaveState::ClawActivateIdolFour:
         leftArm.returnToHome();
+        leftClaw.open();
         delay(500);
         
         rightArm.placeObjectInContainer();
@@ -68,6 +69,14 @@ namespace Robot {
 
         digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
         break;
+
+      case SlaveState::ZiplineLift:
+        zipline.extendZipline(ZiplineNS::ZIPLINE_SPEED_LIFT, ZiplineNS::ZIPLINE_OPERATION_TIME);
+        advanceState();
+
+        digitalWrite(SlaveNS::BP_COMM_OUT, LOW);
+        break;
+
 
       case SlaveState::Done:
         // complete, so do nothing and stop the replica/slave 

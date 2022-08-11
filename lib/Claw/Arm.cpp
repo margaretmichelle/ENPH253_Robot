@@ -42,12 +42,20 @@ void Arm::placeObjectInContainer() {
         return;
     }
 
-    returnToHome();
+    if (up == ArmNS::LEFT_ARM_UP) {
+        armServo.write(ArmNS::LEFT_ARM_DROP);
+    } else {
+        armServo.write(ArmNS::RIGHT_ARM_DROP);
+    }
+
     claw.open();
+
+    returnToHome();
 }
 
 void Arm::goThroughArch() {
     if (up == ArmNS::LEFT_ARM_UP) {
+        claw.close();
         armServo.write(ArmNS::LEFT_ARM_ARCH);
     } else {
         armServo.write(ArmNS::RIGHT_ARM_ARCH);
