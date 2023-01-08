@@ -46,7 +46,7 @@ Through abstracting each component and function into modular libraries, this all
 *add text and images 
 
 
-## Encoders & Edge Detection
+## Encoders 
 
 *add text and images 
 
