@@ -1,6 +1,6 @@
-# Randall - A Fully Autonomous Treasure Seeking Robot :robot:
+# Randall - A Fully Autonomous Treasure Seeking Robot
 
-## The Competition
+## The Competition :game_die:	
 The **2022 ENPH 253 robotics competition** was designed to be the **most difficult** competition run over the 22-years the course has been established.  
 
 Particularly, the **fully autonomous robots** were tasked to pick up and hold treasures, detect and avoid picking up magnetic bombs that looked exactly like treasures, overcome a chicken wire gap obstacle, follow black tape up a vertical 6-7” ramp, climb and descend onto a zipline, differentiate between a 1kHz and 10 kHz infrared beacon**, and be able to travel across a suspension bridge without the aid of black tape and signal processing. 
@@ -27,7 +27,7 @@ Through abstracting each component and function into modular libraries, this all
 **Figure 3:** _Project abstracted into separate libaries for different functional needs_
 
 
-## User Interface 
+## User Interface :tv:	
 
 *add text and images 
 
