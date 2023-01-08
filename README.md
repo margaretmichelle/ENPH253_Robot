@@ -22,6 +22,34 @@ Due to the extensive list of writing code for many functionalities of various co
 
 Through abstracting each component and function into modular libraries, this allows a better collaborative environment for the team while ensuring the software is clean, simple, easy-to-debug, bug-free, and elegant.
 
+<img src = "https://user-images.githubusercontent.com/68613171/211224368-bd1b3522-ac0f-44d0-ba4b-c830fd7176af.png" width ="700" height="600">
+
+**Figure 3:** _Project abstracted into separate libaries for different functional needs_
+
+
+### User Interface
+
+
+### Communication
+
+
+### Navigation
+
+
+### Edge Detection
+
+
+### Encoders & Edge Detection
+
+
+### Servo Control
+
+
+### Sonar Object Detection 
+
+
+
+
 
 
 
