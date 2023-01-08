@@ -27,25 +27,39 @@ Through abstracting each component and function into modular libraries, this all
 **Figure 3:** _Project abstracted into separate libaries for different functional needs_
 
 
-### User Interface
+### User Interface 
 
+*add text and images 
 
 ### Communication
+
+*add text and images 
 
 
 ### Navigation
 
+*add text and images 
+
 
 ### Edge Detection
+
+*add text and images 
 
 
 ### Encoders & Edge Detection
 
+*add text and images 
+
 
 ### Servo Control
 
+*add text and images 
+
 
 ### Sonar Object Detection 
+
+*add text and images 
+
 
 
 
