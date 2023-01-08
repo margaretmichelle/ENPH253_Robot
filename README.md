@@ -1,4 +1,4 @@
-# Randall - A Fully Autonomous Treasure Seeking Robot
+# Randall - A Fully Autonomous Treasure Seeking Robot - 
 
 ## The Competition :game_die:	
 The **2022 ENPH 253 robotics competition** was designed to be the **most difficult** competition run over the 22-years the course has been established.  
@@ -37,16 +37,16 @@ Through abstracting each component and function into modular libraries, this all
 
 
 ## Navigation
+### Tape Following 
+*add text and images 
+
+
+### Edge Detection
 
 *add text and images 
 
 
-## Edge Detection
-
-*add text and images 
-
-
-## Encoders 
+### Encoders 
 
 *add text and images 
 
