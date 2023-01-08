@@ -1,4 +1,4 @@
-# Randall the Robot :robot:
+# Randall - A Fully Autonomous Treasure Seeking Robot :robot:
 
 
 
