@@ -7,7 +7,7 @@ Particularly, the **fully autonomous robots** were tasked to pick up and hold tr
 
 The following images illustrate the 3D layout of the competition surface as well as a diagram and legend of the surface details that helped the team to brainstorm strategies and specific functions required for Randall the Robot.
 
-![image](https://user-images.githubusercontent.com/68613171/211223287-319f103d-8cf0-4bd3-ba38-6a172f6736aa.png)
+![image](https://user-images.githubusercontent.com/68613171/211223301-05f6ff98-2417-4f58-953b-05c52193fdb2.png)
 
 **Figure 1:** _In depth illustration of the competition surface obstacles and treasures_
 
