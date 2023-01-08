@@ -37,7 +37,11 @@ Through abstracting each component and function into modular libraries, this all
 
 
 ## Navigation
-### Tape Following 
+### Tape Following PID Controller
+A proportional–integral–derivative (PID) controller is a control loop mechanism feedback system that continuously calculates an error value as the difference between a desired setpoint (SP) and a measured process variable (PV) and applies a correction based on proportional, integral, and derivative terms (denoted P, I, and D respectively).  Since our robot is fully autonomous, we required a system that continuously took in measurement values from a left and right-sided QRD 1114 Reflectance Sensor to determine whether or not the robot centre was following black tape or not.  
+
+
+
 *add text and images 
 
 
