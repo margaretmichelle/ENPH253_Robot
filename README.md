@@ -15,7 +15,7 @@ The following images illustrate the 3D layout of the competition surface as well
 
 **Figure 2:** _Illustration of the surface competition layout_
 
-## Software Components 
+## Software Components :computer:	⌨️
 
 ### Abstraction & Code Structure 
 Due to the extensive list of writing code for many functionalities of various complexities such as writing PID control algorithms, interrupt handling, claw mechanisms,  communicating between the two STM32 blue pill boards, each component was divided into separate libraries.
