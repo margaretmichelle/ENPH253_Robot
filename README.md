@@ -11,6 +11,10 @@ The following images illustrate the 3D layout of the competition surface as well
 
 **Figure 1:** _In depth illustration of the competition surface obstacles and treasures_
 
+![image](https://user-images.githubusercontent.com/68613171/211223319-c9eca6b5-241b-49a8-a14e-0a2748117954.png)
+
+**Figure 2:** _Illustration of the surface competition layout_
+
 
 
 
