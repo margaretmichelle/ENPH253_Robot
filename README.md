@@ -33,11 +33,13 @@ Through abstracting each component and function into modular libraries, this all
 
 ## BluePill Communication Protocol :chart_with_upwards_trend: :pill:		    
 
-*add text and images 
+Due to the robot requiring a wide range of functionality, we opted using **2 bluepills**.  The main challenge was programming an inter-communication protocol for the master-slave functions.  For context, the **master bluepill** was responsible for **navigation** processes, while the **slave bluepill** was responsible for **claw** processes.
+
+In order to program this inter-communication system, **interrupt handlers** were used to provide signals to things that changed drastically - like the robot suddenly going off the edge, while a **polling system** was used to keep track of what steps of the competition course have been completed.  Polling acted as a to do list for the robot, while interrupts acted as a signalling mechanism to show when something has occurred - prompting the robot to take action. 
 
 
 ## Navigation
-### Tape Following PID Controller
+### Tape Following and Edge Detection PID Controller
 A **proportional–integral–derivative** (PID) controller is a **control loop** mechanism feedback system that continuously calculates an error value as the difference between a desired setpoint (SP) and a measured process variable (PV) and applies a correction based on proportional, integral, and derivative terms (denoted P, I, and D respectively).  Since our robot is fully autonomous, we required a system that continuously took in measurement values from a left and right-sided **QRD 1114 Reflectance Sensor** to determine whether or not the robot centre was on the black tape or not. 
 
 ![image](https://user-images.githubusercontent.com/68613171/211225587-89266fe6-75fb-407b-9b23-2ae4ecf926c9.png)
@@ -54,12 +56,9 @@ The implementation involves first taking in a boolean value from each of the lef
 
 **_3._** If only the right sensor was on black tape, adjust the motor speeds so that the left motor moves faster - turning the robot right 
 
+Edge Detection involves a similar algorithm with different tuned values.
+
 **The source code for the implementation is under PID**
-
-### Edge Detection
-
-*add text and images 
-
 
 ### Encoders 
 
