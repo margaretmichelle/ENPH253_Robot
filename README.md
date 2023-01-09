@@ -31,7 +31,7 @@ Through abstracting each component and function into modular libraries, this all
 
 *add text and images 
 
-## Communication
+## BluePill Communication Protocol
 
 *add text and images 
 
