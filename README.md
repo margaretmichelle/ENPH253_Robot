@@ -38,22 +38,23 @@ Through abstracting each component and function into modular libraries, this all
 
 ## Navigation
 ### Tape Following PID Controller
-A proportional–integral–derivative (PID) controller is a control loop mechanism feedback system that continuously calculates an error value as the difference between a desired setpoint (SP) and a measured process variable (PV) and applies a correction based on proportional, integral, and derivative terms (denoted P, I, and D respectively).  Since our robot is fully autonomous, we required a system that continuously took in measurement values from a left and right-sided QRD 1114 Reflectance Sensor to determine whether or not the robot centre was on the black tape or not. 
+A **proportional–integral–derivative** (PID) controller is a **control loop** mechanism feedback system that continuously calculates an error value as the difference between a desired setpoint (SP) and a measured process variable (PV) and applies a correction based on proportional, integral, and derivative terms (denoted P, I, and D respectively).  Since our robot is fully autonomous, we required a system that continuously took in measurement values from a left and right-sided **QRD 1114 Reflectance Sensor** to determine whether or not the robot centre was on the black tape or not. 
 
 ![image](https://user-images.githubusercontent.com/68613171/211225587-89266fe6-75fb-407b-9b23-2ae4ecf926c9.png)
 
 **Figure 4:** _The proportional, integrative, and derivative terms are inspired by the graph - which take into account time factors_
 
-As the black tape adapts various shapes and curvatures, the main challenge was writing an algorithm that would steer the robot in a manner as stable as possible - which required tuning the set values in an elegant way using the user OLED interface to adjust these values during test runs.  The implementation involves first taking in a boolean value from each of the left and right QRD reflectance sensors which would determine 3 cases of action for the robot.
+As the black tape adapts various shapes and curvatures, the **main challenge** was writing an algorithm that would steer the robot in a manner as **stable** as possible - which required **tuning** the set values in an elegant way using the **user OLED interface** to adjust these values during test runs.  
 
-_1._ If both sensors were on black tape, do nothing
-_2._ If only the left sensor was on black tape, adjust the motor speeds so that the right motor moves faster - turning the robot left 
-_3._ If only the right sensor was on black tape, adjust the motor speeds so that the left motor moves faster - turning the robot right 
+The implementation involves first taking in a boolean value from each of the left and right QRD reflectance sensors which would determine **3 cases** of action for the robot.
+
+**_1._** If **both** sensors were on black tape, do nothing
+
+**_2._** If only the left sensor was on black tape, adjust the motor speeds so that the right motor moves faster - turning the robot left 
+
+**_3._** If only the right sensor was on black tape, adjust the motor speeds so that the left motor moves faster - turning the robot right 
 
 **The source code for the implementation is under PID**
-
-*add text and images 
-
 
 ### Edge Detection
 
