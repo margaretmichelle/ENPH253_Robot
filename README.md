@@ -31,7 +31,7 @@ Through abstracting each component and function into modular libraries, this all
 
 *add text and images 
 
-## BluePill Communication Protocol
+## BluePill Communication Protocol :chart_with_upwards_trend:	   
 
 *add text and images 
 
